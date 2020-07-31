@@ -23,3 +23,6 @@ deploy
 /sormas-app/java_pid21052.hprof
 bin
 /sormas-base/setup/setup.log
+
+# For development systems
+/dev-server

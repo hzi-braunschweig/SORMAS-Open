@@ -44,10 +44,9 @@
 		</artifact:mvn>
 	</target>
 
-	<target name="deploy-serverlibs" description="Gather server jars">
+	<target name="deploy-serverlibs" description="Deploy server dependencies">
 
-		<artifact:pom id="serverlibsPom" file="dependencies/serverlibs.pom">
-		</artifact:pom>
+		<artifact:pom id="serverlibsPom" file="dependencies/serverlibs.pom" />
 
 		<echo>The following invalid POM warning can be ignored</echo>
 		<artifact:dependencies filesetId="serverlibsid" pomRefId="serverlibsPom" useScope="compile" versionsId="dependency.versions" />
@@ -63,6 +62,18 @@
 			<mapper type="flatten" />
 		</copy>
 	</target>
+
+    <target name="deploy-artifacts" description="Deploy application artifacts">
+		<ant dir="../sormas-ear" target="--deploy-artifact"/>
+		<ant dir="../sormas-ui" target="--deploy-artifact"/>
+		<ant dir="../sormas-rest" target="--deploy-artifact"/>
+    </target>
+
+    <target name="deploy" description="Deploy application files to server">
+        <antcall target="deploy-serverlibs" />
+        <antcall target="deploy-artifacts" />
+        <echo>Deploy complete!</echo>
+    </target>
 
 	<target name="collect-setup" description="Collects setup/update scripts and config files">
 

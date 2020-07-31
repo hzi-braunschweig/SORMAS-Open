@@ -9,6 +9,8 @@
 	<property name="autodeploy.dir" value="${glassfish.domain.root}/autodeploy" />
 	<property name="maven.test.skip" value="true" />
 
+	<artifact:pom id="mvnPom" file="pom.xml"/>
+
 	<target name="3-collect" description="Kopiert das Artefakt nach deploy/apps.">
 
 		<property name="copy.path" value="../deploy/apps" />
@@ -17,7 +19,7 @@
 
 	<target name="--copy-artifact">
 
-		<fail unless="copy.path">deploy.path is not set!</fail>
+		<fail unless="copy.path">copy.path is not set!</fail>
 
 		<property name="target.dir" value="./target" />
 		<copy todir="${copy.path}" preservelastmodified="true" verbose="true">
@@ -28,6 +30,15 @@
 			<mapper classpathref="maven-ant-tasks.classpath" classname="org.apache.maven.artifact.ant.VersionMapper" from="${dependency.versions}"
 				to="flatten" />
 		</copy>
+	</target>
+
+	<target name="--deploy-artifact">
+		<exec executable="${payara.home}/glassfish/bin/asadmin">
+			<env key="AS_ADMIN_PORT" value="${payara.admin.port}"/>
+			<arg value="deploy"/>
+			<arg value="--force"/> <!-- Redeploy if necessary -->
+			<arg file="${mvnPom.build.directory}/${mvnPom.artifactId}.${mvnPom.packaging}"/>
+		</exec>
 	</target>
 
 	<path id="maven-ant-tasks.classpath" path="../sormas-base/antlib/maven-ant-tasks-2.1.4-SNAPSHOT_PATCHED.jar" />

@@ -8,18 +8,18 @@
 # Short-Description: Payara-Server SORMAS
 ### END INIT INFO
 
-
-ASADMIN="/opt/payara5/bin/asadmin"
+SORMAS_DOMAIN_DIR="/opt/domains/sormas"
+PAYARA_USER="payara"
 
 case "$1" in
 start)
-    su --login payara --command "$ASADMIN start-domain --domaindir /opt/domains sormas"
+    su --login "$PAYARA_USER" --command "\"$SORMAS_DOMAIN_DIR/start-payara-sormas.sh\""
     ;;
 stop)
-    su --login payara --command "$ASADMIN stop-domain --domaindir /opt/domains sormas"
+    su --login "$PAYARA_USER" --command "\"$SORMAS_DOMAIN_DIR/stop-payara-sormas.sh\""
     ;;
 restart)
-    su --login payara --command "$ASADMIN restart-domain --domaindir /opt/domains sormas"
+    su --login "$PAYARA_USER" --command "\"$SORMAS_DOMAIN_DIR/stop-payara-sormas.sh\"; \"$SORMAS_DOMAIN_DIR/start-payara-sormas.sh\""
     ;;
 *)
     echo "usage: $0 (start|stop|restart|help)"

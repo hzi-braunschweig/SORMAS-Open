@@ -1,3 +1,4 @@
+#!/bin/bash
 #*******************************************************************************
 # SORMAS® - Surveillance Outbreak Response Management & Analysis System
 # Copyright © 2016-2018 Helmholtz-Zentrum f�r Infektionsforschung GmbH (HZI)
@@ -16,8 +17,11 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #*******************************************************************************
 
-#!/bin/bash
+PAYARA_HOME="/opt/payara5"
 
-DIR=$(dirname "$0")
-ASADMIN="${DIR}/../../payara5/bin/asadmin"
-${ASADMIN} stop-domain --domaindir "${DIR}/../" sormas
+DOMAIN_DIR="$(dirname "$0")"
+DOMAINS_HOME="$(dirname "$DOMAIN_DIR")"
+SORMAS_DOMAIN_NAME="$(basename "$DOMAIN_DIR")"
+ASADMIN="${PAYARA_HOME}/bin/asadmin"
+
+"${ASADMIN}" stop-domain --domaindir "${DOMAINS_HOME}" "${SORMAS_DOMAIN_NAME}"
