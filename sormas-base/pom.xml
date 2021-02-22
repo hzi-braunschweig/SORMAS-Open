@@ -14,7 +14,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<!-- *** Payara module versions *** -->
-		<jackson.version>2.10.2</jackson.version>
+		<jackson.version>2.12.1</jackson.version>
 		<jakarta.activation.version>1.2.1</jakarta.activation.version>
 		<javaee.version>8.0.1</javaee.version>
 		<jersey.version>2.30</jersey.version>
@@ -26,7 +26,7 @@
 		<slf4j.version>1.7.30</slf4j.version>
 		<logback.version>1.1.7</logback.version>
 		<vaadin.version.warning>TODO: Remove bootstrap.js in widgetset</vaadin.version.warning>
-		<vaadin.version>8.12.1</vaadin.version>
+		<vaadin.version>8.12.2</vaadin.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<swagger.version>2.1.6</swagger.version>
 		<bouncycastle.version>1.67</bouncycastle.version>

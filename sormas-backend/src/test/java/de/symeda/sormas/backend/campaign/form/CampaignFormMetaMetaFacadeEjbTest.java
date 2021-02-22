@@ -58,7 +58,7 @@ public class CampaignFormMetaMetaFacadeEjbTest extends AbstractBeanTest {
 
 		// Styles must be an array
 		try {
-			schema = "[{\"id\": \"element\", \"type\": \"text\", \"styles\": \"col-1\"}]";
+			schema = "[{\"id\": \"element\", \"type\": \"text\", \"styles\": [\"col-1\"]}]";
 			getCampaignFormFacade().buildCampaignFormMetaFromJson("testForm", null, schema, null);
 		} catch (MismatchedInputException ignored) {
 		}
