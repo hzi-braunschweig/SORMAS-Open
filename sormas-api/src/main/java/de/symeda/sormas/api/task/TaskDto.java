@@ -28,7 +28,7 @@ import de.symeda.sormas.api.user.UserReferenceDto;
 import de.symeda.sormas.api.utils.DataHelper;
 import de.symeda.sormas.api.utils.EmbeddedPersonalData;
 import de.symeda.sormas.api.utils.EmbeddedSensitiveData;
-import de.symeda.sormas.api.utils.Required;
+import javax.validation.constraints.NotNull;
 
 public class TaskDto extends EntityDto {
 
@@ -55,7 +55,7 @@ public class TaskDto extends EntityDto {
 	public static final String CLOSED_LAT = "closedLat";
 	public static final String CLOSED_LON = "closedLon";
 
-	@Required
+	@NotNull
 	private TaskContext taskContext;
 	@EmbeddedPersonalData
 	@EmbeddedSensitiveData
@@ -67,10 +67,10 @@ public class TaskDto extends EntityDto {
 	@EmbeddedSensitiveData
 	private ContactReferenceDto contact;
 
-	@Required
+	@NotNull
 	private TaskType taskType;
 	private TaskPriority priority;
-	@Required
+	@NotNull
 	private Date dueDate;
 	private Date suggestedStart;
 	private TaskStatus taskStatus;
@@ -79,7 +79,7 @@ public class TaskDto extends EntityDto {
 
 	private UserReferenceDto creatorUser;
 	private String creatorComment;
-	@Required
+	@NotNull
 	private UserReferenceDto assigneeUser;
 	private String assigneeReply;
 

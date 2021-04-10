@@ -28,7 +28,6 @@ import java.util.List;
 
 import de.symeda.sormas.api.action.ActionDto;
 import de.symeda.sormas.api.caze.surveillancereport.SurveillanceReportDto;
-import de.symeda.sormas.api.event.EventActionIndexDto;
 import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.util.AreaReference;
@@ -76,7 +75,7 @@ import de.symeda.sormas.api.utils.HideForCountries;
 import de.symeda.sormas.api.utils.HideForCountriesExcept;
 import de.symeda.sormas.api.utils.Outbreaks;
 import de.symeda.sormas.api.utils.PersonalData;
-import de.symeda.sormas.api.utils.Required;
+import javax.validation.constraints.NotNull;
 import de.symeda.sormas.api.utils.SensitiveData;
 import de.symeda.sormas.api.visit.VisitDto;
 
@@ -242,7 +241,7 @@ public class DataDictionaryGenerator {
 
 			// required
 			XSSFCell requiredCell = row.createCell(EntityColumn.REQUIRED.ordinal());
-			if (field.getAnnotation(Required.class) != null)
+			if (field.getAnnotation(NotNull.class) != null)
 				requiredCell.setCellValue(true);
 
 			// diseases

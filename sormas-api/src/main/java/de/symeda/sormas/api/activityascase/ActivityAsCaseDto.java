@@ -32,7 +32,7 @@ import de.symeda.sormas.api.location.LocationDto;
 import de.symeda.sormas.api.user.UserReferenceDto;
 import de.symeda.sormas.api.utils.DataHelper;
 import de.symeda.sormas.api.utils.HideForCountries;
-import de.symeda.sormas.api.utils.Required;
+import javax.validation.constraints.NotNull;
 import de.symeda.sormas.api.utils.SensitiveData;
 import de.symeda.sormas.api.utils.pseudonymization.PseudonymizableDto;
 
@@ -70,7 +70,7 @@ public class ActivityAsCaseDto extends PseudonymizableDto {
 	private Date endDate;
 	@SensitiveData
 	private String description;
-	@Required
+	@NotNull
 	private ActivityAsCaseType activityAsCaseType;
 	@SensitiveData
 	private String activityAsCaseTypeDetails;

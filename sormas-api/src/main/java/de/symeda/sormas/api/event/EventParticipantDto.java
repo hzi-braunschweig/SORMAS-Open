@@ -25,7 +25,7 @@ import de.symeda.sormas.api.sormastosormas.SormasToSormasOriginInfoDto;
 import de.symeda.sormas.api.user.UserReferenceDto;
 import de.symeda.sormas.api.utils.DataHelper;
 import de.symeda.sormas.api.utils.EmbeddedPersonalData;
-import de.symeda.sormas.api.utils.Required;
+import javax.validation.constraints.NotNull;
 import de.symeda.sormas.api.utils.SensitiveData;
 import de.symeda.sormas.api.utils.SormasToSormasEntityDto;
 import de.symeda.sormas.api.utils.pseudonymization.PseudonymizableDto;
@@ -47,9 +47,9 @@ public class EventParticipantDto extends PseudonymizableDto implements SormasToS
 	public static final String VACCINATION_INFO = "vaccinationInfo";
 
 	private UserReferenceDto reportingUser;
-	@Required
+	@NotNull
 	private EventReferenceDto event;
-	@Required
+	@NotNull
 	@EmbeddedPersonalData
 	private PersonDto person;
 	@SensitiveData

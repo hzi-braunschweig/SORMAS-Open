@@ -37,7 +37,7 @@ import de.symeda.sormas.api.user.UserReferenceDto;
 import de.symeda.sormas.api.utils.DataHelper;
 import de.symeda.sormas.api.utils.EmbeddedPersonalData;
 import de.symeda.sormas.api.utils.HideForCountriesExcept;
-import de.symeda.sormas.api.utils.Required;
+import javax.validation.constraints.NotNull;
 import de.symeda.sormas.api.utils.SensitiveData;
 import de.symeda.sormas.api.utils.SormasToSormasEntityDto;
 import de.symeda.sormas.api.utils.YesNoUnknown;
@@ -134,9 +134,9 @@ public class ContactDto extends PseudonymizableDto implements SormasToSormasEnti
 	private Disease disease;
 	private String diseaseDetails;
 
-	@Required
+	@NotNull
 	private Date reportDateTime;
-	@Required
+	@NotNull
 	private UserReferenceDto reportingUser;
 	@SensitiveData
 	@Pseudonymizer(LatitudePseudonymizer.class)
@@ -150,10 +150,10 @@ public class ContactDto extends PseudonymizableDto implements SormasToSormasEnti
 	private RegionReferenceDto region;
 	private DistrictReferenceDto district;
 	private CommunityReferenceDto community;
-	@Required
+	@NotNull
 	private boolean multiDayContact;
 	private Date firstContactDate;
-	@Required
+	@NotNull
 	private Date lastContactDate;
 	@HideForCountriesExcept
 	private ContactIdentificationSource contactIdentificationSource;
@@ -169,6 +169,7 @@ public class ContactDto extends PseudonymizableDto implements SormasToSormasEnti
 	@SensitiveData
 	private String contactProximityDetails;
 	private ContactCategory contactCategory;
+	@NotNull
 	private ContactClassification contactClassification;
 	private ContactStatus contactStatus;
 	private FollowUpStatus followUpStatus;
@@ -199,7 +200,7 @@ public class ContactDto extends PseudonymizableDto implements SormasToSormasEnti
 	private Date quarantineFrom;
 	private Date quarantineTo;
 
-	@Required
+	@NotNull
 	@EmbeddedPersonalData
 	private PersonReferenceDto person;
 

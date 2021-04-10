@@ -28,7 +28,7 @@ import de.symeda.sormas.api.facility.FacilityReferenceDto;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasOriginInfoDto;
 import de.symeda.sormas.api.user.UserReferenceDto;
 import de.symeda.sormas.api.utils.DataHelper;
-import de.symeda.sormas.api.utils.Required;
+import javax.validation.constraints.NotNull;
 import de.symeda.sormas.api.utils.SensitiveData;
 import de.symeda.sormas.api.utils.SormasToSormasEntityDto;
 import de.symeda.sormas.api.utils.pseudonymization.PseudonymizableDto;
@@ -75,12 +75,12 @@ public class SampleDto extends PseudonymizableDto implements SormasToSormasEntit
 	private EventParticipantReferenceDto associatedEventParticipant;
 	private String labSampleID;
 	private String fieldSampleID;
-	@Required
+	@NotNull
 	private Date sampleDateTime;
 
-	@Required
+	@NotNull
 	private Date reportDateTime;
-	@Required
+	@NotNull
 	private UserReferenceDto reportingUser;
 	@SensitiveData
 	private Double reportLat;
@@ -89,11 +89,11 @@ public class SampleDto extends PseudonymizableDto implements SormasToSormasEntit
 
 	private Float reportLatLonAccuracy;
 
-	@Required
+	@NotNull
 	private SampleMaterial sampleMaterial;
 	@SensitiveData
 	private String sampleMaterialText;
-	@Required
+	@NotNull
 	private SamplePurpose samplePurpose;
 
 	private FacilityReferenceDto lab;

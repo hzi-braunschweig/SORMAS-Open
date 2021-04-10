@@ -24,7 +24,7 @@ import de.symeda.sormas.api.sormastosormas.SormasToSormasOriginInfoDto;
 import de.symeda.sormas.api.user.UserReferenceDto;
 import de.symeda.sormas.api.utils.DataHelper;
 import de.symeda.sormas.api.utils.HideForCountriesExcept;
-import de.symeda.sormas.api.utils.Required;
+import javax.validation.constraints.NotNull;
 import de.symeda.sormas.api.utils.SensitiveData;
 import de.symeda.sormas.api.utils.SormasToSormasEntityDto;
 import de.symeda.sormas.api.utils.YesNoUnknown;
@@ -93,7 +93,7 @@ public class EventDto extends PseudonymizableDto implements SormasToSormasEntity
 
 	private EventReferenceDto superordinateEvent;
 
-	@Required
+	@NotNull
 	private EventStatus eventStatus;
 	private RiskLevel riskLevel;
 	private EventInvestigationStatus eventInvestigationStatus;
@@ -103,14 +103,14 @@ public class EventDto extends PseudonymizableDto implements SormasToSormasEntity
 	private String externalId;
 	private String externalToken;
 	private String eventTitle;
-	@Required
+	@NotNull
 	private String eventDesc;
 	private YesNoUnknown nosocomial;
 	private Date startDate;
 	private Date endDate;
-	@Required
+	@NotNull
 	private Date reportDateTime;
-	@Required
+	@NotNull
 	private UserReferenceDto reportingUser;
 	private Date evolutionDate;
 	private String evolutionComment;

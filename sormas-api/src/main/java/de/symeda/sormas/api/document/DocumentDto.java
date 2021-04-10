@@ -16,7 +16,7 @@ package de.symeda.sormas.api.document;
 
 import de.symeda.sormas.api.user.UserReferenceDto;
 import de.symeda.sormas.api.utils.DataHelper;
-import de.symeda.sormas.api.utils.Required;
+import javax.validation.constraints.NotNull;
 import de.symeda.sormas.api.utils.pseudonymization.PseudonymizableDto;
 
 public class DocumentDto extends PseudonymizableDto {
@@ -28,17 +28,17 @@ public class DocumentDto extends PseudonymizableDto {
 	public static final String RELATED_ENTITY_UUID = "relatedEntityUuid";
 	public static final String RELATED_ENTITY_CLASS = "relatedEntityClass";
 
-	@Required
+	@NotNull
 	private UserReferenceDto uploadingUser;
-	@Required
+	@NotNull
 	private String name;
-	@Required
+	@NotNull
 	private String mimeType;
-	@Required
+	@NotNull
 	private long size;
-	@Required
+	@NotNull
 	private String relatedEntityUuid;
-	@Required
+	@NotNull
 	private DocumentRelatedEntityType relatedEntityType;
 
 	public static DocumentDto build() {

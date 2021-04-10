@@ -17,7 +17,7 @@
  *******************************************************************************/
 package de.symeda.sormas.api;
 
-import de.symeda.sormas.api.utils.Required;
+import javax.validation.constraints.NotNull;
 
 import java.io.Serializable;
 
@@ -30,7 +30,7 @@ public abstract class ReferenceDto implements Serializable, HasUuid, Comparable<
 
 	public static final String CAPTION = "caption";
 
-	@Required
+	@NotNull
 	@Pattern(regexp = UUID_REGEX)
 	private String uuid;
 	private String caption;

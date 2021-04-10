@@ -29,7 +29,7 @@ import de.symeda.sormas.api.utils.DataHelper;
 import de.symeda.sormas.api.utils.Diseases;
 import de.symeda.sormas.api.utils.HideForCountriesExcept;
 import de.symeda.sormas.api.utils.PersonalData;
-import de.symeda.sormas.api.utils.Required;
+import javax.validation.constraints.NotNull;
 import de.symeda.sormas.api.utils.SensitiveData;
 import de.symeda.sormas.api.utils.YesNoUnknown;
 import de.symeda.sormas.api.utils.pseudonymization.PseudonymizableDto;
@@ -102,7 +102,7 @@ public class ExposureDto extends PseudonymizableDto {
 	private Date endDate;
 	@SensitiveData
 	private String description;
-	@Required
+	@NotNull
 	private ExposureType exposureType;
 	@SensitiveData
 	private String exposureTypeDetails;

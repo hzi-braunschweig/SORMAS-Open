@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import de.symeda.sormas.api.Disease;
 import de.symeda.sormas.api.symptoms.SymptomsDto;
-import de.symeda.sormas.api.utils.Required;
+import javax.validation.constraints.NotNull;
 import de.symeda.sormas.api.utils.SensitiveData;
 
 /**
@@ -18,13 +18,13 @@ public class ExternalVisitDto implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 7909093498222091926L;
 
-	@Required
+	@NotNull
 	private String personUuid;
-	@Required
+	@NotNull
 	private Disease disease;
-	@Required
+	@NotNull
 	private Date visitDateTime;
-	@Required
+	@NotNull
 	private VisitStatus visitStatus;
 	@SensitiveData
 	private String visitRemarks;

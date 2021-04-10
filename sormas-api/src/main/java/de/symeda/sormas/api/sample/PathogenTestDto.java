@@ -28,7 +28,7 @@ import de.symeda.sormas.api.user.UserReferenceDto;
 import de.symeda.sormas.api.utils.DataHelper;
 import de.symeda.sormas.api.utils.DateFormatHelper;
 import de.symeda.sormas.api.utils.HideForCountriesExcept;
-import de.symeda.sormas.api.utils.Required;
+import javax.validation.constraints.NotNull;
 import de.symeda.sormas.api.utils.SensitiveData;
 import de.symeda.sormas.api.utils.pseudonymization.PseudonymizableDto;
 
@@ -57,31 +57,31 @@ public class PathogenTestDto extends PseudonymizableDto {
 	public static final String REPORT_DATE = "reportDate";
 	public static final String VIA_LIMS = "viaLims";
 
-	@Required
+	@NotNull
 	private SampleReferenceDto sample;
-	@Required
+	@NotNull
 	private Disease testedDisease;
 	private String testedDiseaseDetails;
 	private String typingId;
-	@Required
+	@NotNull
 	private PathogenTestType testType;
 	@SensitiveData
 	private String testTypeText;
-	@Required
+	@NotNull
 	private Date testDateTime;
-	@Required
+	@NotNull
 	private FacilityReferenceDto lab;
 	@SensitiveData
 	private String labDetails;
-	@Required
+	@NotNull
 	@SensitiveData
 	private UserReferenceDto labUser;
-	@Required
+	@NotNull
 	private PathogenTestResultType testResult;
-	@Required
+	@NotNull
 	@SensitiveData
 	private String testResultText;
-	@Required
+	@NotNull
 	private Boolean testResultVerified;
 	private boolean fourFoldIncreaseAntibodyTiter;
 	@SensitiveData

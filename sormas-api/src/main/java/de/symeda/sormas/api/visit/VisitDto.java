@@ -25,7 +25,7 @@ import de.symeda.sormas.api.person.PersonReferenceDto;
 import de.symeda.sormas.api.symptoms.SymptomsDto;
 import de.symeda.sormas.api.user.UserReferenceDto;
 import de.symeda.sormas.api.utils.DataHelper;
-import de.symeda.sormas.api.utils.Required;
+import javax.validation.constraints.NotNull;
 import de.symeda.sormas.api.utils.SensitiveData;
 import de.symeda.sormas.api.utils.pseudonymization.PseudonymizableDto;
 
@@ -46,15 +46,15 @@ public class VisitDto extends PseudonymizableDto {
 	public static final String REPORT_LON = "reportLon";
 	public static final String ORIGIN = "origin";
 
-	@Required
+	@NotNull
 	private PersonReferenceDto person;
 	private Disease disease;
-	@Required
+	@NotNull
 	private Date visitDateTime;
-	@Required
+	@NotNull
 	@SensitiveData
 	private UserReferenceDto visitUser;
-	@Required
+	@NotNull
 	private VisitStatus visitStatus;
 	@SensitiveData
 	private String visitRemarks;

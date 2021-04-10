@@ -56,7 +56,7 @@ import de.symeda.sormas.api.utils.HideForCountries;
 import de.symeda.sormas.api.utils.HideForCountriesExcept;
 import de.symeda.sormas.api.utils.Outbreaks;
 import de.symeda.sormas.api.utils.PersonalData;
-import de.symeda.sormas.api.utils.Required;
+import javax.validation.constraints.NotNull;
 import de.symeda.sormas.api.utils.SensitiveData;
 import de.symeda.sormas.api.utils.SormasToSormasEntityDto;
 import de.symeda.sormas.api.utils.YesNoUnknown;
@@ -202,7 +202,7 @@ public class CaseDataDto extends PseudonymizableDto implements SormasToSormasEnt
 	// Fields are declared in the order they should appear in the import template
 
 	@Outbreaks
-	@Required
+	@NotNull
 	private Disease disease;
 	private DiseaseVariantReferenceDto diseaseVariant;
 	@Outbreaks
@@ -219,7 +219,7 @@ public class CaseDataDto extends PseudonymizableDto implements SormasToSormasEnt
 		Disease.RABIES })
 	@Outbreaks
 	private RabiesType rabiesType;
-	@Required
+	@NotNull
 	@EmbeddedPersonalData
 	private PersonReferenceDto person;
 	@Outbreaks
@@ -228,17 +228,17 @@ public class CaseDataDto extends PseudonymizableDto implements SormasToSormasEnt
 		COUNTRY_CODE_SWITZERLAND })
 	private String epidNumber;
 	@Outbreaks
-	@Required
+	@NotNull
 	private Date reportDate;
 	@Outbreaks
-	@Required
+	@NotNull
 	private UserReferenceDto reportingUser;
 	private Date regionLevelDate;
 	private Date nationalLevelDate;
 	@Outbreaks
 	private Date districtLevelDate;
 	@Outbreaks
-	@Required
+	@NotNull
 	private CaseClassification caseClassification;
 	@HideForCountriesExcept
 	private CaseIdentificationSource caseIdentificationSource;
@@ -257,7 +257,7 @@ public class CaseDataDto extends PseudonymizableDto implements SormasToSormasEnt
 	private YesNoUnknown laboratoryDiagnosticConfirmation;
 
 	@Outbreaks
-	@Required
+	@NotNull
 	private InvestigationStatus investigationStatus;
 	@Outbreaks
 	private Date investigatedDate;
@@ -269,10 +269,10 @@ public class CaseDataDto extends PseudonymizableDto implements SormasToSormasEnt
 	@SensitiveData
 	private String sequelaeDetails;
 	@Outbreaks
-	@Required
+	@NotNull
 	private RegionReferenceDto region;
 	@Outbreaks
-	@Required
+	@NotNull
 	private DistrictReferenceDto district;
 	@Outbreaks
 	@PersonalData
@@ -282,7 +282,7 @@ public class CaseDataDto extends PseudonymizableDto implements SormasToSormasEnt
 	@SensitiveData(mandatoryField = true)
 	private FacilityType facilityType;
 	@Outbreaks
-	@Required
+	@NotNull
 	@PersonalData(mandatoryField = true)
 	@SensitiveData(mandatoryField = true)
 	private FacilityReferenceDto healthFacility;
