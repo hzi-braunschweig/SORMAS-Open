@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #*******************************************************************************
 # SORMAS® - Surveillance Outbreak Response Management & Analysis System
 # Copyright © 2016-2018 Helmholtz-Zentrum f�r Infektionsforschung GmbH (HZI)
@@ -15,8 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #*******************************************************************************
-
-#!/bin/bash
 
 DIR=$(dirname "$0")
 ASADMIN="${DIR}/../../payara5/bin/asadmin"

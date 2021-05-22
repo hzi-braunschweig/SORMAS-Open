@@ -46,12 +46,11 @@ jobs:
       # Run Linter against code base #
       ################################
       - name: Lint Code Base
-        uses: github/super-linter@v3.15.1
+        uses: github/super-linter@v3.15.3
         env:
           DEFAULT_BRANCH: development
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: false
-          VALIDATE_BASH: false
           VALIDATE_CSS: false
           VALIDATE_HTML: false
           VALIDATE_JAVA: false
