@@ -45,8 +45,8 @@ import de.symeda.sormas.backend.contact.ContactFacadeEjb.ContactFacadeEjbLocal;
 import de.symeda.sormas.backend.contact.ContactService;
 import de.symeda.sormas.backend.sormastosormas.AbstractSormasToSormasInterface;
 import de.symeda.sormas.backend.sormastosormas.ProcessedDataPersister;
+import de.symeda.sormas.backend.sormastosormas.ReceivedDataProcessor;
 import de.symeda.sormas.backend.sormastosormas.ShareDataBuilder;
-import de.symeda.sormas.backend.sormastosormas.SharedDataProcessor;
 import de.symeda.sormas.backend.sormastosormas.SormasToSormasShareInfo;
 import de.symeda.sormas.backend.sormastosormas.SormasToSormasShareInfoService;
 
@@ -63,7 +63,7 @@ public class SormasToSormasContactFacadeEjb
 	@EJB
 	private ContactShareDataBuilder contactShareDataBuilder;
 	@EJB
-	private SharedContactProcessor sharedContactProcessor;
+	private ReceivedContactProcessor sharedContactProcessor;
 	@EJB
 	private ProcessedContactDataPersister processedContactDataPersister;
 	@EJB
@@ -87,8 +87,7 @@ public class SormasToSormasContactFacadeEjb
 		return contactShareDataBuilder;
 	}
 
-	@Override
-	protected SharedDataProcessor<ContactDto, SormasToSormasContactDto, ProcessedContactData> getSharedDataProcessor() {
+	protected ReceivedDataProcessor<ContactDto, SormasToSormasContactDto, ProcessedContactData> getReceivedDataProcessor() {
 		return sharedContactProcessor;
 	}
 
@@ -127,10 +126,11 @@ public class SormasToSormasContactFacadeEjb
 			errors.add(I18nProperties.getCaption(Captions.Contact), I18nProperties.getValidationError(Validations.sormasToSormasContactExists));
 		}
 
+		// In case we want to store a new contact, the associated case must already be present 
 		CaseReferenceDto caze = entity.getCaze();
 		if (caze != null && !caseFacade.exists(caze.getUuid())) {
 			errors
-				.add(I18nProperties.getCaption(Captions.CaseData), I18nProperties.getValidationError(Validations.sormasToSormasContactCaseNotExists));
+				.add(I18nProperties.getCaption(Captions.Contact), I18nProperties.getValidationError(Validations.sormasToSormasContactCaseNotExists));
 		}
 
 		return errors;

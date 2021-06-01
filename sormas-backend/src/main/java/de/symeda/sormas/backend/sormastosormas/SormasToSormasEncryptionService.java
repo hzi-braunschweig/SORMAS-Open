@@ -75,6 +75,12 @@ public class SormasToSormasEncryptionService {
 		return store;
 	}
 
+	private String getOrganizationId() throws SormasToSormasException {
+		return serverAccessDataService.getServerAccessData()
+			.orElseThrow(() -> new SormasToSormasException(I18nProperties.getString(Strings.errorSormasToSormasCertNotGenerated)))
+			.getId();
+	}
+
 	private enum Mode {
 		ENCRYPTION,
 		DECRYPTION
@@ -117,11 +123,5 @@ public class SormasToSormasEncryptionService {
 			LOGGER.error("Could not decrypt and verify data", e);
 			throw new SormasToSormasException(I18nProperties.getString(Strings.errorSormasToSormasDecrypt));
 		}
-	}
-
-	private String getOrganizationId() throws SormasToSormasException {
-		return serverAccessDataService.getServerAccessData()
-			.orElseThrow(() -> new SormasToSormasException(I18nProperties.getString(Strings.errorSormasToSormasCertNotGenerated)))
-			.getId();
 	}
 }

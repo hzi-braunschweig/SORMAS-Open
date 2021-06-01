@@ -79,6 +79,57 @@ public abstract class AbstractSormasToSormasInterface<T extends AbstractDomainOb
 		this.entityCaptionTag = entityCaptionTag;
 	}
 
+	protected abstract BaseAdoService<T> getEntityService();
+
+	protected abstract ShareDataBuilder<T, S> getShareDataBuilder();
+
+	protected abstract ReceivedDataProcessor<U, S, P> getReceivedDataProcessor();
+
+	protected abstract ProcessedDataPersister<P> getProcessedDataPersister();
+
+	protected abstract Class<S[]> getShareDataClass();
+
+	protected abstract void validateEntitiesBeforeSend(List<T> entities) throws SormasToSormasException;
+
+	/**
+	 * Must ensure in the first place that the new, shared entity is NOT stored on the system. We need to error if the entity already
+	 * exists.
+	 * 
+	 * Additional checks for invariants can be added (e.g., relation between contacts and cases).
+	 * 
+	 * @param entity
+	 *            The entity which should NOT exist on the system.
+	 * @return Validation error if any. An error is inserted if the entity already exists.
+	 */
+	protected abstract ValidationErrors validateSharedEntity(U entity);
+
+	/**
+	 * Must ensure in the first place that the received entity is already stored on the system. We need to error if the entity is NOT
+	 * existing.
+	 * Additional checks for invariants can be added (e.g., relation between contacts and cases).
+	 * 
+	 * @param entity
+	 *            The entity which should exist on the system.
+	 * @return Validation error if any. An error is inserted if the entity does NOT exist.
+	 */
+	protected ValidationErrors validateExistingEntity(U entity, List<U> existingEntities) {
+		ValidationErrors errors = new ValidationErrors();
+
+		if (existingEntities.stream().noneMatch(e -> e.getUuid().equals(entity.getUuid()))) {
+			errors
+				.add(I18nProperties.getCaption(entityCaptionTag), I18nProperties.getValidationError(Validations.sormasToSormasReturnEntityNotExists));
+
+		}
+
+		return errors;
+	}
+
+	protected abstract void setEntityShareInfoAssociatedObject(SormasToSormasShareInfo sormasToSormasShareInfo, T entity);
+
+	protected abstract SormasToSormasShareInfo getShareInfoByEntityAndOrganization(String entityUuid, String organizationId);
+
+	protected abstract List<U> loadExistingEntities(List<String> uuids);
+
 	@Override
 	public void shareEntities(List<String> entityUuids, SormasToSormasOptionsDto options) throws SormasToSormasException {
 		User currentUser = userService.getCurrentUser();
@@ -88,11 +139,10 @@ public abstract class AbstractSormasToSormasInterface<T extends AbstractDomainOb
 
 		List<S> entitiesToSend = new ArrayList<>();
 		List<AssociatedEntityWrapper<?>> associatedEntities = new ArrayList<>();
+
 		for (T entity : entities) {
 			ShareData<S> shareData = getShareDataBuilder().buildShareData(entity, currentUser, options);
-
 			entitiesToSend.add(shareData.getDto());
-
 			associatedEntities.addAll(shareData.getAssociatedEntities());
 		}
 
@@ -111,38 +161,7 @@ public abstract class AbstractSormasToSormasInterface<T extends AbstractDomainOb
 
 	@Override
 	public void saveSharedEntities(SormasToSormasEncryptedDataDto encryptedData) throws SormasToSormasException, SormasToSormasValidationException {
-		S[] sharedEntities = sormasToSormasFacadeHelper.decryptSharedData(encryptedData, getShareDataClass());
-
-		Map<String, ValidationErrors> validationErrors = new HashMap<>();
-		List<P> dataToSave = new ArrayList<>(sharedEntities.length);
-
-		for (S data : sharedEntities) {
-			try {
-				U entity = data.getEntity();
-
-				ValidationErrors caseErrors = validateSharedEntity(entity);
-
-				if (caseErrors.hasError()) {
-					validationErrors.put(buildEntityValidationGroupName(entity), caseErrors);
-				} else {
-					P processedData = getSharedDataProcessor().processSharedData(data, null);
-
-					processedData.getEntity().setSormasToSormasOriginInfo(processedData.getOriginInfo());
-
-					dataToSave.add(processedData);
-				}
-			} catch (SormasToSormasValidationException validationException) {
-				validationErrors.putAll(validationException.getErrors());
-			}
-		}
-
-		if (validationErrors.size() > 0) {
-			throw new SormasToSormasValidationException(validationErrors);
-		}
-
-		for (P processedData : dataToSave) {
-			getProcessedDataPersister().persistSharedData(processedData);
-		}
+		saveNewEntities(encryptedData, data -> getProcessedDataPersister().persistSharedData(data));
 	}
 
 	@Override
@@ -173,37 +192,8 @@ public abstract class AbstractSormasToSormasInterface<T extends AbstractDomainOb
 	}
 
 	@Override
-	public void saveReturnedEntity(SormasToSormasEncryptedDataDto sharedData) throws SormasToSormasException, SormasToSormasValidationException {
-		S[] sharedEntities = sormasToSormasFacadeHelper.decryptSharedData(sharedData, getShareDataClass());
-
-		Map<String, ValidationErrors> validationErrors = new HashMap<>();
-		List<P> entitiesToSave = new ArrayList<>(sharedEntities.length);
-		List<U> existingEntities = loadExistingEntities(Arrays.stream(sharedEntities).map(e -> e.getEntity().getUuid()).collect(Collectors.toList()));
-		Map<String, U> existingEntitiesMap = existingEntities.stream().collect(Collectors.toMap(EntityDto::getUuid, Function.identity()));
-
-		for (S sharedEntity : sharedEntities) {
-			try {
-				U entity = sharedEntity.getEntity();
-				ValidationErrors entityErrors = validateExistingEntity(entity, existingEntities);
-				if (entityErrors.hasError()) {
-					validationErrors.put(buildEntityValidationGroupName(entity), entityErrors);
-				} else {
-					U exsitingEntity = existingEntitiesMap.get(sharedEntity.getEntity().getUuid());
-					P processedEntity = getSharedDataProcessor().processSharedData(sharedEntity, exsitingEntity);
-					entitiesToSave.add(processedEntity);
-				}
-			} catch (SormasToSormasValidationException validationException) {
-				validationErrors.putAll(validationException.getErrors());
-			}
-		}
-
-		if (validationErrors.size() > 0) {
-			throw new SormasToSormasValidationException(validationErrors);
-		}
-
-		for (P contactData : entitiesToSave) {
-			getProcessedDataPersister().persistReturnedData(contactData, contactData.getOriginInfo());
-		}
+	public void saveReturnedEntity(SormasToSormasEncryptedDataDto encryptedData) throws SormasToSormasException, SormasToSormasValidationException {
+		saveExistingEntities(encryptedData, data -> getProcessedDataPersister().persistReturnedData(data, data.getOriginInfo()));
 	}
 
 	@Override
@@ -239,80 +229,141 @@ public abstract class AbstractSormasToSormasInterface<T extends AbstractDomainOb
 
 	@Override
 	public void saveSyncedEntity(SormasToSormasEncryptedDataDto encryptedData) throws SormasToSormasException, SormasToSormasValidationException {
-		S[] sharedEntities = sormasToSormasFacadeHelper.decryptSharedData(encryptedData, getShareDataClass());
+		saveExistingEntities(encryptedData, data -> getProcessedDataPersister().persistSyncData(data));
 
+	}
+
+	private interface Persister<P> {
+
+		/**
+		 * Lambda for final persisting operation passed to each save function.
+		 * 
+		 * @param data
+		 *            The processed data that should be saved. See {@link ProcessedDataPersister} for details.
+		 * @throws SormasToSormasValidationException
+		 *             Throws in case the data cannot be saved.
+		 */
+		void call(P data) throws SormasToSormasValidationException;
+	}
+
+	/**
+	 * Handles the saving of entities received through S2S in the do not previously exists in the system and need to be
+	 * created. This is the case for the share operations, as new entities enter the system.
+	 * 
+	 * @param encryptedData
+	 *            The encrypted payload extracted from the request.
+	 * @param persister
+	 *            Lambda that is executed at the very end to persist the data at the very end. See {@link ProcessedDataPersister} for
+	 *            details.
+	 * @throws SormasToSormasException
+	 *             Throws in case the operation did not succeed.
+	 * @throws SormasToSormasValidationException
+	 *             Throws in case the received data was not valid.
+	 */
+	private void saveNewEntities(SormasToSormasEncryptedDataDto encryptedData, Persister<P> persister)
+		throws SormasToSormasException, SormasToSormasValidationException {
+		decryptAndSave(encryptedData, persister, false);
+	}
+
+	/**
+	 * Handles the saving of entities received through S2S in the case they already exists in the system.
+	 * This is the case for return and sync operations as the case existed before it was shared to another instance
+	 * 
+	 * @param encryptedData
+	 *            The encrypted payload extracted from the request.
+	 * @param persister
+	 *            Lambda that is executed at the very end to persist the data at the very end. See {@link ProcessedDataPersister} for
+	 *            details.
+	 * @throws SormasToSormasException
+	 *             Throws in case the operation did not succeed.
+	 * @throws SormasToSormasValidationException
+	 *             Throws in case the received data was not valid.
+	 */
+	private void saveExistingEntities(SormasToSormasEncryptedDataDto encryptedData, Persister<P> persister)
+		throws SormasToSormasException, SormasToSormasValidationException {
+		decryptAndSave(encryptedData, persister, true);
+	}
+
+	/**
+	 * Decrypts the received data, validates it, and finally persists it. The function has two modes governed by the `existing` flag, If it
+	 * is set to true, the function will attempt to resolve and process existing entities. If set to false, it assumes that the entities are
+	 * should be newly created and no scann for exisitng entities is performed.
+	 *
+	 * @param encryptedData
+	 *            The encrypted payload extracted from the request which is getting finally decrypted by this function.
+	 * @param persister
+	 *            Lambda that is executed at the very end to persist the data at the very end. See {@link ProcessedDataPersister} for
+	 *            details.
+	 * @param existing
+	 *            True for return and sync mode (as entities already exist on the system), else false.
+	 * @throws SormasToSormasException
+	 *             Throws in case the operation did not succeed.
+	 * @throws SormasToSormasValidationException
+	 *             Throws in case the received data was not valid.
+	 */
+	private void decryptAndSave(SormasToSormasEncryptedDataDto encryptedData, Persister<P> persister, boolean existing)
+		throws SormasToSormasException, SormasToSormasValidationException {
+		S[] receivedS2SEntities = sormasToSormasFacadeHelper.decryptSharedData(encryptedData, getShareDataClass());
 		Map<String, ValidationErrors> validationErrors = new HashMap<>();
-		List<P> entitiesToSave = new ArrayList<>(sharedEntities.length);
-		List<U> existingEntities = loadExistingEntities(Arrays.stream(sharedEntities).map(e -> e.getEntity().getUuid()).collect(Collectors.toList()));
-		Map<String, U> existingEntitiesMap = existingEntities.stream().collect(Collectors.toMap(EntityDto::getUuid, Function.identity()));
+		List<P> dataToSave = new ArrayList<>(receivedS2SEntities.length);
 
-		for (S sharedEntity : sharedEntities) {
+		List<U> existingEntities = null;
+		Map<String, U> existingEntitiesMap = null;
+		if (existing) {
+			// for all received entities, load the corresponding existing entities 
+			existingEntities =
+				loadExistingEntities(Arrays.stream(receivedS2SEntities).map(e -> e.getEntity().getUuid()).collect(Collectors.toList()));
+			existingEntitiesMap = existingEntities.stream().collect(Collectors.toMap(EntityDto::getUuid, Function.identity()));
+		}
+
+		for (S receivedS2SEntity : receivedS2SEntities) {
 			try {
-				U entity = sharedEntity.getEntity();
-
-				ValidationErrors contactErrors = validateExistingEntity(entity, existingEntities);
-				if (contactErrors.hasError()) {
-					validationErrors.put(buildEntityValidationGroupName(entity), contactErrors);
+				U receivedEntity = receivedS2SEntity.getEntity();
+				ValidationErrors validationError;
+				if (existing) {
+					// check that the received entity is already existing
+					validationError = validateExistingEntity(receivedEntity, existingEntities);
 				} else {
-					U existingEntity = existingEntitiesMap.get(sharedEntity.getEntity().getUuid());
-					P processedContactData = getSharedDataProcessor().processSharedData(sharedEntity, existingEntity);
-					entitiesToSave.add(processedContactData);
+					// check that the new, shared entity is not existing
+					validationError = validateSharedEntity(receivedEntity);
+				}
+				if (validationError.hasError()) {
+					validationErrors.put(buildValidationGroupName(entityCaptionTag, receivedEntity), validationError);
+				} else {
+					if (existing) {
+						U existingEntity = existingEntitiesMap.get(receivedEntity.getUuid());
+
+						// take the received and existing entity and process it
+						P processedData = getReceivedDataProcessor().processReceivedData(receivedS2SEntity, existingEntity);
+
+						dataToSave.add(processedData);
+					} else {
+						// take the new received process it
+						P processedData = getReceivedDataProcessor().processReceivedData(receivedS2SEntity, null);
+
+						// todo this looks like a no op
+						processedData.getEntity().setSormasToSormasOriginInfo(processedData.getOriginInfo());
+
+						dataToSave.add(processedData);
+					}
 				}
 			} catch (SormasToSormasValidationException validationException) {
 				validationErrors.putAll(validationException.getErrors());
 			}
 		}
-
 		if (validationErrors.size() > 0) {
 			throw new SormasToSormasValidationException(validationErrors);
 		}
-
-		for (P contactData : entitiesToSave) {
-			getProcessedDataPersister().persistSyncData(contactData);
+		for (P data : dataToSave) {
+			persister.call(data);
 		}
 	}
 
-	private String buildEntityValidationGroupName(U entity) {
-		return buildValidationGroupName(entityCaptionTag, entity);
-	}
-
-	protected abstract BaseAdoService<T> getEntityService();
-
-	protected abstract ShareDataBuilder<T, S> getShareDataBuilder();
-
-	protected abstract SharedDataProcessor<U, S, P> getSharedDataProcessor();
-
-	protected abstract ProcessedDataPersister<P> getProcessedDataPersister();
-
-	protected abstract Class<S[]> getShareDataClass();
-
-	protected abstract void validateEntitiesBeforeSend(List<T> entities) throws SormasToSormasException;
-
-	protected abstract ValidationErrors validateSharedEntity(U entity);
-
-	protected abstract void setEntityShareInfoAssociatedObject(SormasToSormasShareInfo sormasToSormasShareInfo, T entity);
-
-	protected abstract SormasToSormasShareInfo getShareInfoByEntityAndOrganization(String entityUuid, String organizationId);
-
-	protected abstract List<U> loadExistingEntities(List<String> uuids);
-
-	protected ValidationErrors validateExistingEntity(U entity, List<U> existingEntities) {
-		ValidationErrors errors = new ValidationErrors();
-
-		if (existingEntities.stream().noneMatch(e -> e.getUuid().equals(entity.getUuid()))) {
-			errors
-				.add(I18nProperties.getCaption(entityCaptionTag), I18nProperties.getValidationError(Validations.sormasToSormasReturnEntityNotExists));
-
-		}
-
-		return errors;
-	}
-
-	private <T> void saveNewShareInfo(
+	private <A> void saveNewShareInfo(
 		UserReferenceDto sender,
 		SormasToSormasOptionsDto options,
-		T associatedObject,
-		BiConsumer<SormasToSormasShareInfo, T> setAssociatedObject) {
+		A associatedObject,
+		BiConsumer<SormasToSormasShareInfo, A> setAssociatedObject) {
 		SormasToSormasShareInfo shareInfo = new SormasToSormasShareInfo();
 
 		shareInfo.setUuid(DataHelper.createUuid());
@@ -321,7 +372,6 @@ public abstract class AbstractSormasToSormasInterface<T extends AbstractDomainOb
 		shareInfo.setSender(userService.getByReferenceDto(sender));
 
 		addOptionsToShareInfo(options, shareInfo);
-
 		setAssociatedObject.accept(shareInfo, associatedObject);
 
 		shareInfoService.ensurePersisted(shareInfo);
@@ -339,7 +389,6 @@ public abstract class AbstractSormasToSormasInterface<T extends AbstractDomainOb
 
 	private void updateShareInfoOptions(SormasToSormasShareInfo shareInfo, SormasToSormasOptionsDto options) {
 		addOptionsToShareInfo(options, shareInfo);
-
 		shareInfoService.ensurePersisted(shareInfo);
 	}
 }

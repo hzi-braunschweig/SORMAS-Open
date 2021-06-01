@@ -33,25 +33,25 @@ import de.symeda.sormas.api.sormastosormas.SormasToSormasSampleDto;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasValidationException;
 import de.symeda.sormas.api.sormastosormas.ValidationErrors;
 import de.symeda.sormas.api.sormastosormas.contact.SormasToSormasContactDto;
-import de.symeda.sormas.backend.sormastosormas.SharedDataProcessor;
+import de.symeda.sormas.backend.sormastosormas.ReceivedDataProcessor;
 import de.symeda.sormas.backend.sormastosormas.SharedDataProcessorHelper;
 
 @Stateless
 @LocalBean
-public class SharedContactProcessor implements SharedDataProcessor<ContactDto, SormasToSormasContactDto, ProcessedContactData> {
+public class ReceivedContactProcessor implements ReceivedDataProcessor<ContactDto, SormasToSormasContactDto, ProcessedContactData> {
 
 	@EJB
 	private SharedDataProcessorHelper dataProcessorHelper;
 
 	@Override
-	public ProcessedContactData processSharedData(SormasToSormasContactDto sharedContact, ContactDto existingContact)
+	public ProcessedContactData processReceivedData(SormasToSormasContactDto receivedData, ContactDto existingContact)
 		throws SormasToSormasValidationException {
 		Map<String, ValidationErrors> validationErrors = new HashMap<>();
 
-		PersonDto person = sharedContact.getPerson();
-		ContactDto contact = sharedContact.getEntity();
-		List<SormasToSormasSampleDto> samples = sharedContact.getSamples();
-		SormasToSormasOriginInfoDto originInfo = sharedContact.getOriginInfo();
+		PersonDto person = receivedData.getPerson();
+		ContactDto contact = receivedData.getEntity();
+		List<SormasToSormasSampleDto> samples = receivedData.getSamples();
+		SormasToSormasOriginInfoDto originInfo = receivedData.getOriginInfo();
 
 		ValidationErrors contactValidationErrors = new ValidationErrors();
 

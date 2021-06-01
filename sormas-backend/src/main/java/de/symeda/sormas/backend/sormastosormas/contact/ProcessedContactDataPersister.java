@@ -104,7 +104,10 @@ public class ProcessedContactDataPersister implements ProcessedDataPersister<Pro
 		final ContactDto savedContact;
 		if (isCreate) {
 			// save person first during creation
-			handleValidationError(() -> personFacade.savePerson(processedData.getPerson(), false), Captions.Person, contactValidationGroupName);
+			handleValidationError(
+				() -> personFacade.savePerson(processedData.getPerson(), false),
+				Captions.Person,
+				contactValidationGroupName);
 			savedContact = handleValidationError(
 				() -> contactFacade.saveContact(processedData.getEntity(), true, true, false),
 				Captions.Contact,
@@ -115,7 +118,10 @@ public class ProcessedContactDataPersister implements ProcessedDataPersister<Pro
 				() -> contactFacade.saveContact(processedData.getEntity(), true, true, false),
 				Captions.Contact,
 				contactValidationGroupName);
-			handleValidationError(() -> personFacade.savePerson(processedData.getPerson(), false), Captions.Person, contactValidationGroupName);
+			handleValidationError(
+				() -> personFacade.savePerson(processedData.getPerson(), false),
+				Captions.Person,
+				contactValidationGroupName);
 		}
 
 		if (afterSaveContact != null) {

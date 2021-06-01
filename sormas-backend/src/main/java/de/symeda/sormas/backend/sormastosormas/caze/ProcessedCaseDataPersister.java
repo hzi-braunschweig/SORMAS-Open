@@ -116,12 +116,18 @@ public class ProcessedCaseDataPersister implements ProcessedDataPersister<Proces
 		final CaseDataDto savedCase;
 		if (isCreate) {
 			// save person first during creation
-			handleValidationError(() -> personFacade.savePerson(caseData.getPerson(), false), Captions.Person, buildCaseValidationGroupName(caze));
+			handleValidationError(
+				() -> personFacade.savePerson(caseData.getPerson(), false),
+				Captions.Person,
+				buildCaseValidationGroupName(caze));
 			savedCase = handleValidationError(() -> caseFacade.saveCase(caze, true, false), Captions.CaseData, buildCaseValidationGroupName(caze));
 		} else {
 			//save case first during update
 			savedCase = handleValidationError(() -> caseFacade.saveCase(caze, true, false), Captions.CaseData, buildCaseValidationGroupName(caze));
-			handleValidationError(() -> personFacade.savePerson(caseData.getPerson(), false), Captions.Person, buildCaseValidationGroupName(caze));
+			handleValidationError(
+				() -> personFacade.savePerson(caseData.getPerson(), false),
+				Captions.Person,
+				buildCaseValidationGroupName(caze));
 		}
 
 		if (afterSaveCase != null) {

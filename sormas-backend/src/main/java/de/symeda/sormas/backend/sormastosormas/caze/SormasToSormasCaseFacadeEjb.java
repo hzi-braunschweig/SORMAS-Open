@@ -43,8 +43,8 @@ import de.symeda.sormas.backend.caze.CaseService;
 import de.symeda.sormas.backend.common.BaseAdoService;
 import de.symeda.sormas.backend.sormastosormas.AbstractSormasToSormasInterface;
 import de.symeda.sormas.backend.sormastosormas.ProcessedDataPersister;
+import de.symeda.sormas.backend.sormastosormas.ReceivedDataProcessor;
 import de.symeda.sormas.backend.sormastosormas.ShareDataBuilder;
-import de.symeda.sormas.backend.sormastosormas.SharedDataProcessor;
 import de.symeda.sormas.backend.sormastosormas.SormasToSormasShareInfo;
 import de.symeda.sormas.backend.sormastosormas.SormasToSormasShareInfoService;
 
@@ -60,7 +60,7 @@ public class SormasToSormasCaseFacadeEjb extends AbstractSormasToSormasInterface
 	@EJB
 	private CaseShareDataBuilder caseShareDataBuilder;
 	@EJB
-	private SharedCaseProcessor sharedCaseProcessor;
+	private ReceivedCaseProcessor sharedCaseProcessor;
 	@EJB
 	private ProcessedCaseDataPersister processedCaseDataPersister;
 	@EJB
@@ -82,8 +82,7 @@ public class SormasToSormasCaseFacadeEjb extends AbstractSormasToSormasInterface
 		return caseShareDataBuilder;
 	}
 
-	@Override
-	protected SharedDataProcessor<CaseDataDto, SormasToSormasCaseDto, ProcessedCaseData> getSharedDataProcessor() {
+	protected ReceivedDataProcessor<CaseDataDto, SormasToSormasCaseDto, ProcessedCaseData> getReceivedDataProcessor() {
 		return sharedCaseProcessor;
 	}
 
