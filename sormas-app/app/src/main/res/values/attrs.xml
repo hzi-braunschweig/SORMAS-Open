@@ -190,11 +190,15 @@
         <attr name="captionItalic" />
     </declare-styleable>
 
+    <attr name="softRequired" format="boolean"/>
+
     <declare-styleable name="ControlPropertyEditField">
         <attr name="required" />
         <attr name="softRequired" />
         <attr name="hint" />
     </declare-styleable>
+
+    <attr name="allowedDaysInFuture" format="integer"/>
 
     <declare-styleable name="ControlDateField">
         <attr name="allowedDaysInFuture" />
@@ -222,6 +226,8 @@
         <attr name="inputType" />
         <attr name="slim" />
     </declare-styleable>
+
+    <attr name="excludeEmptyItem" format="boolean"/>
 
     <declare-styleable name="ControlSpinnerField">
         <attr name="excludeEmptyItem" />
@@ -309,6 +315,8 @@
         <attr name="imageHeight" />
     </declare-styleable>
 
+    <attr name="text" format="string" localization="suggested" />
+
     <declare-styleable name="ControlButton">
         <attr name="buttonType" />
         <attr name="iconEnd" />
@@ -318,6 +326,8 @@
         <attr name="slim" />
         <attr name="text" />
     </declare-styleable>
+
+    <attr name="marginBottomOffsetResId" format="integer"/>
 
     <declare-styleable name="PageMenuControl">
         <attr name="cellLayout" />
