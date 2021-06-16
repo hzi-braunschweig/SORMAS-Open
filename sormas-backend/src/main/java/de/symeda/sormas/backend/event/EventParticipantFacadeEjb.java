@@ -103,8 +103,8 @@ import de.symeda.sormas.backend.region.Region;
 import de.symeda.sormas.backend.region.RegionFacadeEjb;
 import de.symeda.sormas.backend.region.RegionService;
 import de.symeda.sormas.backend.sample.Sample;
-import de.symeda.sormas.backend.sormastosormas.SormasToSormasOriginInfoFacadeEjb;
-import de.symeda.sormas.backend.sormastosormas.shareinfo.ShareInfoHelper;
+import de.symeda.sormas.backend.sormastosormas.origin.SormasToSormasOriginInfoFacadeEjb;
+import de.symeda.sormas.backend.sormastosormas.share.shareinfo.ShareInfoHelper;
 import de.symeda.sormas.backend.user.User;
 import de.symeda.sormas.backend.user.UserService;
 import de.symeda.sormas.backend.util.DtoHelper;
@@ -262,39 +262,40 @@ public class EventParticipantFacadeEjb implements EventParticipantFacade {
 		}
 
 		Date fromDate = Date.from(Instant.now().minus(Duration.ofDays(30)));
-		Map<String, Optional<User>> responsibleUserByEventUuid = eventService.getAllEventUuidsWithResponsibleUserByPersonAndDiseaseAfterDateForNotification(
-			eventParticipant.getPerson().getUuid(), event.getDisease(), fromDate);
+		Map<String, Optional<User>> responsibleUserByEventUuid =
+			eventService.getAllEventUuidsWithResponsibleUserByPersonAndDiseaseAfterDateForNotification(
+				eventParticipant.getPerson().getUuid(),
+				event.getDisease(),
+				fromDate);
 		if (responsibleUserByEventUuid.size() == 1 && responsibleUserByEventUuid.containsKey(event.getUuid())) {
 			// it means the event participant is only appearing into the current event
 			return;
 		}
 
 		for (Map.Entry<String, Optional<User>> entry : responsibleUserByEventUuid.entrySet()) {
-			entry.getValue()
-				.filter(user -> StringUtils.isNotEmpty(user.getUserEmail()))
-				.ifPresent(user -> {
-					try {
-						messagingService.sendMessage(
-							user,
-							MessageSubject.EVENT_PARTICIPANT_RELATED_TO_OTHER_EVENTS,
-							String.format(
-								I18nProperties.getString(MessagingService.CONTENT_EVENT_PARTICIPANT_RELATED_TO_OTHER_EVENTS),
-								DataHelper.getShortUuid(eventParticipant.getPerson().getUuid()),
-								DataHelper.getShortUuid(eventParticipant.getUuid()),
-								DataHelper.getShortUuid(event.getUuid()),
-								User.buildCaptionForNotification(event.getResponsibleUser()),
-								User.buildCaptionForNotification(userService.getCurrentUser()),
-								buildEventListContentForNotification(responsibleUserByEventUuid)),
-							MessageType.EMAIL,
-							MessageType.SMS);
-					} catch (NotificationDeliveryFailedException e) {
-						logger.error(
-							String.format(
-								"NotificationDeliveryFailedException when trying to notify event responsible user about a newly created EventPartipant related to other events. "
-									+ "Failed to send " + e.getMessageType() + " to user with UUID %s.",
-								user.getUuid()));
-					}
-				});
+			entry.getValue().filter(user -> StringUtils.isNotEmpty(user.getUserEmail())).ifPresent(user -> {
+				try {
+					messagingService.sendMessage(
+						user,
+						MessageSubject.EVENT_PARTICIPANT_RELATED_TO_OTHER_EVENTS,
+						String.format(
+							I18nProperties.getString(MessagingService.CONTENT_EVENT_PARTICIPANT_RELATED_TO_OTHER_EVENTS),
+							DataHelper.getShortUuid(eventParticipant.getPerson().getUuid()),
+							DataHelper.getShortUuid(eventParticipant.getUuid()),
+							DataHelper.getShortUuid(event.getUuid()),
+							User.buildCaptionForNotification(event.getResponsibleUser()),
+							User.buildCaptionForNotification(userService.getCurrentUser()),
+							buildEventListContentForNotification(responsibleUserByEventUuid)),
+						MessageType.EMAIL,
+						MessageType.SMS);
+				} catch (NotificationDeliveryFailedException e) {
+					logger.error(
+						String.format(
+							"NotificationDeliveryFailedException when trying to notify event responsible user about a newly created EventPartipant related to other events. "
+								+ "Failed to send " + e.getMessageType() + " to user with UUID %s.",
+							user.getUuid()));
+				}
+			});
 		}
 	}
 

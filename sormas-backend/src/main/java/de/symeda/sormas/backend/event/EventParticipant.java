@@ -38,9 +38,9 @@ import de.symeda.sormas.backend.person.Person;
 import de.symeda.sormas.backend.region.District;
 import de.symeda.sormas.backend.region.Region;
 import de.symeda.sormas.backend.sample.Sample;
-import de.symeda.sormas.backend.sormastosormas.SormasToSormasEntity;
-import de.symeda.sormas.backend.sormastosormas.SormasToSormasOriginInfo;
-import de.symeda.sormas.backend.sormastosormas.shareinfo.ShareInfoEventParticipant;
+import de.symeda.sormas.backend.sormastosormas.entities.SormasToSormasEntity;
+import de.symeda.sormas.backend.sormastosormas.origin.SormasToSormasOriginInfo;
+import de.symeda.sormas.backend.sormastosormas.share.shareinfo.ShareInfoEventParticipant;
 import de.symeda.sormas.backend.user.User;
 import de.symeda.sormas.backend.vaccinationinfo.VaccinationInfo;
 

@@ -93,7 +93,7 @@ import de.symeda.sormas.backend.region.District;
 import de.symeda.sormas.backend.region.DistrictService;
 import de.symeda.sormas.backend.region.Region;
 import de.symeda.sormas.backend.region.RegionService;
-import de.symeda.sormas.backend.sormastosormas.ServerAccessDataService;
+import de.symeda.sormas.backend.sormastosormas.access.ServerAccessDataService;
 import de.symeda.sormas.backend.user.User;
 import de.symeda.sormas.backend.user.UserService;
 import de.symeda.sormas.backend.user.event.PasswordResetEvent;

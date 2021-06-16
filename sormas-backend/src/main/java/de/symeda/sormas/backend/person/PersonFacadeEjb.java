@@ -50,9 +50,6 @@ import javax.persistence.criteria.Subquery;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import de.symeda.sormas.api.caze.CaseClassification;
-import de.symeda.sormas.api.externaldata.ExternalDataDto;
-import de.symeda.sormas.api.externaldata.ExternalDataUpdateException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -62,12 +59,15 @@ import com.google.i18n.phonenumbers.Phonenumber;
 
 import de.symeda.sormas.api.Disease;
 import de.symeda.sormas.api.caze.AgeAndBirthDateDto;
+import de.symeda.sormas.api.caze.CaseClassification;
 import de.symeda.sormas.api.caze.CaseCriteria;
 import de.symeda.sormas.api.caze.CaseDataDto;
 import de.symeda.sormas.api.caze.CaseOutcome;
 import de.symeda.sormas.api.common.Page;
 import de.symeda.sormas.api.contact.FollowUpStatus;
 import de.symeda.sormas.api.contact.FollowUpStatusDto;
+import de.symeda.sormas.api.externaldata.ExternalDataDto;
+import de.symeda.sormas.api.externaldata.ExternalDataUpdateException;
 import de.symeda.sormas.api.feature.FeatureType;
 import de.symeda.sormas.api.i18n.Captions;
 import de.symeda.sormas.api.i18n.I18nProperties;
@@ -121,8 +121,8 @@ import de.symeda.sormas.backend.region.DistrictFacadeEjb;
 import de.symeda.sormas.backend.region.DistrictService;
 import de.symeda.sormas.backend.region.RegionFacadeEjb;
 import de.symeda.sormas.backend.region.RegionService;
-import de.symeda.sormas.backend.sormastosormas.SormasToSormasOriginInfo;
-import de.symeda.sormas.backend.sormastosormas.SormasToSormasOriginInfoService;
+import de.symeda.sormas.backend.sormastosormas.origin.SormasToSormasOriginInfo;
+import de.symeda.sormas.backend.sormastosormas.origin.SormasToSormasOriginInfoService;
 import de.symeda.sormas.backend.user.User;
 import de.symeda.sormas.backend.user.UserFacadeEjb.UserFacadeEjbLocal;
 import de.symeda.sormas.backend.user.UserService;
@@ -298,7 +298,8 @@ public class PersonFacadeEjb implements PersonFacade {
 
 	/**
 	 *
-	 * @param personDto a detailed person object
+	 * @param personDto
+	 *            a detailed person object
 	 * @return a pair with element0=emailAddress and element1=phone
 	 */
 	public Pair<String, String> getContactDetails(PersonDto personDto) {
@@ -331,8 +332,6 @@ public class PersonFacadeEjb implements PersonFacade {
 		}
 	}
 
-
-
 	public String formatPhoneNumber(String phoneNumber) {
 		try {
 			PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
@@ -352,13 +351,17 @@ public class PersonFacadeEjb implements PersonFacade {
 	 * Saves the received person.
 	 * If checkChangedDate is specified, it checks whether the the person from the database has a higher timestamp than the source object,
 	 * so it prevents overwriting with obsolete data.
-	 * If the person to be saved is enrolled in the external journal, the relevant data is validated and, if changed, the external journal is notified.
+	 * If the person to be saved is enrolled in the external journal, the relevant data is validated and, if changed, the external journal
+	 * is notified.
 	 *
 	 *
-	 * @param source the person dto object to be saved
-	 * @param checkChangeDate a boolean specifying whether to check if the source data is outdated
+	 * @param source
+	 *            the person dto object to be saved
+	 * @param checkChangeDate
+	 *            a boolean specifying whether to check if the source data is outdated
 	 * @return the newly saved person
-	 * @throws ValidationRuntimeException if the passed source person to be saved contains invalid data
+	 * @throws ValidationRuntimeException
+	 *             if the passed source person to be saved contains invalid data
 	 */
 	public PersonDto savePerson(PersonDto source, boolean checkChangeDate) throws ValidationRuntimeException {
 		Person person = personService.getByUuid(source.getUuid());
@@ -386,16 +389,20 @@ public class PersonFacadeEjb implements PersonFacade {
 	/**
 	 * Saves the received person.
 	 * This method always checks if the given source person data is outdated
-	 * The approximate age reference date is calculated and set on the person object to be saved. In case the case classification was changed by saving the person,
-	 * If the person is enrolled in the external journal, the relevant data is validated,but the external journal is not notified. The task of notifying the external journals falls to the caller of this method.
+	 * The approximate age reference date is calculated and set on the person object to be saved. In case the case classification was
+	 * changed by saving the person,
+	 * If the person is enrolled in the external journal, the relevant data is validated,but the external journal is not notified. The task
+	 * of notifying the external journals falls to the caller of this method.
 	 * Also, in case the case classification was changed, the new classification will be returned.
 	 *
 	 *
-	 * @param source the person dto object to be saved
+	 * @param source
+	 *            the person dto object to be saved
 	 * @return a pair of objects containing:
-	 * 					- the new case classification or null if it was not changed
-	 * 					- the old person data from the database
-	 * @throws ValidationRuntimeException if the passed source person to be saved contains invalid data
+	 *         - the new case classification or null if it was not changed
+	 *         - the old person data from the database
+	 * @throws ValidationRuntimeException
+	 *             if the passed source person to be saved contains invalid data
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public Pair<CaseClassification, PersonDto> savePersonWithoutNotifyingExternalJournal(PersonDto source) throws ValidationRuntimeException {
@@ -429,8 +436,7 @@ public class PersonFacadeEjb implements PersonFacade {
 		// Check whether the classification of any of this person's cases has changed
 		for (CaseDataDto oldCase : oldCases) {
 			CaseDataDto updatedPersonCase = caseFacade.getCaseDataByUuid(oldCase.getUuid());
-			if (oldCase.getCaseClassification() != updatedPersonCase.getCaseClassification()
-					&& updatedPersonCase.getClassificationUser() == null) {
+			if (oldCase.getCaseClassification() != updatedPersonCase.getCaseClassification() && updatedPersonCase.getClassificationUser() == null) {
 				return updatedPersonCase.getCaseClassification();
 			}
 		}
@@ -441,8 +447,8 @@ public class PersonFacadeEjb implements PersonFacade {
 	private void computeApproximateAgeReferenceDate(PersonDto existingPerson, PersonDto changedPerson) {
 		// approximate age reference date
 		if (existingPerson == null
-				|| !DataHelper.equal(changedPerson.getApproximateAge(), existingPerson.getApproximateAge())
-				|| !DataHelper.equal(changedPerson.getApproximateAgeType(), existingPerson.getApproximateAgeType())) {
+			|| !DataHelper.equal(changedPerson.getApproximateAge(), existingPerson.getApproximateAge())
+			|| !DataHelper.equal(changedPerson.getApproximateAgeType(), existingPerson.getApproximateAgeType())) {
 			if (changedPerson.getApproximateAge() == null) {
 				changedPerson.setApproximateAgeReferenceDate(null);
 			} else {

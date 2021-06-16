@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -42,9 +41,6 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 import javax.transaction.Transactional;
 
-import de.symeda.sormas.api.externaldata.ExternalDataDto;
-import de.symeda.sormas.api.externaldata.ExternalDataUpdateException;
-import de.symeda.sormas.backend.util.ExternalDataUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -53,6 +49,8 @@ import de.symeda.sormas.api.EntityRelevanceStatus;
 import de.symeda.sormas.api.event.EventCriteria;
 import de.symeda.sormas.api.event.EventCriteriaDateType;
 import de.symeda.sormas.api.event.EventReferenceDto;
+import de.symeda.sormas.api.externaldata.ExternalDataDto;
+import de.symeda.sormas.api.externaldata.ExternalDataUpdateException;
 import de.symeda.sormas.api.task.TaskCriteria;
 import de.symeda.sormas.api.user.JurisdictionLevel;
 import de.symeda.sormas.api.user.UserRole;
@@ -79,10 +77,11 @@ import de.symeda.sormas.backend.region.District;
 import de.symeda.sormas.backend.region.Region;
 import de.symeda.sormas.backend.share.ExternalShareInfo;
 import de.symeda.sormas.backend.share.ExternalShareInfoService;
-import de.symeda.sormas.backend.sormastosormas.shareinfo.SormasToSormasShareInfoService;
+import de.symeda.sormas.backend.sormastosormas.share.shareinfo.SormasToSormasShareInfoService;
 import de.symeda.sormas.backend.task.Task;
 import de.symeda.sormas.backend.task.TaskService;
 import de.symeda.sormas.backend.user.User;
+import de.symeda.sormas.backend.util.ExternalDataUtil;
 import de.symeda.sormas.backend.util.IterableHelper;
 import de.symeda.sormas.backend.util.ModelConstants;
 
@@ -195,7 +194,10 @@ public class EventService extends AbstractCoreAdoService<Event> {
 		return em.createQuery(cq).getResultList().stream().collect(Collectors.toMap(objects -> (String) objects[0], objects -> (User) objects[1]));
 	}
 
-	public Map<String, Optional<User>> getAllEventUuidsWithResponsibleUserByPersonAndDiseaseAfterDateForNotification(String personUuid, Disease disease, Date date) {
+	public Map<String, Optional<User>> getAllEventUuidsWithResponsibleUserByPersonAndDiseaseAfterDateForNotification(
+		String personUuid,
+		Disease disease,
+		Date date) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
 		Root<Event> eventRoot = cq.from(Event.class);

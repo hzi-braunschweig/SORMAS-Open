@@ -15,7 +15,7 @@
 
 package de.symeda.sormas.backend.sormastosormas;
 
-import static de.symeda.sormas.backend.sormastosormas.ValidationHelper.buildValidationGroupName;
+import static de.symeda.sormas.backend.sormastosormas.processed.ValidationHelper.buildValidationGroupName;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -58,9 +58,23 @@ import de.symeda.sormas.api.utils.SormasToSormasEntityDto;
 import de.symeda.sormas.backend.common.AbstractDomainObject;
 import de.symeda.sormas.backend.common.BaseAdoService;
 import de.symeda.sormas.backend.feature.FeatureConfigurationFacadeEjb.FeatureConfigurationFacadeEjbLocal;
-import de.symeda.sormas.backend.sormastosormas.shareinfo.SormasToSormasShareInfo;
-import de.symeda.sormas.backend.sormastosormas.shareinfo.SormasToSormasShareInfoService;
-import de.symeda.sormas.backend.sormastosormas.sharerequest.SormasToSormasShareRequestFacadeEJB.SormasToSormasShareRequestFacadeEJBLocal;
+import de.symeda.sormas.backend.sormastosormas.crypto.SormasToSormasEncryptionService;
+import de.symeda.sormas.backend.sormastosormas.entities.AssociatedEntityWrapper;
+import de.symeda.sormas.backend.sormastosormas.entities.SormasToSormasEntity;
+import de.symeda.sormas.backend.sormastosormas.origin.SormasToSormasOriginInfo;
+import de.symeda.sormas.backend.sormastosormas.origin.SormasToSormasOriginInfoService;
+import de.symeda.sormas.backend.sormastosormas.processed.ProcessedData;
+import de.symeda.sormas.backend.sormastosormas.processed.ProcessedDataPersister;
+import de.symeda.sormas.backend.sormastosormas.received.ReceivedDataProcessor;
+import de.symeda.sormas.backend.sormastosormas.received.ReceivedDataProcessorHelper;
+import de.symeda.sormas.backend.sormastosormas.rest.SormasToSormasRestClient;
+import de.symeda.sormas.backend.sormastosormas.share.ShareData;
+import de.symeda.sormas.backend.sormastosormas.share.ShareDataBuilder;
+import de.symeda.sormas.backend.sormastosormas.share.ShareDataBuilderHelper;
+import de.symeda.sormas.backend.sormastosormas.share.ShareRequestData;
+import de.symeda.sormas.backend.sormastosormas.share.shareinfo.SormasToSormasShareInfo;
+import de.symeda.sormas.backend.sormastosormas.share.shareinfo.SormasToSormasShareInfoService;
+import de.symeda.sormas.backend.sormastosormas.share.sharerequest.SormasToSormasShareRequestFacadeEJB.SormasToSormasShareRequestFacadeEJBLocal;
 import de.symeda.sormas.backend.user.User;
 import de.symeda.sormas.backend.user.UserService;
 
@@ -226,8 +240,8 @@ public abstract class AbstractSormasToSormasInterface<ADO extends AbstractDomain
 		SormasToSormasShareRequestDto shareRequest = shareRequestFacade.getShareRequestByUuid(uuid);
 		String organizationId = shareRequest.getOriginInfo().getOrganizationId();
 
-		SormasToSormasEncryptedDataDto encryptedData = sormasToSormasRestClient
-			.post(organizationId, requestAcceptEndpoint, uuid, SormasToSormasEncryptedDataDto.class);
+		SormasToSormasEncryptedDataDto encryptedData =
+			sormasToSormasRestClient.post(organizationId, requestAcceptEndpoint, uuid, SormasToSormasEncryptedDataDto.class);
 
 		saveSharedEntities(encryptedData, shareRequest.getOriginInfo());
 

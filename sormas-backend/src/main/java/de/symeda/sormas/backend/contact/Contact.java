@@ -66,9 +66,9 @@ import de.symeda.sormas.backend.region.Community;
 import de.symeda.sormas.backend.region.District;
 import de.symeda.sormas.backend.region.Region;
 import de.symeda.sormas.backend.sample.Sample;
-import de.symeda.sormas.backend.sormastosormas.SormasToSormasEntity;
-import de.symeda.sormas.backend.sormastosormas.SormasToSormasOriginInfo;
-import de.symeda.sormas.backend.sormastosormas.shareinfo.ShareInfoContact;
+import de.symeda.sormas.backend.sormastosormas.entities.SormasToSormasEntity;
+import de.symeda.sormas.backend.sormastosormas.origin.SormasToSormasOriginInfo;
+import de.symeda.sormas.backend.sormastosormas.share.shareinfo.ShareInfoContact;
 import de.symeda.sormas.backend.task.Task;
 import de.symeda.sormas.backend.user.User;
 import de.symeda.sormas.backend.vaccinationinfo.VaccinationInfo;
@@ -580,7 +580,9 @@ public class Contact extends CoreAdo implements SormasToSormasEntity, HasExterna
 
 	/**
 	 * Extra setter for externalID needed to comply with the HasExternalData interface
-	 * @param externalId the value to be set for externalID
+	 * 
+	 * @param externalId
+	 *            the value to be set for externalID
 	 */
 	public void setExternalId(String externalId) {
 		this.externalID = externalId;

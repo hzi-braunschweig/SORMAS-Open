@@ -113,8 +113,8 @@ import de.symeda.sormas.backend.sample.SampleJoins;
 import de.symeda.sormas.backend.sample.SampleService;
 import de.symeda.sormas.backend.share.ExternalShareInfo;
 import de.symeda.sormas.backend.share.ExternalShareInfoService;
-import de.symeda.sormas.backend.sormastosormas.shareinfo.ShareInfoCase;
-import de.symeda.sormas.backend.sormastosormas.shareinfo.SormasToSormasShareInfoService;
+import de.symeda.sormas.backend.sormastosormas.share.shareinfo.ShareInfoCase;
+import de.symeda.sormas.backend.sormastosormas.share.shareinfo.SormasToSormasShareInfoService;
 import de.symeda.sormas.backend.symptoms.Symptoms;
 import de.symeda.sormas.backend.task.Task;
 import de.symeda.sormas.backend.task.TaskService;
@@ -722,11 +722,11 @@ public class CaseService extends AbstractCoreAdoService<Case> {
 					CriteriaBuilderHelper.ilike(cb, from.get(Case.EXTERNAL_TOKEN), textFilter),
 					CriteriaBuilderHelper.unaccentedIlike(cb, from.get(Case.HEALTH_FACILITY_DETAILS), textFilter),
 					phoneNumberPredicate(
-					cb,
-					(Expression<String>) caseQueryContext.getSubqueryExpression(ContactQueryContext.PERSON_PHONE_SUBQUERY),
-					textFilter),
+						cb,
+						(Expression<String>) caseQueryContext.getSubqueryExpression(ContactQueryContext.PERSON_PHONE_SUBQUERY),
+						textFilter),
 					CriteriaBuilderHelper.unaccentedIlike(cb, location.get(Location.CITY), textFilter),
-				CriteriaBuilderHelper.ilike(cb, location.get(Location.POSTAL_CODE), textFilter)));
+					CriteriaBuilderHelper.ilike(cb, location.get(Location.POSTAL_CODE), textFilter)));
 
 			filter = CriteriaBuilderHelper.and(cb, filter, likeFilters);
 		}
@@ -795,12 +795,8 @@ public class CaseService extends AbstractCoreAdoService<Case> {
 			sharesSubQuery.where(cb.equal(sharesRoot.get(ShareInfoCase.CAZE), from));
 			sharesSubQuery.select(sharesRoot.get(ShareInfoCase.ID));
 
-			filter = CriteriaBuilderHelper.and(
-				cb,
-				filter,
-				cb.or(
-					cb.exists(sharesSubQuery),
-					cb.isNotNull(from.get(Case.SORMAS_TO_SORMAS_ORIGIN_INFO))));
+			filter =
+				CriteriaBuilderHelper.and(cb, filter, cb.or(cb.exists(sharesSubQuery), cb.isNotNull(from.get(Case.SORMAS_TO_SORMAS_ORIGIN_INFO))));
 		}
 		if (Boolean.TRUE.equals(caseCriteria.getOnlyCasesWithReinfection())) {
 			filter = CriteriaBuilderHelper.and(cb, filter, cb.equal(from.get(Case.RE_INFECTION), YesNoUnknown.YES));
@@ -1321,7 +1317,7 @@ public class CaseService extends AbstractCoreAdoService<Case> {
 		casesForUpdate.forEach(this::updateCompleteness);
 	}
 
-	public void updateCompleteness(Case caze){
+	public void updateCompleteness(Case caze) {
 		caze.setCompleteness(calculateCompleteness(caze));
 		ensurePersisted(caze);
 	}

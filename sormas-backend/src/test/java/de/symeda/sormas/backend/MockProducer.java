@@ -39,10 +39,10 @@ import javax.transaction.UserTransaction;
 
 import de.symeda.sormas.api.utils.InfoProvider;
 import de.symeda.sormas.backend.common.ConfigFacadeEjb;
-import de.symeda.sormas.backend.sormastosormas.ServerAccessDataService;
-import de.symeda.sormas.backend.sormastosormas.SormasToSormasEncryptionService;
-import de.symeda.sormas.backend.sormastosormas.SormasToSormasRestClient;
-import de.symeda.sormas.backend.sormastosormas.SormasToSormasRestClientProducer;
+import de.symeda.sormas.backend.sormastosormas.access.ServerAccessDataService;
+import de.symeda.sormas.backend.sormastosormas.crypto.SormasToSormasEncryptionService;
+import de.symeda.sormas.backend.sormastosormas.rest.SormasToSormasRestClient;
+import de.symeda.sormas.backend.sormastosormas.rest.SormasToSormasRestClientProducer;
 
 /**
  * Creates mocks for resources needed in bean test / external services.

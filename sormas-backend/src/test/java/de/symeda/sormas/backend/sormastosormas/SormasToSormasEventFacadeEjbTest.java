@@ -80,8 +80,8 @@ import de.symeda.sormas.api.utils.DataHelper;
 import de.symeda.sormas.backend.MockProducer;
 import de.symeda.sormas.backend.TestDataCreator;
 import de.symeda.sormas.backend.common.StartupShutdownService;
-import de.symeda.sormas.backend.sormastosormas.shareinfo.ShareInfoEvent;
-import de.symeda.sormas.backend.sormastosormas.shareinfo.ShareInfoEventParticipant;
+import de.symeda.sormas.backend.sormastosormas.share.shareinfo.ShareInfoEvent;
+import de.symeda.sormas.backend.sormastosormas.share.shareinfo.ShareInfoEventParticipant;
 import de.symeda.sormas.backend.user.User;
 
 @RunWith(MockitoJUnitRunner.class)

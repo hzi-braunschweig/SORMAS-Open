@@ -1,19 +1,16 @@
 /*
- *
- *  * SORMAS® - Surveillance Outbreak Response Management & Analysis System
- *  * Copyright © 2016-2021 Helmholtz-Zentrum für Infektionsforschung GmbH (HZI)
- *  * This program is free software: you can redistribute it and/or modify
- *  * it under the terms of the GNU General Public License as published by
- *  * the Free Software Foundation, either version 3 of the License, or
- *  * (at your option) any later version.
- *  * This program is distributed in the hope that it will be useful,
- *  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  * GNU General Public License for more details.
- *  * You should have received a copy of the GNU General Public License
- *  * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- *
+ * * SORMAS® - Surveillance Outbreak Response Management & Analysis System
+ * * Copyright © 2016-2021 Helmholtz-Zentrum für Infektionsforschung GmbH (HZI)
+ * * This program is free software: you can redistribute it and/or modify
+ * * it under the terms of the GNU General Public License as published by
+ * * the Free Software Foundation, either version 3 of the License, or
+ * * (at your option) any later version.
+ * * This program is distributed in the hope that it will be useful,
+ * * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * * GNU General Public License for more details.
+ * * You should have received a copy of the GNU General Public License
+ * * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package de.symeda.sormas.backend.event;
 
@@ -40,7 +37,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import de.symeda.sormas.api.externaldata.HasExternalData;
 import org.hibernate.annotations.Type;
 
 import de.symeda.auditlog.api.Audited;
@@ -63,12 +59,13 @@ import de.symeda.sormas.api.event.ParenteralTransmissionMode;
 import de.symeda.sormas.api.event.RiskLevel;
 import de.symeda.sormas.api.event.TypeOfPlace;
 import de.symeda.sormas.api.exposure.WorkEnvironment;
+import de.symeda.sormas.api.externaldata.HasExternalData;
 import de.symeda.sormas.api.utils.YesNoUnknown;
 import de.symeda.sormas.backend.common.CoreAdo;
 import de.symeda.sormas.backend.location.Location;
-import de.symeda.sormas.backend.sormastosormas.SormasToSormasEntity;
-import de.symeda.sormas.backend.sormastosormas.SormasToSormasOriginInfo;
-import de.symeda.sormas.backend.sormastosormas.shareinfo.ShareInfoEvent;
+import de.symeda.sormas.backend.sormastosormas.entities.SormasToSormasEntity;
+import de.symeda.sormas.backend.sormastosormas.origin.SormasToSormasOriginInfo;
+import de.symeda.sormas.backend.sormastosormas.share.shareinfo.ShareInfoEvent;
 import de.symeda.sormas.backend.task.Task;
 import de.symeda.sormas.backend.user.User;
 import de.symeda.sormas.backend.util.ModelConstants;
@@ -201,7 +198,7 @@ public class Event extends CoreAdo implements SormasToSormasEntity, HasExternalD
 	private YesNoUnknown epidemiologicalEvidence;
 	private Map<EpidemiologicalEvidenceDetail, Boolean> epidemiologicalEvidenceDetails;
 	private YesNoUnknown laboratoryDiagnosticEvidence;
-	private Map<LaboratoryDiagnosticEvidenceDetail, Boolean>  laboratoryDiagnosticEvidenceDetails;
+	private Map<LaboratoryDiagnosticEvidenceDetail, Boolean> laboratoryDiagnosticEvidenceDetails;
 
 	private List<Task> tasks;
 	private List<EventGroup> eventGroups;
@@ -750,7 +747,9 @@ public class Event extends CoreAdo implements SormasToSormasEntity, HasExternalD
 
 	@AuditedIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = EVENTS_EVENT_GROUPS_TABLE_NAME, joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "eventgroup_id"))
+	@JoinTable(name = EVENTS_EVENT_GROUPS_TABLE_NAME,
+		joinColumns = @JoinColumn(name = "event_id"),
+		inverseJoinColumns = @JoinColumn(name = "eventgroup_id"))
 	public List<EventGroup> getEventGroups() {
 		return eventGroups;
 	}

@@ -88,9 +88,9 @@ import de.symeda.sormas.backend.region.District;
 import de.symeda.sormas.backend.region.Region;
 import de.symeda.sormas.backend.sample.Sample;
 import de.symeda.sormas.backend.share.ExternalShareInfo;
-import de.symeda.sormas.backend.sormastosormas.SormasToSormasEntity;
-import de.symeda.sormas.backend.sormastosormas.SormasToSormasOriginInfo;
-import de.symeda.sormas.backend.sormastosormas.shareinfo.ShareInfoCase;
+import de.symeda.sormas.backend.sormastosormas.entities.SormasToSormasEntity;
+import de.symeda.sormas.backend.sormastosormas.origin.SormasToSormasOriginInfo;
+import de.symeda.sormas.backend.sormastosormas.share.shareinfo.ShareInfoCase;
 import de.symeda.sormas.backend.symptoms.Symptoms;
 import de.symeda.sormas.backend.task.Task;
 import de.symeda.sormas.backend.therapy.Therapy;
@@ -1252,7 +1252,9 @@ public class Case extends CoreAdo implements SormasToSormasEntity, HasExternalDa
 
 	/**
 	 * Extra setter for externalID needed to comply with the HasExternalData interface
-	 * @param externalId the value to be set for externalID
+	 * 
+	 * @param externalId
+	 *            the value to be set for externalID
 	 */
 	public void setExternalId(String externalId) {
 		this.externalID = externalId;
