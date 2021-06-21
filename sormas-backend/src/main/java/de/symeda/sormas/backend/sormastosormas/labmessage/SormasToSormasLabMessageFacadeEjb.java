@@ -46,7 +46,7 @@ import de.symeda.sormas.api.utils.ValidationRuntimeException;
 import de.symeda.sormas.backend.labmessage.LabMessage;
 import de.symeda.sormas.backend.labmessage.LabMessageFacadeEjb.LabMessageFacadeEjbLocal;
 import de.symeda.sormas.backend.labmessage.LabMessageService;
-import de.symeda.sormas.backend.sormastosormas.SormasToSormasEncryptionService;
+import de.symeda.sormas.backend.sormastosormas.SormasToSormasEncryptionFacadeEjb.SormasToSormasEncryptionFacadeEjbLocal;
 import de.symeda.sormas.backend.sormastosormas.SormasToSormasRestClient;
 
 @Stateless(name = "SormasToSormasLabMessageFacade")
@@ -62,7 +62,7 @@ public class SormasToSormasLabMessageFacadeEjb implements SormasToSormasLabMessa
 	private SormasToSormasRestClient sormasToSormasRestClient;
 
 	@EJB
-	private SormasToSormasEncryptionService encryptionService;
+	private SormasToSormasEncryptionFacadeEjbLocal sormasToSormasEncryptionEjb;
 
 	@Override
 	public void sendLabMessages(List<String> uuids, SormasToSormasOptionsDto options) throws SormasToSormasException {
@@ -78,7 +78,7 @@ public class SormasToSormasLabMessageFacadeEjb implements SormasToSormasLabMessa
 
 	@Override
 	public void saveLabMessages(SormasToSormasEncryptedDataDto encryptedData) throws SormasToSormasException, SormasToSormasValidationException {
-		LabMessageDto[] sharedLabMessages = encryptionService.decryptAndVerify(encryptedData, LabMessageDto[].class);
+		LabMessageDto[] sharedLabMessages = sormasToSormasEncryptionEjb.decryptAndVerify(encryptedData, LabMessageDto[].class);
 
 		Map<String, ValidationErrors> validationErrors = new HashMap<>();
 		List<LabMessageDto> labMessagesToSave = new ArrayList<>(sharedLabMessages.length);

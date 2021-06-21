@@ -14,16 +14,8 @@
  */
 package de.symeda.sormas.rest.security;
 
-import de.symeda.sormas.api.AuthProvider;
-import de.symeda.sormas.api.ConfigFacade;
-import de.symeda.sormas.api.FacadeProvider;
-import de.symeda.sormas.rest.security.config.KeycloakConfigResolver;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import org.glassfish.soteria.cdi.BasicAuthenticationMechanismDefinitionAnnotationLiteral;
-import org.glassfish.soteria.mechanisms.BasicAuthenticationMechanism;
+import java.util.Collections;
+import java.util.HashSet;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -34,6 +26,21 @@ import javax.security.enterprise.authentication.mechanism.http.HttpAuthenticatio
 import javax.security.enterprise.authentication.mechanism.http.HttpMessageContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.glassfish.soteria.cdi.BasicAuthenticationMechanismDefinitionAnnotationLiteral;
+import org.glassfish.soteria.mechanisms.BasicAuthenticationMechanism;
+
+import de.symeda.sormas.api.AuthProvider;
+import de.symeda.sormas.api.ConfigFacade;
+import de.symeda.sormas.api.FacadeProvider;
+import de.symeda.sormas.api.sormastosormas.SormasToSormasApiConstants;
+import de.symeda.sormas.api.user.UserRole;
+import de.symeda.sormas.api.utils.DefaultUserHelper;
+import de.symeda.sormas.rest.security.config.KeycloakConfigResolver;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 
 /**
  * Mechanism which allows configuration of multiple providers trough a system property.
@@ -81,6 +88,9 @@ public class MultiAuthenticationMechanism implements HttpAuthenticationMechanism
 	@Override
 	public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext context)
 		throws AuthenticationException {
+		if (request.getPathInfo().startsWith(SormasToSormasApiConstants.RESOURCE_PATH)) {
+			return validateRequestS2S(context);
+		}
 		return authenticationMechanism.validateRequest(request, response, context);
 	}
 
@@ -93,5 +103,12 @@ public class MultiAuthenticationMechanism implements HttpAuthenticationMechanism
 	@Override
 	public void cleanSubject(HttpServletRequest request, HttpServletResponse response, HttpMessageContext httpMessageContext) {
 		authenticationMechanism.cleanSubject(request, response, httpMessageContext);
+	}
+
+	private AuthenticationStatus validateRequestS2S(HttpMessageContext context) {
+
+		return context.notifyContainerAboutLogin(
+			() -> DefaultUserHelper.SORMAS_TO_SORMAS_USER_NAME,
+			new HashSet<>(Collections.singletonList(UserRole.SORMAS_TO_SORMAS_CLIENT.name())));
 	}
 }

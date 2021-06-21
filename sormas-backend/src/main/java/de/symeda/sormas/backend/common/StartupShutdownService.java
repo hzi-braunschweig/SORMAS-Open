@@ -107,7 +107,6 @@ import de.symeda.sormas.backend.util.ModelConstants;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class StartupShutdownService {
 
-	public static final String SORMAS_TO_SORMAS_USER_NAME = "Sormas2Sormas";
 	static final String SORMAS_SCHEMA = "sql/sormas_schema.sql";
 	static final String AUDIT_SCHEMA = "sql/sormas_audit_schema.sql";
 	private static final Pattern SQL_COMMENT_PATTERN = Pattern.compile("^\\s*(--.*)?");
@@ -508,11 +507,10 @@ public class StartupShutdownService {
 
 	private void createOrUpdateSormasToSormasUser() {
 		serverAccessDataService.getServerAccessData().ifPresent((serverAccessData -> {
-			String sormasToSormasUserPassword = serverAccessData.getRestUserPassword();
 			createOrUpdateDefaultUser(
 				Collections.singleton(UserRole.SORMAS_TO_SORMAS_CLIENT),
-				SORMAS_TO_SORMAS_USER_NAME,
-				sormasToSormasUserPassword,
+				DefaultUserHelper.SORMAS_TO_SORMAS_USER_NAME,
+				DefaultUserHelper.SORMAS_TO_SORMAS_PASSWORD,
 				"Sormas to Sormas",
 				"Client");
 		}));

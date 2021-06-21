@@ -511,4 +511,13 @@ public class WebDriverHelpers {
       throw new Error("checked was found as NULL");
     }
   }
+
+  // always needs the raw header value from the DOM, not the stylized one (the one displayed in UI)
+  public String getValueFromTableRowUsingTheHeader(String headerValue, int rowIndex) {
+    By header = By.xpath("//div[contains(text(), '" + headerValue + "')]/ancestor::th");
+    scrollToElement(header);
+    String style = getAttributeFromWebElement(header, "style");
+    By selector = By.cssSelector("[style*='" + style.substring(style.length() - 17) + "']");
+    return baseSteps.getDriver().findElements(selector).get(rowIndex).getText();
+  }
 }

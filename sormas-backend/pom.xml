@@ -203,6 +203,20 @@
 			<artifactId>wiremock-standalone</artifactId>
 		</dependency>
 
+		<!-- OIDC for S2S -->
+		<dependency>
+			<groupId>com.google.oauth-client</groupId>
+			<artifactId>google-oauth-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.http-client</groupId>
+			<artifactId>google-http-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.http-client</groupId>
+			<artifactId>google-http-client-gson</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

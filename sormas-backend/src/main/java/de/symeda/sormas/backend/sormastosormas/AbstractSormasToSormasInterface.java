@@ -57,6 +57,7 @@ import de.symeda.sormas.api.utils.DataHelper;
 import de.symeda.sormas.api.utils.SormasToSormasEntityDto;
 import de.symeda.sormas.backend.common.AbstractDomainObject;
 import de.symeda.sormas.backend.common.BaseAdoService;
+import de.symeda.sormas.backend.sormastosormas.SormasToSormasEncryptionFacadeEjb.SormasToSormasEncryptionFacadeEjbLocal;
 import de.symeda.sormas.backend.feature.FeatureConfigurationFacadeEjb.FeatureConfigurationFacadeEjbLocal;
 import de.symeda.sormas.backend.sormastosormas.shareinfo.SormasToSormasShareInfo;
 import de.symeda.sormas.backend.sormastosormas.shareinfo.SormasToSormasShareInfoService;
@@ -86,7 +87,7 @@ public abstract class AbstractSormasToSormasInterface<ADO extends AbstractDomain
 	@EJB
 	private FeatureConfigurationFacadeEjbLocal featureConfigurationFacade;
 	@EJB
-	private SormasToSormasEncryptionService encryptionService;
+	private SormasToSormasEncryptionFacadeEjbLocal sormasToSormasEncryptionEjb;
 
 	private final String requestEndpoint;
 	private final String requestRejectEndpoint;
@@ -163,7 +164,7 @@ public abstract class AbstractSormasToSormasInterface<ADO extends AbstractDomain
 
 	@Override
 	public void saveShareRequest(SormasToSormasEncryptedDataDto encryptedData) throws SormasToSormasException, SormasToSormasValidationException {
-		ShareRequestData<PREVIEW> shareData = encryptionService.decryptAndVerify(encryptedData, previewType);
+		ShareRequestData<PREVIEW> shareData = sormasToSormasEncryptionEjb.decryptAndVerify(encryptedData, previewType);
 
 		Map<String, ValidationErrors> validationErrors = new HashMap<>();
 		List<PREVIEW> previews = shareData.getPreviews();
@@ -213,7 +214,7 @@ public abstract class AbstractSormasToSormasInterface<ADO extends AbstractDomain
 	@Override
 	@Transactional
 	public void rejectShareRequest(SormasToSormasEncryptedDataDto encryptedRequestUuid) throws SormasToSormasException {
-		String requestUuid = encryptionService.decryptAndVerify(encryptedRequestUuid, String.class);
+		String requestUuid = sormasToSormasEncryptionEjb.decryptAndVerify(encryptedRequestUuid, String.class);
 		SormasToSormasShareInfo shareInfo = shareInfoService.getByRequestUuid(requestUuid);
 		shareInfo.setRequestStatus(ShareRequestStatus.REJECTED);
 		shareInfo.setOwnershipHandedOver(false);
@@ -239,7 +240,7 @@ public abstract class AbstractSormasToSormasInterface<ADO extends AbstractDomain
 	@Override
 	public SormasToSormasEncryptedDataDto getDataForShareRequest(SormasToSormasEncryptedDataDto encryptedRequestUuid) throws SormasToSormasException {
 		User currentUser = userService.getCurrentUser();
-		String requestUuid = encryptionService.decryptAndVerify(encryptedRequestUuid, String.class);
+		String requestUuid = sormasToSormasEncryptionEjb.decryptAndVerify(encryptedRequestUuid, String.class);
 		SormasToSormasShareInfo shareInfo = shareInfoService.getByRequestUuid(requestUuid);
 
 		List<ShareData<ADO, S>> shareData = getShareDataBuilder().buildShareData(shareInfo, currentUser);
@@ -247,7 +248,7 @@ public abstract class AbstractSormasToSormasInterface<ADO extends AbstractDomain
 		List<S> entitiesToSend = shareData.stream().map(ShareData::getDto).collect(Collectors.toList());
 		validateEntitiesBeforeShare(shareData.stream().map(ShareData::getEntity).collect(Collectors.toList()), shareInfo.isOwnershipHandedOver());
 
-		SormasToSormasEncryptedDataDto encrypted = encryptionService.signAndEncrypt(entitiesToSend, shareInfo.getOrganizationId());
+		SormasToSormasEncryptedDataDto encrypted = sormasToSormasEncryptionEjb.signAndEncrypt(entitiesToSend, shareInfo.getOrganizationId());
 
 		shareInfo.setRequestStatus(ShareRequestStatus.ACCEPTED);
 		shareInfoService.ensurePersisted(shareInfo);
@@ -354,7 +355,7 @@ public abstract class AbstractSormasToSormasInterface<ADO extends AbstractDomain
 		SormasToSormasOriginInfoDto originInfo)
 		throws SormasToSormasException, SormasToSormasValidationException {
 
-		S[] receivedS2SEntities = encryptionService.decryptAndVerify(encryptedData, getShareDataClass());
+		S[] receivedS2SEntities = sormasToSormasEncryptionEjb.decryptAndVerify(encryptedData, getShareDataClass());
 
 		Map<String, ValidationErrors> validationErrors = new HashMap<>();
 		List<PROCESSED> entitiesToPersist = new ArrayList<>(receivedS2SEntities.length);

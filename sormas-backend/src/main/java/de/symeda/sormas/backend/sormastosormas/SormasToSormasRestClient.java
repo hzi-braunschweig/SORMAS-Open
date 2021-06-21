@@ -19,8 +19,7 @@ import static de.symeda.sormas.api.sormastosormas.SormasToSormasApiConstants.SOR
 
 import java.io.IOException;
 import java.net.ConnectException;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.ws.rs.HttpMethod;
@@ -30,6 +29,7 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.ResponseProcessingException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
@@ -39,29 +39,36 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import de.symeda.sormas.backend.sormastosormas.SormasToSormasEncryptionFacadeEjb.SormasToSormasEncryptionFacadeEjbLocal;
+import de.symeda.sormas.api.SormasToSormasConfig;
 import de.symeda.sormas.api.i18n.I18nProperties;
 import de.symeda.sormas.api.i18n.Strings;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasEncryptedDataDto;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasErrorResponse;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasException;
 import de.symeda.sormas.api.sormastosormas.ValidationErrors;
-import de.symeda.sormas.backend.common.StartupShutdownService;
+import de.symeda.sormas.backend.sormastosormas.auth.Oidc;
 import de.symeda.sormas.backend.util.ClientHelper;
 
 public class SormasToSormasRestClient {
 
-	public static final String SORMAS_REST_URL_TEMPLATE = "https://%s" + SORMAS_REST_PATH + "%s";
-	private static final Logger LOGGER = LoggerFactory.getLogger(SormasToSormasRestClient.class);
-	private final ServerAccessDataService serverAccessDataService;
+	public static final String SORMAS_REST_URL_TEMPLATE = "http://%s" + SORMAS_REST_PATH + "%s";
 
-	private final SormasToSormasEncryptionService encryptionService;
+	private static final Logger LOGGER = LoggerFactory.getLogger(SormasToSormasRestClient.class);
+
+	private final ServerAccessDataService serverAccessDataService;
+	private final SormasToSormasEncryptionFacadeEjbLocal sormasToSormasEncryptionEjb;
+	private final SormasToSormasConfig sormasToSormasConfig;
 
 	private final ObjectMapper mapper;
 
-	public SormasToSormasRestClient(ServerAccessDataService serverAccessDataService, SormasToSormasEncryptionService encryptionService) {
+	public SormasToSormasRestClient(
+		ServerAccessDataService serverAccessDataService,
+		SormasToSormasEncryptionFacadeEjbLocal sormasToSormasEncryptionEjb,
+		SormasToSormasConfig sormasToSormasConfig) {
 		this.serverAccessDataService = serverAccessDataService;
-		this.encryptionService = encryptionService;
+		this.sormasToSormasEncryptionEjb = sormasToSormasEncryptionEjb;
+		this.sormasToSormasConfig = sormasToSormasConfig;
 
 		mapper = new ObjectMapper();
 		mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
@@ -77,9 +84,25 @@ public class SormasToSormasRestClient {
 		return sendRequest(receiverId, endpoint, body, responseType, HttpMethod.PUT);
 	}
 
-	private String buildAuthToken(OrganizationServerAccessData targetServerAccessData) {
-		String userCredentials = StartupShutdownService.SORMAS_TO_SORMAS_USER_NAME + ":" + targetServerAccessData.getRestUserPassword();
-		return "Basic " + new String(Base64.getEncoder().encode(userCredentials.getBytes(StandardCharsets.UTF_8)));
+	public <T> T get(String receiverId, String endpoint, Class<T> responseType) throws SormasToSormasException {
+		return sendRequest(receiverId, endpoint, null, responseType, HttpMethod.GET);
+	}
+
+	private String buildAuthToken(String targetId) throws SormasToSormasException {
+		String scope = String.format("s2s-%s", targetId);
+		String authToken;
+		try {
+			authToken = Oidc.requestAccessToken(
+				sormasToSormasConfig.getOidcRealmTokenEndoint(),
+				sormasToSormasConfig.getOidcClientId(),
+				sormasToSormasConfig.getOidcClientSecret(),
+				Collections.singletonList(scope));
+		} catch (Exception e) {
+			LOGGER.info(String.format("Could not requested access token for %s: %s", targetId, e));
+			throw new SormasToSormasException(e.getMessage());
+		}
+		LOGGER.info(String.format("Successfully requested access token for %s", targetId));
+		return String.format("Bearer %s", authToken);
 	}
 
 	private Invocation.Builder buildRestClient(String receiverId, String endpoint) throws SormasToSormasException {
@@ -87,7 +110,7 @@ public class SormasToSormasRestClient {
 			.orElseThrow(() -> new SormasToSormasException(I18nProperties.getString(Strings.errorSormasToSormasServerAccess)));
 
 		String host = targetServerAccessData.getHostName();
-		String authToken = buildAuthToken(targetServerAccessData);
+		String authToken = buildAuthToken(targetServerAccessData.getId());
 
 		return ClientHelper.newBuilderWithProxy()
 			.build()
@@ -98,8 +121,21 @@ public class SormasToSormasRestClient {
 
 	private <T> T sendRequest(String receiverId, String endpoint, Object body, Class<T> responseType, String method) throws SormasToSormasException {
 		try {
-			SormasToSormasEncryptedDataDto encryptedBody = encryptionService.signAndEncrypt(body, receiverId);
-			Entity<String> entity = Entity.entity(mapper.writeValueAsString(encryptedBody), MediaType.APPLICATION_JSON_TYPE);
+			Entity<String> entity = null;
+			if (body != null) {
+				SormasToSormasEncryptedDataDto encryptedBody = sormasToSormasEncryptionEjb.signAndEncrypt(body, receiverId);
+				entity = Entity.entity(mapper.writeValueAsString(encryptedBody), MediaType.APPLICATION_JSON_TYPE);
+			} else {
+				// no sender org id in the encrypted DTP, therefore, we pass it as query parameter
+				String onwOrgId = this.serverAccessDataService.getServerAccessData().get().getId();
+
+				// safely append the parameter
+				endpoint = UriBuilder.fromUri(endpoint)
+					.queryParam(SormasToSormasConfig.ORG_ID_REQUEST_PARAM, onwOrgId)
+					.build()
+					.toString();
+			}
+
 			Invocation.Builder invocation = buildRestClient(receiverId, endpoint);
 
 			Response response;
@@ -109,6 +145,9 @@ public class SormasToSormasRestClient {
 				break;
 			case HttpMethod.PUT:
 				response = invocation.put(entity);
+				break;
+			case HttpMethod.GET:
+				response = invocation.get();
 				break;
 			default:
 				throw new SormasToSormasException("Invalid HTTP verb used");
@@ -139,7 +178,7 @@ public class SormasToSormasRestClient {
 
 			try {
 				SormasToSormasErrorResponse errorResponse = mapper.readValue(errorMessage, SormasToSormasErrorResponse.class);
-				errorMessage = I18nProperties.getString(Strings.errorSormasToSormasShare);
+				errorMessage = I18nProperties.getString(Strings.errorSormasToSormasSend);
 				errors = errorResponse.getErrors();
 			} catch (IOException e) {
 				// do nothing, keep the unparsed response as error message
@@ -147,7 +186,7 @@ public class SormasToSormasRestClient {
 
 			if (statusCode != HttpStatus.SC_BAD_REQUEST) {
 				// don't log validation errors, will be displayed on the UI
-				LOGGER.error("Share request failed: {}; {}", statusCode, errorMessage);
+				LOGGER.error("Sending request failed: {}; {}", statusCode, errorMessage);
 			}
 			throw new SormasToSormasException(errorMessage, errors);
 		}

@@ -114,9 +114,6 @@ public class ServerAccessDataService {
 		if (row[2] != null) {
 			dto.setHostName(row[2]);
 		}
-		if (row[3] != null) {
-			dto.setRestUserPassword(row[3]);
-		}
 
 		return dto;
 	}

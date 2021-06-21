@@ -129,7 +129,6 @@
 
             <de.symeda.sormas.app.component.controls.ControlSpinnerField
                 android:id="@+id/caseData_community"
-                app:caption="@string/caption_facility_or_home"
                 style="@style/ControlSingleColumnStyle"
                 app:softRequired="true"
                 app:value="@={data.community}" />

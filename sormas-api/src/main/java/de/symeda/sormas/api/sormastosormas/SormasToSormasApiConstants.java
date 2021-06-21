@@ -55,4 +55,6 @@ public class SormasToSormasApiConstants {
 
 	public static final String REVOKE_REQUESTS_ENDPOINT = "/revoke-requests";
 
+	public static final String CERT_ENDPOINT = "/cert";
+
 }

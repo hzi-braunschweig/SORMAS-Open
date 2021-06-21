@@ -9,7 +9,6 @@ public class OrganizationServerAccessData {
 	private String id;
 	private String name;
 	private String hostName;
-	private String restUserPassword;
 
 	public OrganizationServerAccessData() {
 	}
@@ -43,13 +42,7 @@ public class OrganizationServerAccessData {
 		this.hostName = hostName;
 	}
 
-	public String getRestUserPassword() {
-		return restUserPassword;
-	}
 
-	public void setRestUserPassword(String restUserPassword) {
-		this.restUserPassword = restUserPassword;
-	}
 
 	public ServerAccessDataReferenceDto toReference() {
 		return new ServerAccessDataReferenceDto(id, name);
@@ -64,8 +57,7 @@ public class OrganizationServerAccessData {
 		OrganizationServerAccessData that = (OrganizationServerAccessData) o;
 		return Objects.equals(id, that.id)
 			&& Objects.equals(hostName, that.hostName)
-			&& Objects.equals(name, that.name)
-			&& Objects.equals(restUserPassword, that.restUserPassword);
+			&& Objects.equals(name, that.name);
 	}
 
 	@Override

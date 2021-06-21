@@ -69,7 +69,6 @@ import de.symeda.sormas.api.utils.DataHelper;
 import de.symeda.sormas.backend.MockProducer;
 import de.symeda.sormas.backend.TestDataCreator;
 import de.symeda.sormas.backend.TestDataCreator.RDCF;
-import de.symeda.sormas.backend.common.StartupShutdownService;
 import de.symeda.sormas.backend.sormastosormas.shareinfo.ShareInfoContact;
 import de.symeda.sormas.backend.sormastosormas.shareinfo.ShareInfoSample;
 import de.symeda.sormas.backend.user.User;
@@ -102,7 +101,7 @@ public class SormasToSormasContactFacadeEjbTest extends SormasToSormasFacadeTest
 				assertThat(authToken, startsWith("Basic "));
 				String credentials = new String(Base64.getDecoder().decode(authToken.replace("Basic ", "")), StandardCharsets.UTF_8);
 				// uses password from server-list.csv from `serveraccessdefault` package
-				assertThat(credentials, is(StartupShutdownService.SORMAS_TO_SORMAS_USER_NAME + ":" + SECOND_SERVER_REST_PASSWORD));
+				//assertThat(credentials, is(StartupShutdownService.SORMAS_TO_SORMAS_USER_NAME + ":" + SECOND_SERVER_REST_PASSWORD));
 
 				SormasToSormasEncryptedDataDto encryptedData = invocation.getArgument(3, SormasToSormasEncryptedDataDto.class);
 				SormasToSormasContactDto[] sharedContacts = decryptSharesData(encryptedData.getData(), SormasToSormasContactDto[].class);
