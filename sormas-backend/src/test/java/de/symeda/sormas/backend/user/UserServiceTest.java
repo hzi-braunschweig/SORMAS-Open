@@ -57,6 +57,7 @@ public class UserServiceTest extends AbstractBeanTest {
 
 		List<String> regionUuids = null;
 		List<String> districtUuids = null;
+		List<String> communityUuids = null;
 		boolean includeSupervisors = false;
 		boolean filterByJurisdiction = false;
 		boolean activeOnly = false;
@@ -72,42 +73,42 @@ public class UserServiceTest extends AbstractBeanTest {
 		// 1a. Find admin with several conditions
 		activeOnly = true;
 		userRoles = Arrays.asList(UserRole.ADMIN);
-		result = getUserService().getReferenceList(regionUuids, districtUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
+		result = getUserService().getReferenceList(regionUuids, districtUuids, communityUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
 		assertThat(result, contains(admin));
 		userRoles = Arrays.asList(UserRole.NATIONAL_USER);
-		result = getUserService().getReferenceList(regionUuids, districtUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
+		result = getUserService().getReferenceList(regionUuids, districtUuids, communityUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
 		assertThat(result, contains(admin));
 		userRoles = Arrays.asList(UserRole.ADMIN, UserRole.CASE_OFFICER);
-		result = getUserService().getReferenceList(regionUuids, districtUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
+		result = getUserService().getReferenceList(regionUuids, districtUuids, communityUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
 		assertThat(result, contains(admin));
 
 		// 1b. Exclude admin by role
 		userRoles = Arrays.asList(UserRole.CASE_OFFICER);
-		result = getUserService().getReferenceList(regionUuids, districtUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
+		result = getUserService().getReferenceList(regionUuids, districtUuids, communityUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
 		assertThat(result, is(empty()));
 
 		// 2. Include supervisors
 		userRoles = Arrays.asList(UserRole.CONTACT_OFFICER);
 		RDCF rdcf = creator.createRDCF();
 		UserDto supervisor = creator.createUser(rdcf, UserRole.CONTACT_SUPERVISOR);
-		result = getUserService().getReferenceList(regionUuids, districtUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
+		result = getUserService().getReferenceList(regionUuids, districtUuids, communityUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
 		assertThat(result, is(empty()));
 		includeSupervisors = true;
-		result = getUserService().getReferenceList(regionUuids, districtUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
+		result = getUserService().getReferenceList(regionUuids, districtUuids, communityUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
 		assertThat(result, hasSize(1));
 		assertThat(result.get(0).getUuid(), equalTo(supervisor.getUuid()));
 
 		// 3. Exclude inactive user as overall condition
 		getUserFacade().disableUsers(Arrays.asList(supervisor.getUuid()));
-		result = getUserService().getReferenceList(regionUuids, districtUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
+		result = getUserService().getReferenceList(regionUuids, districtUuids, communityUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
 		assertThat(result, is(empty()));
 
 		// 4. filterByJurisdiction to test that the invocation works and filters correctly concerning activeOnly
 		filterByJurisdiction = true;
-		result = getUserService().getReferenceList(regionUuids, districtUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
+		result = getUserService().getReferenceList(regionUuids, districtUuids, communityUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
 		assertThat(result, is(empty()));
 		activeOnly = false;
-		result = getUserService().getReferenceList(regionUuids, districtUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
+		result = getUserService().getReferenceList(regionUuids, districtUuids, communityUuids, includeSupervisors, filterByJurisdiction, activeOnly, userRoles);
 		assertThat(result, hasSize(1));
 		assertThat(result.get(0).getUuid(), equalTo(supervisor.getUuid()));
 

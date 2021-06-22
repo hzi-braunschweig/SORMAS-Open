@@ -19,7 +19,9 @@ import static de.symeda.sormas.api.user.UserRole.SURVEILLANCE_OFFICER;
 import static de.symeda.sormas.api.user.UserRole.SURVEILLANCE_SUPERVISOR;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
@@ -178,7 +180,7 @@ public class UserFacadeEjbTest extends AbstractBeanTest {
 
 		assertThat(getUserFacade().getUserRefsByDistrict(district1_1, true, CASE_OFFICER), containsInAnyOrder(userD1, userS1, userS2, userS3));
 
-		assertThat(getUserFacade().getUsersWithSuperiorJurisdiction(getUserFacade().getByUuid(userN1.getUuid())), nullValue());
+		assertThat(getUserFacade().getUsersWithSuperiorJurisdiction(getUserFacade().getByUuid(userN1.getUuid())), anyOf(empty()));
 		assertThat(
 			getUserFacade().getUsersWithSuperiorJurisdiction(getUserFacade().getByUuid(userR1.getUuid())),
 			containsInAnyOrder(userAdmin, userN1, userN2));
@@ -187,10 +189,9 @@ public class UserFacadeEjbTest extends AbstractBeanTest {
 			containsInAnyOrder(userR1, userS1, userS2));
 		assertThat(getUserFacade().getUsersWithSuperiorJurisdiction(getUserFacade().getByUuid(userC1.getUuid())), containsInAnyOrder(userD1));
 
-		// Bug? userC2 is in a different community
 		assertThat(
 			getUserFacade().getUsersWithSuperiorJurisdiction(getUserFacade().getByUuid(userHF1.getUuid())),
-			containsInAnyOrder(userD1, userC1, userC2));
+			containsInAnyOrder(userC1));
 
 		assertThat(getUserFacade().getAllUserRefs(false), hasSize(16));
 

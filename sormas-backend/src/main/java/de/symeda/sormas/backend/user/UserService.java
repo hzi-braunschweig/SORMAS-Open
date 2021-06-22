@@ -42,6 +42,7 @@ import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import de.symeda.sormas.backend.region.Community;
 import org.apache.commons.collections4.CollectionUtils;
 
 import de.symeda.sormas.api.AuthProvider;
@@ -126,7 +127,7 @@ public class UserService extends AdoServiceWithUserFilter<User> {
 	}
 
 	/**
-	 * @see #getReferenceList(List, List, boolean, boolean, boolean, List) This method is partly a duplication for getReferenceList,
+	 * @see #getReferenceList(List, List, List, boolean, boolean, boolean, List) This method is partly a duplication for getReferenceList,
 	 *      but it's still in use for WeeklyReports and messageRecipients where more information of the user is needed
 	 *      and method signatures rely on {@link User}.
 	 */
@@ -185,17 +186,18 @@ public class UserService extends AdoServiceWithUserFilter<User> {
 		boolean activeOnly,
 		UserRole... userRoles) {
 
-		return getReferenceList(regionUuids, districtUuids, includeSupervisors, filterByJurisdiction, activeOnly, Arrays.asList(userRoles));
+		return getReferenceList(regionUuids, districtUuids, null, includeSupervisors, filterByJurisdiction, activeOnly, Arrays.asList(userRoles));
 	}
 
 	/**
 	 * Loads users filtered by combinable filter conditions.<br />
 	 * Condition combination if parameter is set:<br />
-	 * {@code ((regionUuids & districtUuids & filterByJurisdiction & userRoles) | includeSupervisors) & activeOnly}
-	 * 
+	 * {@code ((regionUuids & districtUuids & communityUuids & filterByJurisdiction & userRoles) | includeSupervisors) & activeOnly}
+	 *
 	 * @see #createJurisdictionFilter(CriteriaBuilder, From)
 	 * @param regionUuids
 	 * @param districtUuids
+	 * @param communityUuids
 	 * @param includeSupervisors
 	 *            If set to {@code true}, all supervisors are returned independent of other filters.
 	 * @param filterByJurisdiction
@@ -203,12 +205,13 @@ public class UserService extends AdoServiceWithUserFilter<User> {
 	 * @param userRoles
 	 */
 	public List<UserReference> getReferenceList(
-		List<String> regionUuids,
-		List<String> districtUuids,
-		boolean includeSupervisors,
-		boolean filterByJurisdiction,
-		boolean activeOnly,
-		List<UserRole> userRoles) {
+			List<String> regionUuids,
+			List<String> districtUuids,
+			List<String> communityUuids,
+			boolean includeSupervisors,
+			boolean filterByJurisdiction,
+			boolean activeOnly,
+			List<UserRole> userRoles) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<UserReference> cq = cb.createQuery(UserReference.class);
@@ -245,13 +248,18 @@ public class UserService extends AdoServiceWithUserFilter<User> {
 		// WHERE OR
 		if (includeSupervisors) {
 			Predicate supervisorFilter = rolesJoin.in(
-				Arrays.asList(UserRole.CASE_SUPERVISOR, UserRole.CONTACT_SUPERVISOR, UserRole.SURVEILLANCE_SUPERVISOR, UserRole.ADMIN_SUPERVISOR));
+					Arrays.asList(UserRole.CASE_SUPERVISOR, UserRole.CONTACT_SUPERVISOR, UserRole.SURVEILLANCE_SUPERVISOR, UserRole.ADMIN_SUPERVISOR));
 			filter = CriteriaBuilderHelper.or(cb, filter, supervisorFilter);
 		}
 
 		// WHERE outer AND
 		if (activeOnly) {
 			filter = CriteriaBuilderHelper.and(cb, filter, createDefaultFilter(cb, root));
+		}
+
+		if (CollectionUtils.isNotEmpty(communityUuids)) {
+			Join<User, Community> communityJoin = userRoot.join(User.COMMUNITY, JoinType.LEFT);
+			filter = CriteriaBuilderHelper.and(cb, filter, cb.in(communityJoin.get(Community.UUID)).value(communityUuids));
 		}
 
 		if (filter != null) {

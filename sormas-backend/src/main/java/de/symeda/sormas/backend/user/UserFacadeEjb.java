@@ -43,6 +43,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.validation.ValidationException;
 
+import de.symeda.sormas.backend.region.Community;
 import org.apache.commons.beanutils.BeanUtils;
 
 import de.symeda.sormas.api.HasUuid;
@@ -230,11 +231,12 @@ public class UserFacadeEjb implements UserFacade {
 		switch (superordinateJurisdiction) {
 		case NATION:
 			superiorUsersList =
-				userService.getReferenceList(null, null, false, false, true, UserRole.getWithJurisdictionLevels(superordinateJurisdiction));
+				userService.getReferenceList(null, null, null, false, false, true, UserRole.getWithJurisdictionLevels(superordinateJurisdiction));
 			break;
 		case REGION:
 			superiorUsersList = userService.getReferenceList(
 				Arrays.asList(user.getRegion().getUuid()),
+				null,
 				null,
 				false,
 				false,
@@ -245,25 +247,31 @@ public class UserFacadeEjb implements UserFacade {
 			// if user is assigned to a facility, but that facility is not assigned to a district, show no superordinate users. Else, show users of the district (and community) in which the facility is located
 
 			District district = null;
+			Community community = null;
 			List<UserRole> superordinateRoles = UserRole.getWithJurisdictionLevels(superordinateJurisdiction);
 			if (user.getDistrict() != null) {
 				district = districtService.getByReferenceDto(user.getDistrict());
 			} else if (user.getHealthFacility() != null) {
 				district = facilityService.getByReferenceDto(user.getHealthFacility()).getDistrict();
+				community = facilityService.getByReferenceDto(user.getHealthFacility()).getCommunity();
 				superordinateRoles.addAll(UserRole.getWithJurisdictionLevels(JurisdictionLevel.COMMUNITY));
 			}
 
-			superiorUsersList =
-				(district == null)
-					? null
-					: userService.getReferenceList(null, Arrays.asList(district.getUuid()), false, false, true, superordinateRoles);
+			if(district == null) {
+				superiorUsersList = new ArrayList<>();
+			} else if (community == null){
+				superiorUsersList = userService.getReferenceList(null, Arrays.asList(district.getUuid()), null,false, false, true, superordinateRoles);
+			} else {
+				superiorUsersList = userService.getReferenceList(null, Arrays.asList(district.getUuid()), Arrays.asList(community.getUuid()), false, false, true, superordinateRoles);
+			}
+
 			break;
 		default:
 			superiorUsersList = null;
 			break;
 		}
 
-		return superiorUsersList == null ? null : superiorUsersList.stream().map(f -> toReferenceDto(f)).collect(Collectors.toList());
+		return superiorUsersList == null ? new ArrayList<>() : superiorUsersList.stream().map(f -> toReferenceDto(f)).collect(Collectors.toList());
 	}
 
 	@Override
