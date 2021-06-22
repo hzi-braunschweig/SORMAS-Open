@@ -64,22 +64,31 @@ task format(type: GoogleJavaFormat) {
 	source 'src/main'
 	source 'src/test'
 	include '**/*.java'
+	println ("[GRADLE-INFO] : format task executed with success")
 }
 
 tasks.withType(Test) {
 	maxParallelForks = (int) (Runtime.runtime.availableProcessors().intdiv(2) ?: 1)
 	systemProperties = System.getProperties()
 	systemProperties.remove("java.endorsed.dirs") // needs to be removed from Java 9
+	println("[GRADLE-INFO] : Provided System properties")
+	//println(systemProperties.list())
+	println("[GRADLE-INFO] : Tests execution has started")
+
 }
 
 task createReportFolderIfNotExist() {
 	// Create a File object representing the folder 'A/B'
 	def folder = new File('allureReports')
+	println("[GRADLE-INFO] : Checking if allureReports folder exists")
+	println file("allureReports").isDirectory()
 
 	// If it doesn't exist
 	if (!folder.exists()) {
 		// Create all folders up-to and including B
 		folder.mkdirs()
+		println("[GRADLE-INFO] : allureReports folder was created !")
+		println file("allureReports").isDirectory()
 	}
 }
 
@@ -94,6 +103,9 @@ task copyGeneratedReport(type: Copy) {
 
 	from file("$buildDir/reports/allure-report")
 	into file("allureReports")
+	// print info
+	println("[GRADLE-INFO] : Last task copy generated report executed with success, moving files from allure-report to allureReports folder")
+	println file("allureReports").list()
 }
 
 task copyToGeneratedReport(type: Copy) {
@@ -104,22 +116,43 @@ task copyToGeneratedReport(type: Copy) {
 task copyCategoriesJson(type: Copy) {
 	from file("src/test/resources/allurefiles/categories.json")
 	into file("$buildDir/allure-results")
+	// print info
+	println("[GRADLE-INFO] : Listing all files from allure-results folder after copying jsons from categories.json")
+	println file("$buildDir/allure-results").list()
 }
 task copyEnvironmentProperties(type: Copy) {
 	dependsOn 'copyCategoriesJson'
 
 	from file("$buildDir/resources/test/allurefiles/environment.properties")
 	into file("$buildDir/allure-results")
+	// print info
+	println("[GRADLE-INFO] : Listing all files from allure-results folder after copying jsons from environment.properties ")
+	println file("$buildDir/allure-results").list()
 }
 
 task createAllureReport(type: Exec) {
 	workingDir System.getProperty("user.dir")
 	def workingDirectory = System.getProperty("user.dir")
+	println("[GRADLE-INFO] : Current working directory is: " + workingDirectory)
 	def isWindows = System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')
 	if (isWindows) {
 		commandLine 'cmd', '/c', 'allure.bat', 'generate', "${workingDirectory}/build/allure-results", '-c', '-o', "${workingDirectory}/allureReports"
 	} else {
+		println("[GRADLE-INFO] : Running command to generate allure reports")
+
+		println("[GRADLE-INFO] : Current working directory is: " + commandLine('pwd'))
 		commandLine "allure", 'generate', "${workingDirectory}/build/allure-results", '-c', '-o', "${workingDirectory}/allureReports"
+
+		//def filesFromAllureReportsAfterGeneration = file("${workingDirectory}/allureReports").listFiles().length
+		//println ("[GRADLE-INFO] : " + filesFromAllureReportsAfterGeneration + " files in allureReports folder")
+
+		println ("[GRADLE-INFO] : listing folders from project")
+		//println commandLine 'ls' "${workingDirectory}"
+		println file("${workingDirectory}").list()
+		println ("[GRADLE-INFO] : listing folders from allure reports folder")
+		//println commandLine 'ls' "${workingDirectory}/allureReports"
+		println file("${workingDirectory}/allureReports").list()
+		println ("[GRADLE-INFO] : Create allure report task executed with success")
 	}
 }
 
@@ -134,6 +167,7 @@ test {
 }
 
 compileJava.dependsOn format
+
 startTests.finalizedBy copyToGeneratedReport
 copyToGeneratedReport.finalizedBy test
 test.finalizedBy copyEnvironmentProperties

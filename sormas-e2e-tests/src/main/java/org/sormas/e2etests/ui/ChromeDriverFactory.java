@@ -24,12 +24,14 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import java.util.HashMap;
 import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+@Slf4j
 public class ChromeDriverFactory implements DriverFactory {
 
   private final boolean headless;
@@ -48,7 +50,20 @@ public class ChromeDriverFactory implements DriverFactory {
 
   @Override
   public RemoteWebDriver getRemoteWebDriver() {
-    WebDriverManager.chromedriver().setup();
+    try {
+      WebDriverManager.chromedriver().driverVersion("90.0.4430.212").setup();
+      log.info(
+          "90.0.4430.212 version was set to ChromeDriver  <<<<<<<<<<<<<<<<<<<<<<<<<<<< CHROME INFO");
+    } catch (Exception e) {
+      log.error("Unable to force ChromeDriver to start with 90.0.4430.212 ");
+      log.info("Trying to start ChromeDriver with 90 <<<<<<<<<<<< CHROME INFO");
+      WebDriverManager.chromedriver().driverVersion("90").setup();
+    } finally {
+      WebDriverManager.chromedriver().setup();
+      log.info(
+          "Starting ChromeDriver with webdrivermanager provided version  <<<<<<<<<<<<<<<<<<<<<<<<<<<< CHROME INFO");
+    }
+
     System.setProperty("webdriver.chrome.silentOutput", "true");
     System.setProperty("javascript.enabled", "true");
     final HashMap<String, Object> chromePreferences = new HashMap<>();

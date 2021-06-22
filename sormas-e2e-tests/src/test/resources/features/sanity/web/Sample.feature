@@ -25,6 +25,7 @@ Feature: Sample Functionalities
     When I click on edit Sample
     Then I check the created Sample is correctly displayed on Edit Sample page
 
+    @jenkins_run
   Scenario: Delete created sample
     Given I log in with the user
     Given API: I create a new case

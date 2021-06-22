@@ -54,6 +54,8 @@ public class BaseSteps implements StepLifecycleListener {
       options.window().maximize();
       options.timeouts().setScriptTimeout(Duration.ofMinutes(2));
       options.timeouts().pageLoadTimeout(Duration.ofMinutes(2));
+      System.out.println("Chrome driver started with version: " + driver.getCapabilities().getBrowserVersion() + "<<<<<<<<<<<<<<<<<<<<<<< CHROME INFO");
+      log.info("Chrome driver started with version: " + driver.getCapabilities().getBrowserVersion() + "<<<<<<<<<<<<<<<<<<<<<<< CHROME INFO");
     }
   }
 
