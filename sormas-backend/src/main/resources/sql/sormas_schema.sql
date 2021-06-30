@@ -7471,4 +7471,10 @@ $$ LANGUAGE plpgsql;
 ALTER TABLE cases DROP COLUMN reportingdistrict_id;
 
 INSERT INTO schema_version (version_number, comment) VALUES (379, 'Refine the split of jurisdiction and place of stay #5852');
+
+-- 2021-06-30 Add reportId to labMessage #5622
+ALTER TABLE labmessage ADD COLUMN reportid varchar(512);
+ALTER TABLE labmessage_history ADD COLUMN reportid varchar(512);
+
+INSERT INTO schema_version (version_number, comment) VALUES (380, 'Add reportId to labMessage #5622');
 -- *** Insert new sql commands BEFORE this line ***

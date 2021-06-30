@@ -15,8 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import de.symeda.sormas.backend.sample.PathogenTest;
-
 import de.symeda.auditlog.api.Audited;
 import de.symeda.sormas.api.Disease;
 import de.symeda.sormas.api.labmessage.LabMessageStatus;
@@ -26,6 +24,7 @@ import de.symeda.sormas.api.sample.PathogenTestType;
 import de.symeda.sormas.api.sample.SampleMaterial;
 import de.symeda.sormas.api.sample.SpecimenCondition;
 import de.symeda.sormas.backend.common.AbstractDomainObject;
+import de.symeda.sormas.backend.sample.PathogenTest;
 
 @Entity(name = "labmessage")
 @Audited
@@ -65,6 +64,7 @@ public class LabMessage extends AbstractDomainObject {
 	public static final String STATUS = "status";
 	public static final String TEST_RESULT_TEXT = "testResultText";
 	public static final String PATHOGEN_TEST = "pathogenTest";
+	public static final String REPORT_ID = "reportId";
 
 	private Date messageDateTime;
 	private Date sampleDateTime;
@@ -101,6 +101,8 @@ public class LabMessage extends AbstractDomainObject {
 
 	private String testResultText;
 	private PathogenTest pathogenTest;
+	//Lab messages related to each other should have the same reportId
+	private String reportId;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getMessageDateTime() {
@@ -146,7 +148,6 @@ public class LabMessage extends AbstractDomainObject {
 	public void setSampleMaterial(SampleMaterial sampleMaterial) {
 		this.sampleMaterial = sampleMaterial;
 	}
-
 
 	@Column(length = COLUMN_LENGTH_DEFAULT)
 	public String getSampleMaterialText() {
@@ -355,7 +356,6 @@ public class LabMessage extends AbstractDomainObject {
 		this.personEmail = personEmail;
 	}
 
-
 	@Column
 	public String getLabMessageDetails() {
 		return labMessageDetails;
@@ -392,5 +392,14 @@ public class LabMessage extends AbstractDomainObject {
 
 	public void setPathogenTest(PathogenTest pathogenTest) {
 		this.pathogenTest = pathogenTest;
+	}
+
+	@Column(length = COLUMN_LENGTH_DEFAULT)
+	public String getReportId() {
+		return reportId;
+	}
+
+	public void setReportId(String reportId) {
+		this.reportId = reportId;
 	}
 }

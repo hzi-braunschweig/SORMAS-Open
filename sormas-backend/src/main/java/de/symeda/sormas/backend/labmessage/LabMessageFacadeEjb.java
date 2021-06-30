@@ -117,10 +117,10 @@ public class LabMessageFacadeEjb implements LabMessageFacade {
 		target.setTestType(source.getTestType());
 		target.setTestResultText(source.getTestResultText());
 		target.setPathogenTest(pathogenTestService.getByReferenceDto(source.getPathogenTest()));
+		target.setReportId(source.getReportId());
 
 		return target;
 	}
-
 
 	@Override
 	public LabMessageDto save(LabMessageDto dto) {
@@ -175,6 +175,7 @@ public class LabMessageFacadeEjb implements LabMessageFacade {
 		if (source.getStatus() == LabMessageStatus.PROCESSED && source.getPathogenTest() != null) {
 			target.setPathogenTest(source.getPathogenTest().toReference());
 		}
+		target.setReportId(source.getReportId());
 
 		return target;
 	}
@@ -213,7 +214,6 @@ public class LabMessageFacadeEjb implements LabMessageFacade {
 		return em.createQuery(cq).getResultList().stream().map(this::toDto).collect(toList());
 	}
 
-
 	@Override
 	public List<LabMessageDto> getByPathogenTestUuid(String pathogenTestUuid) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -225,7 +225,6 @@ public class LabMessageFacadeEjb implements LabMessageFacade {
 
 		return em.createQuery(cq).getResultList().stream().map(this::toDto).collect(toList());
 	}
-
 
 	@Override
 	public Boolean isProcessed(String uuid) {
@@ -426,6 +425,17 @@ public class LabMessageFacadeEjb implements LabMessageFacade {
 	@Override
 	public boolean exists(String uuid) {
 		return labMessageService.exists(uuid);
+	}
+
+	@Override
+	public List<LabMessageDto> getByReportId(String reportId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<LabMessage> cq = cb.createQuery(LabMessage.class);
+		Root<LabMessage> from = cq.from(LabMessage.class);
+
+		cq.where(cb.equal(from.get(LabMessage.REPORT_ID), reportId));
+
+		return em.createQuery(cq).getResultList().stream().map(this::toDto).collect(toList());
 	}
 
 	@LocalBean

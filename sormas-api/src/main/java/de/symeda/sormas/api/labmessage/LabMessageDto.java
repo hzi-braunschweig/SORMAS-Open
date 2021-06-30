@@ -48,6 +48,7 @@ public class LabMessageDto extends EntityDto {
 	public static final String PROCESSED = "processed";
 	public static final String TEST_RESULT_TEXT = "testResultText";
 	public static final String PATHOGEN_TEST = "pathogenTest";
+	public static final String REPORT_ID = "reportId";
 
 	private Date messageDateTime;
 	private Date sampleDateTime;
@@ -83,6 +84,7 @@ public class LabMessageDto extends EntityDto {
 	private LabMessageStatus status = LabMessageStatus.UNPROCESSED;
 	private String testResultText;
 	private PathogenTestReferenceDto pathogenTest;
+	private String reportId;
 
 	public Date getMessageDateTime() {
 		return messageDateTime;
@@ -338,6 +340,14 @@ public class LabMessageDto extends EntityDto {
 
 	public void setPathogenTest(PathogenTestReferenceDto pathogenTest) {
 		this.pathogenTest = pathogenTest;
+	}
+
+	public String getReportId() {
+		return reportId;
+	}
+
+	public void setReportId(String reportId) {
+		this.reportId = reportId;
 	}
 
 	public static LabMessageDto build() {
