@@ -17,6 +17,8 @@
  */
 package org.sormas.e2etests.steps.api;
 
+import static com.google.common.truth.Truth.assertWithMessage;
+
 import cucumber.api.java8.En;
 import javax.inject.Inject;
 import org.sormas.e2etests.helpers.api.CaseHelper;
@@ -30,11 +32,46 @@ public class CaseSteps implements En {
   public CaseSteps(CaseHelper caseHelper, CaseApiService caseApiService, ApiState apiState) {
 
     When(
-        "API: I create a new case",
+        "^API: I create a new case$",
         () -> {
           Case caze = caseApiService.buildGeneratedCase(apiState.getEditPerson());
           caseHelper.createCase(caze);
           apiState.setCreatedCase(caze);
+        });
+
+    When(
+        "^API: I create a new case with already created Case uuid$",
+        () -> {
+          Case caze =
+              caseApiService.buildGeneratedCase(
+                  apiState.getEditPerson().toBuilder()
+                      .uuid(apiState.getCreatedCase().getUuid())
+                      .build());
+          caseHelper.createCase(caze);
+        });
+
+    When(
+        "API: I create a new case with an already created case",
+        () -> caseHelper.createCase(apiState.getCreatedCase()));
+
+    When(
+        "API: I query the last created case",
+        () -> caseHelper.getCaseByUuid(apiState.getCreatedCase().getUuid()));
+
+    When(
+        "API: I check if the response can be converted to a case object",
+        () -> {
+          Case caze = caseHelper.getCaseFromResponseIgnoringUnrecognizedFields();
+          assertWithMessage("The queried case was not created").that(caze).isNotNull();
+          assertWithMessage("The queried case uuid is not valid").that(caze.getUuid()).isNotEmpty();
+        });
+
+    When(
+        "^API: I create a new case with disease (.*)$",
+        (String disease) -> {
+          Case caze = caseApiService.buildGeneratedCase(apiState.getEditPerson());
+          caze = caze.toBuilder().disease(disease).build();
+          caseHelper.createCase(caze);
         });
   }
 }

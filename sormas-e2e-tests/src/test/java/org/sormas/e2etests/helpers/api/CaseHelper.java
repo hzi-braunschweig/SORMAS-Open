@@ -19,6 +19,7 @@ package org.sormas.e2etests.helpers.api;
 
 import static org.sormas.e2etests.constants.api.Endpoints.CASES;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.Method;
 import java.io.ByteArrayOutputStream;
@@ -28,16 +29,20 @@ import lombok.SneakyThrows;
 import org.sormas.e2etests.helpers.RestAssuredClient;
 import org.sormas.e2etests.pojo.api.Case;
 import org.sormas.e2etests.pojo.api.Request;
+import org.sormas.e2etests.state.ApiState;
 
 public class CaseHelper {
 
   private final RestAssuredClient restAssuredClient;
   private final ObjectMapper objectMapper;
+  private final ApiState apiState;
 
   @Inject
-  public CaseHelper(RestAssuredClient restAssuredClient, ObjectMapper objectMapper) {
+  public CaseHelper(
+      RestAssuredClient restAssuredClient, ObjectMapper objectMapper, ApiState apiState) {
     this.restAssuredClient = restAssuredClient;
     this.objectMapper = objectMapper;
+    this.apiState = apiState;
   }
 
   @SneakyThrows
@@ -47,5 +52,15 @@ public class CaseHelper {
     objectMapper.writeValue(out, listOfContacts);
     restAssuredClient.sendRequest(
         Request.builder().method(Method.POST).path(CASES + "push").body(out.toString()).build());
+  }
+
+  public void getCaseByUuid(String uuid) {
+    restAssuredClient.sendRequest(Request.builder().method(Method.GET).path(CASES + uuid).build());
+  }
+
+  @SneakyThrows
+  public Case getCaseFromResponseIgnoringUnrecognizedFields() {
+    objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    return objectMapper.readValue(apiState.getResponse().prettyPrint(), Case.class);
   }
 }
