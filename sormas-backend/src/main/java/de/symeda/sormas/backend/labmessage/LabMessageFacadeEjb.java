@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -429,6 +430,11 @@ public class LabMessageFacadeEjb implements LabMessageFacade {
 
 	@Override
 	public List<LabMessageDto> getByReportId(String reportId) {
+
+		if (reportId == null) {
+			return Collections.emptyList();
+		}
+
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<LabMessage> cq = cb.createQuery(LabMessage.class);
 		Root<LabMessage> from = cq.from(LabMessage.class);
