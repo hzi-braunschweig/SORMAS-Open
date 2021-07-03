@@ -72,6 +72,7 @@ import de.symeda.sormas.ui.dashboard.surveillance.SurveillanceDashboardView;
 import de.symeda.sormas.ui.events.EventGroupDataView;
 import de.symeda.sormas.ui.events.EventParticipantDataView;
 import de.symeda.sormas.ui.events.EventsView;
+import de.symeda.sormas.ui.immunization.ImmunizationsView;
 import de.symeda.sormas.ui.labmessage.LabMessagesView;
 import de.symeda.sormas.ui.person.PersonsView;
 import de.symeda.sormas.ui.reports.ReportsView;
@@ -94,7 +95,7 @@ public class MainScreen extends HorizontalLayout {
 	// Add new views to this set to make sure that the right error page is shown
 	private static final Set<String> KNOWN_VIEWS = initKnownViews();
 
-	private Menu menu;
+	private final Menu menu;
 
 	public MainScreen(SormasUI ui) {
 
@@ -180,6 +181,15 @@ public class MainScreen extends HorizontalLayout {
 		if (permitted(FeatureType.SAMPLES_LAB, UserRight.SAMPLE_VIEW)) {
 			ControllerProvider.getSampleController().registerViews(navigator);
 			menu.addView(SamplesView.class, SamplesView.VIEW_NAME, I18nProperties.getCaption(Captions.mainMenuSamples), VaadinIcons.DATABASE);
+		}
+
+		if (permitted(FeatureType.IMMUNIZATION_MANAGEMENT, UserRight.IMMUNIZATION_MANAGEMENT_ACCESS)) {
+			ControllerProvider.getImmunizationController().registerViews(navigator);
+			menu.addView(
+				ImmunizationsView.class,
+				ImmunizationsView.VIEW_NAME,
+				I18nProperties.getCaption(Captions.mainMenuImmunizations),
+				VaadinIcons.DIPLOMA);
 		}
 
 		if (FacadeProvider.getFeatureConfigurationFacade().isFeatureEnabled(FeatureType.SORMAS_TO_SORMAS_ACCEPT_REJECT)
@@ -291,6 +301,7 @@ public class MainScreen extends HorizontalLayout {
 				EventsView.VIEW_NAME,
 				EventGroupDataView.VIEW_NAME,
 				SamplesView.VIEW_NAME,
+				ImmunizationsView.VIEW_NAME,
 				CampaignsView.VIEW_NAME,
 				CampaignDataView.VIEW_NAME,
 				CampaignStatisticsView.VIEW_NAME,
@@ -350,7 +361,7 @@ public class MainScreen extends HorizontalLayout {
 					if (!DataHelper.isNullOrEmpty(event.getParameters())) {
 						url += event.getParameters();
 					}
-					url += "?" + urlParams.toString();
+					url += "?" + urlParams;
 					SormasUI.get().getNavigator().navigateTo(url);
 					return false;
 				}

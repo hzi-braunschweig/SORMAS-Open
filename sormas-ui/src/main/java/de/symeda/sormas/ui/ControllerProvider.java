@@ -31,6 +31,7 @@ import de.symeda.sormas.ui.docgeneration.DocGenerationController;
 import de.symeda.sormas.ui.events.EventController;
 import de.symeda.sormas.ui.events.EventGroupController;
 import de.symeda.sormas.ui.events.EventParticipantsController;
+import de.symeda.sormas.ui.immunization.ImmunizationController;
 import de.symeda.sormas.ui.labmessage.LabMessageController;
 import de.symeda.sormas.ui.person.PersonController;
 import de.symeda.sormas.ui.reports.aggregate.AggregateReportController;
@@ -59,6 +60,7 @@ public class ControllerProvider extends BaseControllerProvider {
 	private final TaskController taskController;
 	private final ActionController actionController;
 	private final SampleController sampleController;
+	private final ImmunizationController immunizationController;
 	private final PathogenTestController pathogenTestController;
 	private final AdditionalTestController additionalTestController;
 	private final OutbreakController outbreakController;
@@ -89,6 +91,7 @@ public class ControllerProvider extends BaseControllerProvider {
 		taskController = new TaskController();
 		actionController = new ActionController();
 		sampleController = new SampleController();
+		immunizationController = new ImmunizationController();
 		pathogenTestController = new PathogenTestController();
 		additionalTestController = new AdditionalTestController();
 		outbreakController = new OutbreakController();
@@ -155,6 +158,10 @@ public class ControllerProvider extends BaseControllerProvider {
 
 	public static SampleController getSampleController() {
 		return get().sampleController;
+	}
+
+	public static ImmunizationController getImmunizationController() {
+		return get().immunizationController;
 	}
 
 	public static AdditionalTestController getAdditionalTestController() {

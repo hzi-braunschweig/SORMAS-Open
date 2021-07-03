@@ -25,6 +25,7 @@ public enum FeatureType {
 		new FeatureType[] {
 			CASE_SURVEILANCE,
 			EVENT_SURVEILLANCE }),
+	IMMUNIZATION_MANAGEMENT(true, true, null),
 	TASK_MANAGEMENT(true, true, null),
 	WEEKLY_REPORTING(true, true, null),
 
