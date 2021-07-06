@@ -15,6 +15,7 @@
 
 package de.symeda.sormas.backend.immunization;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +31,12 @@ import de.symeda.sormas.api.immunization.ImmunizationCriteria;
 import de.symeda.sormas.api.immunization.ImmunizationDto;
 import de.symeda.sormas.api.immunization.ImmunizationFacade;
 import de.symeda.sormas.api.immunization.ImmunizationIndexDto;
+import de.symeda.sormas.api.immunization.ImmunizationManagementStatus;
 import de.symeda.sormas.api.immunization.ImmunizationReferenceDto;
+import de.symeda.sormas.api.immunization.ImmunizationStatus;
+import de.symeda.sormas.api.immunization.MeansOfImmunization;
+import de.symeda.sormas.api.person.ApproximateAgeType;
+import de.symeda.sormas.api.person.Sex;
 import de.symeda.sormas.api.utils.SortProperty;
 import de.symeda.sormas.api.utils.ValidationRuntimeException;
 import de.symeda.sormas.backend.caze.CaseFacadeEjb;
@@ -160,7 +166,7 @@ public class ImmunizationFacadeEjb implements ImmunizationFacade {
 		}
 	}
 
-	private void restorePseudonymizedDto(ImmunizationDto dto, ImmunizationDto existingDto,  Immunization immunization, Pseudonymizer pseudonymizer) {
+	private void restorePseudonymizedDto(ImmunizationDto dto, ImmunizationDto existingDto, Immunization immunization, Pseudonymizer pseudonymizer) {
 		if (existingDto != null) {
 			final boolean inJurisdiction = immunizationService.inJurisdictionOrOwned(immunization);
 			final User currentUser = userService.getCurrentUser();
@@ -180,12 +186,50 @@ public class ImmunizationFacadeEjb implements ImmunizationFacade {
 
 	@Override
 	public long count(ImmunizationCriteria criteria) {
-		return immunizationService.count((cb, root) -> immunizationService.buildCriteriaFilter(criteria, cb, root));
+		//return immunizationService.count((cb, root) -> immunizationService.buildCriteriaFilter(criteria, cb, root));
+		return 2;
 	}
 
 	@Override
 	public List<ImmunizationIndexDto> getIndexList(ImmunizationCriteria criteria, Integer first, Integer max, List<SortProperty> sortProperties) {
-		return null;
+		//return null;
+		return Arrays.asList(
+			new ImmunizationIndexDto(
+				"QWERTY",
+				"T2RYF3-AXKSCM-HRYBMN-SQYYKLCE",
+				"Samuel",
+				"Becket",
+				62,
+				ApproximateAgeType.YEARS,
+				5,
+				2,
+				1959,
+				Sex.MALE,
+				"First district",
+				MeansOfImmunization.VACCINATION,
+				ImmunizationManagementStatus.COMPLETED,
+				ImmunizationStatus.ACQUIRED,
+				new Date(),
+				new Date(),
+				new Date()),
+			new ImmunizationIndexDto(
+				"ASDFGH",
+				"REW2ZV-U6FCZD-YWNFPB-SKU3KF3M",
+				"Nathan",
+				"Johnson",
+				30,
+				ApproximateAgeType.YEARS,
+				4,
+				12,
+				1990,
+				Sex.MALE,
+				"Second district",
+				MeansOfImmunization.OTHER,
+				ImmunizationManagementStatus.CANCELED,
+				ImmunizationStatus.EXPIRED,
+				new Date(),
+				new Date(),
+				new Date()));
 	}
 
 	public ImmunizationDto toDto(Immunization entity) {

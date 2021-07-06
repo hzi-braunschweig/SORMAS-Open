@@ -77,9 +77,7 @@ public abstract class AbstractFilterForm<T> extends AbstractForm<T> {
 			addMoreFilters(moreFiltersLayout);
 		}
 
-		this.addValueChangeListener(e -> {
-			onChange();
-		});
+		this.addValueChangeListener(e -> onChange());
 
 		addStyleName(CssStyles.FILTER_FORM);
 	}
@@ -96,7 +94,11 @@ public abstract class AbstractFilterForm<T> extends AbstractForm<T> {
 	protected abstract String[] getMainFilterLocators();
 
 	protected UserDto currentUserDto() {
-		return UserProvider.getCurrent().getUser();
+		UserProvider currentUser = UserProvider.getCurrent();
+		if (currentUser != null) {
+			return UserProvider.getCurrent().getUser();
+		}
+		return null;
 	}
 
 	protected String createMoreFiltersHtmlLayout() {
@@ -124,9 +126,7 @@ public abstract class AbstractFilterForm<T> extends AbstractForm<T> {
 		String caption = I18nProperties.getPrefixCaption(propertyI18nPrefix, propertyId, field.getCaption());
 		setFieldCaption(field, caption);
 
-		field.addValueChangeListener(e -> {
-			onFieldValueChange(propertyId, e);
-		});
+		field.addValueChangeListener(e -> onFieldValueChange(propertyId, e));
 	}
 
 	public void addResetHandler(Button.ClickListener resetHandler) {
@@ -172,7 +172,7 @@ public abstract class AbstractFilterForm<T> extends AbstractForm<T> {
 	}
 
 	protected void applyRegionFilterDependency(RegionReferenceDto region, String districtFieldId) {
-		final UserDto user = UserProvider.getCurrent().getUser();
+		final UserDto user = currentUserDto();
 		final ComboBox districtField = getField(districtFieldId);
 		if (user.getRegion() != null && user.getDistrict() == null) {
 			FieldHelper.updateItems(districtField, FacadeProvider.getDistrictFacade().getAllActiveByRegion(user.getRegion().getUuid()));
@@ -197,7 +197,7 @@ public abstract class AbstractFilterForm<T> extends AbstractForm<T> {
 	}
 
 	protected void applyDistrictDependency(DistrictReferenceDto district, String communityFieldId) {
-		final UserDto user = UserProvider.getCurrent().getUser();
+		final UserDto user = currentUserDto();
 		final ComboBox communityField = getField(communityFieldId);
 		if (user.getDistrict() != null && user.getCommunity() == null) {
 			FieldHelper.updateItems(communityField, FacadeProvider.getCommunityFacade().getAllActiveByDistrict(user.getDistrict().getUuid()));
