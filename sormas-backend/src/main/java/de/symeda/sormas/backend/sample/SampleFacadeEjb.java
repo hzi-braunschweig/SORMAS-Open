@@ -1170,8 +1170,8 @@ public class SampleFacadeEjb implements SampleFacade {
 	public Boolean isSampleEditAllowed(String sampleUuid) {
 		Sample sample = sampleService.getByUuid(sampleUuid);
 
-		if (sample.getSormasToSormasOriginInfo() != null) {
-			return sample.getSormasToSormasOriginInfo().isOwnershipHandedOver();
+		if (sample.getSormasToSormasOriginInfo() != null && !sample.getSormasToSormasOriginInfo().isOwnershipHandedOver()) {
+			return false;
 		}
 
 		return sampleService.inJurisdictionOrOwned(sample).getInJurisdiction() && !sormasToSormasShareInfoService.isSamlpeOwnershipHandedOver(sample);

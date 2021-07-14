@@ -65,10 +65,10 @@ import de.symeda.sormas.api.sormastosormas.SormasToSormasException;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasOptionsDto;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasOriginInfoDto;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasSampleDto;
-import de.symeda.sormas.api.sormastosormas.SormasToSormasShareInfoCriteria;
-import de.symeda.sormas.api.sormastosormas.SormasToSormasShareInfoDto;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasValidationException;
 import de.symeda.sormas.api.sormastosormas.event.SormasToSormasEventDto;
+import de.symeda.sormas.api.sormastosormas.shareinfo.SormasToSormasShareInfoCriteria;
+import de.symeda.sormas.api.sormastosormas.shareinfo.SormasToSormasShareInfoDto;
 import de.symeda.sormas.api.sormastosormas.sharerequest.SormasToSormasShareRequestDto;
 import de.symeda.sormas.api.user.UserDto;
 import de.symeda.sormas.api.user.UserReferenceDto;
@@ -145,7 +145,7 @@ public class SormasToSormasEventFacadeEjbTest extends SormasToSormasFacadeTest {
 		getSormasToSormasEventFacade().shareEntities(Collections.singletonList(event.getUuid()), options);
 
 		List<SormasToSormasShareInfoDto> shareInfoList =
-			getSormasToSormasFacade().getShareInfoIndexList(new SormasToSormasShareInfoCriteria().event(event.toReference()), 0, 100);
+			getSormasToSormasShareInfoFacade().getIndexList(new SormasToSormasShareInfoCriteria().event(event.toReference()), 0, 100);
 		assertThat(shareInfoList.size(), is(1));
 		assertThat(shareInfoList.get(0).getTarget().getUuid(), is(SECOND_SERVER_ACCESS_ID));
 		assertThat(shareInfoList.get(0).getSender().getCaption(), is("Surv OFF - Surveillance Officer"));
@@ -219,7 +219,7 @@ public class SormasToSormasEventFacadeEjbTest extends SormasToSormasFacadeTest {
 		getSormasToSormasEventFacade().shareEntities(Collections.singletonList(event.getUuid()), options);
 
 		List<SormasToSormasShareInfoDto> shareInfoList =
-			getSormasToSormasFacade().getShareInfoIndexList(new SormasToSormasShareInfoCriteria().event(event.toReference()), 0, 100);
+			getSormasToSormasShareInfoFacade().getIndexList(new SormasToSormasShareInfoCriteria().event(event.toReference()), 0, 100);
 		assertThat(shareInfoList.size(), is(1));
 		assertThat(shareInfoList.get(0).getTarget().getUuid(), is(SECOND_SERVER_ACCESS_ID));
 		assertThat(shareInfoList.get(0).getSender().getCaption(), is("Surv OFF - Surveillance Officer"));
@@ -368,6 +368,9 @@ public class SormasToSormasEventFacadeEjbTest extends SormasToSormasFacadeTest {
 
 		EventDto event =
 			creator.createEvent(EventStatus.SCREENING, EventInvestigationStatus.ONGOING, "Test event title", "Test description", officer, (e) -> {
+				e.getEventLocation().setRegion(rdcf.region);
+				e.getEventLocation().setDistrict(rdcf.district);
+
 				SormasToSormasOriginInfoDto originInfo = new SormasToSormasOriginInfoDto();
 				originInfo.setSenderName("Test Name");
 				originInfo.setSenderEmail("test@email.com");
@@ -408,8 +411,8 @@ public class SormasToSormasEventFacadeEjbTest extends SormasToSormasFacadeTest {
 		assertThat(sharedEventParticipant.getSormasToSormasOriginInfo().isOwnershipHandedOver(), is(false));
 
 		// new samples should have share info with ownership handed over
-		List<SormasToSormasShareInfoDto> newEventParticipantShareInfos = getSormasToSormasFacade()
-			.getShareInfoIndexList(new SormasToSormasShareInfoCriteria().eventParticipant(newEventParticipant.toReference()), 0, 100);
+		List<SormasToSormasShareInfoDto> newEventParticipantShareInfos = getSormasToSormasShareInfoFacade()
+			.getIndexList(new SormasToSormasShareInfoCriteria().eventParticipant(newEventParticipant.toReference()), 0, 100);
 		assertThat(newEventParticipantShareInfos, hasSize(1));
 		assertThat(newEventParticipantShareInfos.get(0).isOwnershipHandedOver(), is(true));
 	}
@@ -431,13 +434,13 @@ public class SormasToSormasEventFacadeEjbTest extends SormasToSormasFacadeTest {
 		getSormasToSormasShareInfoService().persist(
 			createShareInfo(
 				officerUser,
-					DEFAULT_SERVER_ACCESS_ID,
+				DEFAULT_SERVER_ACCESS_ID,
 				true,
 				i -> i.getEvents().add(new ShareInfoEvent(i, getEventService().getByReferenceDto(event.toReference())))));
 		getSormasToSormasShareInfoService().persist(
 			createShareInfo(
 				officerUser,
-					DEFAULT_SERVER_ACCESS_ID,
+				DEFAULT_SERVER_ACCESS_ID,
 				true,
 				i -> i.getEventParticipants()
 					.add(new ShareInfoEventParticipant(i, getEventParticipantService().getByReferenceDto(eventParticipant.toReference())))));
@@ -463,14 +466,14 @@ public class SormasToSormasEventFacadeEjbTest extends SormasToSormasFacadeTest {
 		assertThat(returnedEvent.getReportingUser(), is(officer));
 
 		List<SormasToSormasShareInfoDto> eventShares =
-			getSormasToSormasFacade().getShareInfoIndexList(new SormasToSormasShareInfoCriteria().event(event.toReference()), 0, 100);
+			getSormasToSormasShareInfoFacade().getIndexList(new SormasToSormasShareInfoCriteria().event(event.toReference()), 0, 100);
 		assertThat(eventShares.get(0).isOwnershipHandedOver(), is(false));
 
 		assertThat(
 			getEventParticipantFacade().getEventParticipantByUuid(eventParticipant.getUuid()).getPerson().getBirthName(),
 			is("Test birth name"));
-		List<SormasToSormasShareInfoDto> eventParticipantShares = getSormasToSormasFacade()
-			.getShareInfoIndexList(new SormasToSormasShareInfoCriteria().eventParticipant(eventParticipant.toReference()), 0, 100);
+		List<SormasToSormasShareInfoDto> eventParticipantShares = getSormasToSormasShareInfoFacade()
+			.getIndexList(new SormasToSormasShareInfoCriteria().eventParticipant(eventParticipant.toReference()), 0, 100);
 		assertThat(eventParticipantShares.get(0).isOwnershipHandedOver(), is(false));
 
 		EventParticipantDto returnedNewEventParticipant = getEventParticipantFacade().getEventParticipantByUuid(newEventParticipant.getUuid());
@@ -518,19 +521,19 @@ public class SormasToSormasEventFacadeEjbTest extends SormasToSormasFacadeTest {
 
 		// contact ownership should be lost
 		List<SormasToSormasShareInfoDto> eventShareInfoList =
-			getSormasToSormasFacade().getShareInfoIndexList(new SormasToSormasShareInfoCriteria().event(event.toReference()), 0, 100);
+			getSormasToSormasShareInfoFacade().getIndexList(new SormasToSormasShareInfoCriteria().event(event.toReference()), 0, 100);
 		assertThat(eventShareInfoList, hasSize(1));
 		assertThat(eventShareInfoList.get(0).isOwnershipHandedOver(), is(true));
 
 		// event participant ownership should be lost
-		List<SormasToSormasShareInfoDto> eventParticipantShareInfoList = getSormasToSormasFacade()
-			.getShareInfoIndexList(new SormasToSormasShareInfoCriteria().eventParticipant(eventParticipant.toReference()), 0, 100);
+		List<SormasToSormasShareInfoDto> eventParticipantShareInfoList = getSormasToSormasShareInfoFacade()
+			.getIndexList(new SormasToSormasShareInfoCriteria().eventParticipant(eventParticipant.toReference()), 0, 100);
 		assertThat(eventParticipantShareInfoList, hasSize(1));
 		assertThat(eventParticipantShareInfoList.get(0).isOwnershipHandedOver(), is(true));
 
 		// new event participant should have share info with ownership handed over
-		List<SormasToSormasShareInfoDto> newEventParticipantShareInfoList = getSormasToSormasFacade()
-			.getShareInfoIndexList(new SormasToSormasShareInfoCriteria().eventParticipant(newEventParticipant.toReference()), 0, 100);
+		List<SormasToSormasShareInfoDto> newEventParticipantShareInfoList = getSormasToSormasShareInfoFacade()
+			.getIndexList(new SormasToSormasShareInfoCriteria().eventParticipant(newEventParticipant.toReference()), 0, 100);
 		assertThat(newEventParticipantShareInfoList, hasSize(1));
 		assertThat(newEventParticipantShareInfoList.get(0).isOwnershipHandedOver(), is(true));
 

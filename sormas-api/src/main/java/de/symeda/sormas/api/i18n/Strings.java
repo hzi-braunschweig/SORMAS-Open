@@ -271,6 +271,7 @@ public interface Strings {
 	String errorSormasToSormasDecrypt = "errorSormasToSormasDecrypt";
 	String errorSormasToSormasEncrypt = "errorSormasToSormasEncrypt";
 	String errorSormasToSormasInfrastructure = "errorSormasToSormasInfrastructure";
+	String errorSormasToSormasLoadShares = "errorSormasToSormasLoadShares";
 	String errorSormasToSormasNotEditable = "errorSormasToSormasNotEditable";
 	String errorSormasToSormasOwnershipAlreadyHandedOver = "errorSormasToSormasOwnershipAlreadyHandedOver";
 	String errorSormasToSormasPersonEnrolled = "errorSormasToSormasPersonEnrolled";
@@ -1163,6 +1164,7 @@ public interface Strings {
 	String reportedBy = "reportedBy";
 	String reportedOn = "reportedOn";
 	String setTo = "setTo";
+	String sormasToSormasLoadingShares = "sormasToSormasLoadingShares";
 	String step = "step";
 	String text = "text";
 	String toCase = "toCase";

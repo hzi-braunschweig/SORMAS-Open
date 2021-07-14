@@ -163,6 +163,7 @@ public final class CssStyles {
 	// List styles
 	public static final String SORMAS_LIST = "s-list";
 	public static final String SORMAS_LIST_ENTRY = "s-list-entry";
+	public static final String SORMAS_LIST_ENTRY_NO_BORDER = "s-list-entry-no-border";
 
 	// SVG fill and stroke styles
 	public static final String SVG_FILL_PRIMARY = "svg-fill-primary";

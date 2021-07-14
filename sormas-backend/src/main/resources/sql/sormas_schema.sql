@@ -7607,4 +7607,13 @@ ALTER TABLE events_history ADD COLUMN diseasevariant text;
 
 INSERT INTO schema_version (version_number, comment) VALUES (383, 'Add disease variant to event #5525');
 
+ALTER TABLE sormastosormassharerequest ALTER COLUMN cases TYPE json USING cases::json;
+ALTER TABLE sormastosormassharerequest ALTER COLUMN contacts TYPE json USING contacts::json;
+ALTER TABLE sormastosormassharerequest ALTER COLUMN events TYPE json USING events::json;
+ALTER TABLE sormastosormassharerequest_history ALTER COLUMN cases TYPE json USING cases::json;
+ALTER TABLE sormastosormassharerequest_history ALTER COLUMN contacts TYPE json USING contacts::json;
+ALTER TABLE sormastosormassharerequest_history ALTER COLUMN events TYPE json USING events::json;
+
+INSERT INTO schema_version (version_number, comment) VALUES (384, '[Sormas2Sormas] View share chain for each case shared/received trough S2S #6033');
+
 -- *** Insert new sql commands BEFORE this line ***

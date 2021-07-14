@@ -63,6 +63,7 @@ public class SormasToSormasEventFacadeEjb
 	public static final String EVENT_REQUEST_ACCEPT_ENDPOINT = RESOURCE_PATH + SormasToSormasApiConstants.EVENT_REQUEST_ACCEPT_ENDPOINT;
 	public static final String SAVE_SHARED_EVENTS_ENDPOINT = RESOURCE_PATH + EVENT_ENDPOINT;
 	public static final String SYNC_SHARED_EVENTS_ENDPOINT = RESOURCE_PATH + EVENT_SYNC_ENDPOINT;
+	public static final String EVENT_SHARES_ENDPOINT = RESOURCE_PATH + SormasToSormasApiConstants.EVENT_SHARES_ENDPOINT;
 
 	@EJB
 	private EventService eventService;
@@ -84,6 +85,7 @@ public class SormasToSormasEventFacadeEjb
 			EVENT_REQUEST_ACCEPT_ENDPOINT,
 			SAVE_SHARED_EVENTS_ENDPOINT,
 			SYNC_SHARED_EVENTS_ENDPOINT,
+			EVENT_SHARES_ENDPOINT,
 			Captions.Event,
 			ShareRequestDataType.EVENT,
 			EventShareRequestData.class);
@@ -159,6 +161,11 @@ public class SormasToSormasEventFacadeEjb
 	@Override
 	protected void setShareRequestPreviewData(SormasToSormasShareRequestDto request, List<SormasToSormasEventPreview> previews) {
 		request.setEvents(previews);
+	}
+
+	@Override
+	protected List<SormasToSormasShareInfo> getEntityShares(Event event) {
+		return event.getShareInfoEvents().stream().map(ShareInfoEvent::getShareInfo).collect(Collectors.toList());
 	}
 
 	private ValidationErrors validateSharedUuid(String uuid) {

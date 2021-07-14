@@ -1235,8 +1235,9 @@ public class CaseService extends AbstractCoreAdoService<Case> {
 	}
 
 	public boolean isCaseEditAllowed(Case caze) {
-		if (caze.getSormasToSormasOriginInfo() != null) {
-			return caze.getSormasToSormasOriginInfo().isOwnershipHandedOver();
+
+		if (caze.getSormasToSormasOriginInfo() != null && !caze.getSormasToSormasOriginInfo().isOwnershipHandedOver()) {
+			return false;
 		}
 
 		return inJurisdictionOrOwned(caze) && !sormasToSormasShareInfoService.isCaseOwnershipHandedOver(caze);

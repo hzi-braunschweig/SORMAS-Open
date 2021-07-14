@@ -375,8 +375,8 @@ public class EventParticipantService extends AbstractCoreAdoService<EventPartici
 	}
 
 	public boolean isEventParticipantEditAllowed(EventParticipant eventParticipant) {
-		if (eventParticipant.getSormasToSormasOriginInfo() != null) {
-			return eventParticipant.getSormasToSormasOriginInfo().isOwnershipHandedOver();
+		if (eventParticipant.getSormasToSormasOriginInfo() != null && !eventParticipant.getSormasToSormasOriginInfo().isOwnershipHandedOver()) {
+			return false;
 		}
 
 		return inJurisdiction(eventParticipant) && !sormasToSormasShareInfoService.isEventParticipantOwnershipHandedOver(eventParticipant);

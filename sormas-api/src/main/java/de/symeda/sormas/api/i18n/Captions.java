@@ -1794,7 +1794,7 @@ public interface Captions {
 	String SormasToSormasOptions_withAssociatedContacts = "SormasToSormasOptions.withAssociatedContacts";
 	String SormasToSormasOptions_withEventParticipants = "SormasToSormasOptions.withEventParticipants";
 	String SormasToSormasOptions_withSamples = "SormasToSormasOptions.withSamples";
-	String sormasToSormasOwnershipHandedOver = "sormasToSormasOwnershipHandedOver";
+	String sormasToSormasOwnedBy = "sormasToSormasOwnedBy";
 	String SormasToSormasPerson_address = "SormasToSormasPerson.address";
 	String SormasToSormasPerson_birthdDate = "SormasToSormasPerson.birthdDate";
 	String SormasToSormasPerson_personName = "SormasToSormasPerson.personName";

@@ -48,4 +48,8 @@ public interface SormasToSormasEntityInterface {
 	void syncEntity(String entityUuid, SormasToSormasOptionsDto options) throws SormasToSormasException;
 
 	void saveSyncedEntity(SormasToSormasEncryptedDataDto encryptedData) throws SormasToSormasException, SormasToSormasValidationException;
+
+	List<SormasToSormasShareTree> getAllShares(String uuid) throws SormasToSormasException;
+
+	SormasToSormasEncryptedDataDto getShareTrees(SormasToSormasEncryptedDataDto encryptedData) throws SormasToSormasException;
 }

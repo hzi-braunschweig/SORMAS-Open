@@ -83,6 +83,7 @@ import de.symeda.sormas.api.sormastosormas.SormasToSormasLabMessageFacade;
 import de.symeda.sormas.api.sormastosormas.caze.SormasToSormasCaseFacade;
 import de.symeda.sormas.api.sormastosormas.contact.SormasToSormasContactFacade;
 import de.symeda.sormas.api.sormastosormas.event.SormasToSormasEventFacade;
+import de.symeda.sormas.api.sormastosormas.shareinfo.SormasToSormasShareInfoFacade;
 import de.symeda.sormas.api.sormastosormas.sharerequest.SormasToSormasShareRequestFacade;
 import de.symeda.sormas.api.symptoms.SymptomsFacade;
 import de.symeda.sormas.api.systemevents.SystemEventFacade;
@@ -342,6 +343,10 @@ public class FacadeProvider {
 
 	public static SormasToSormasFacade getSormasToSormasFacade() {
 		return get().lookupEjbRemote(SormasToSormasFacade.class);
+	}
+
+	public static SormasToSormasShareInfoFacade getSormasToSormasShareInfoFacade() {
+		return get().lookupEjbRemote(SormasToSormasShareInfoFacade.class);
 	}
 
 	public static SormasToSormasCaseFacade getSormasToSormasCaseFacade() {

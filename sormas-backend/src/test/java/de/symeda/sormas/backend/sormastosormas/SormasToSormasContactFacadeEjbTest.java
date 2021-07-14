@@ -55,10 +55,10 @@ import de.symeda.sormas.api.sormastosormas.SormasToSormasException;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasOptionsDto;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasOriginInfoDto;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasSampleDto;
-import de.symeda.sormas.api.sormastosormas.SormasToSormasShareInfoCriteria;
-import de.symeda.sormas.api.sormastosormas.SormasToSormasShareInfoDto;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasValidationException;
 import de.symeda.sormas.api.sormastosormas.contact.SormasToSormasContactDto;
+import de.symeda.sormas.api.sormastosormas.shareinfo.SormasToSormasShareInfoCriteria;
+import de.symeda.sormas.api.sormastosormas.shareinfo.SormasToSormasShareInfoDto;
 import de.symeda.sormas.api.sormastosormas.sharerequest.SormasToSormasShareRequestDto;
 import de.symeda.sormas.api.user.UserReferenceDto;
 import de.symeda.sormas.api.user.UserRole;
@@ -118,7 +118,7 @@ public class SormasToSormasContactFacadeEjbTest extends SormasToSormasFacadeTest
 		getSormasToSormasContactFacade().shareEntities(Collections.singletonList(contact.getUuid()), options);
 
 		List<SormasToSormasShareInfoDto> shareInfoList =
-			getSormasToSormasFacade().getShareInfoIndexList(new SormasToSormasShareInfoCriteria().contact(contact.toReference()), 0, 100);
+			getSormasToSormasShareInfoFacade().getIndexList(new SormasToSormasShareInfoCriteria().contact(contact.toReference()), 0, 100);
 		assertThat(shareInfoList.size(), is(1));
 		assertThat(shareInfoList.get(0).getTarget().getUuid(), is(SECOND_SERVER_ACCESS_ID));
 		assertThat(shareInfoList.get(0).getSender().getCaption(), is("Surv OFF - Surveillance Officer"));
@@ -180,7 +180,7 @@ public class SormasToSormasContactFacadeEjbTest extends SormasToSormasFacadeTest
 		getSormasToSormasContactFacade().shareEntities(Collections.singletonList(contact.getUuid()), options);
 
 		List<SormasToSormasShareInfoDto> shareInfoList =
-			getSormasToSormasFacade().getShareInfoIndexList(new SormasToSormasShareInfoCriteria().sample(sample.toReference()), 0, 100);
+			getSormasToSormasShareInfoFacade().getIndexList(new SormasToSormasShareInfoCriteria().sample(sample.toReference()), 0, 100);
 
 		SormasToSormasShareInfoDto sampleShareInfoList = shareInfoList.get(0);
 		assertThat(sampleShareInfoList.getTarget().getUuid(), is(SECOND_SERVER_ACCESS_ID));
@@ -302,7 +302,7 @@ public class SormasToSormasContactFacadeEjbTest extends SormasToSormasFacadeTest
 
 		// new samples should have share info with ownership handed over
 		List<SormasToSormasShareInfoDto> newSampleShareInfos =
-			getSormasToSormasFacade().getShareInfoIndexList(new SormasToSormasShareInfoCriteria().sample(newSample.toReference()), 0, 100);
+			getSormasToSormasShareInfoFacade().getIndexList(new SormasToSormasShareInfoCriteria().sample(newSample.toReference()), 0, 100);
 		assertThat(newSampleShareInfos, hasSize(1));
 		assertThat(newSampleShareInfos.get(0).isOwnershipHandedOver(), is(true));
 	}
@@ -355,11 +355,11 @@ public class SormasToSormasContactFacadeEjbTest extends SormasToSormasFacadeTest
 		assertThat(returnedContact.getReportingUser(), is(officer));
 
 		List<SormasToSormasShareInfoDto> contactShares =
-			getSormasToSormasFacade().getShareInfoIndexList(new SormasToSormasShareInfoCriteria().contact(contact.toReference()), 0, 100);
+			getSormasToSormasShareInfoFacade().getIndexList(new SormasToSormasShareInfoCriteria().contact(contact.toReference()), 0, 100);
 		assertThat(contactShares.get(0).isOwnershipHandedOver(), is(false));
 
 		List<SormasToSormasShareInfoDto> sampleShares =
-			getSormasToSormasFacade().getShareInfoIndexList(new SormasToSormasShareInfoCriteria().sample(sharedSample.toReference()), 0, 100);
+			getSormasToSormasShareInfoFacade().getIndexList(new SormasToSormasShareInfoCriteria().sample(sharedSample.toReference()), 0, 100);
 		assertThat(sampleShares.get(0).isOwnershipHandedOver(), is(false));
 
 		SampleDto returnedNewSample = getSampleFacade().getSampleByUuid(newSample.getUuid());

@@ -24,11 +24,11 @@ import de.symeda.sormas.api.sormastosormas.sharerequest.ShareRequestDataType;
 @Remote
 public interface SormasToSormasFacade {
 
+	String getOrganizationId();
+
 	List<ServerAccessDataReferenceDto> getAvailableOrganizations();
 
 	ServerAccessDataReferenceDto getOrganizationRef(String id);
-
-	List<SormasToSormasShareInfoDto> getShareInfoIndexList(SormasToSormasShareInfoCriteria criteria, Integer first, Integer max);
 
 	void rejectShareRequest(ShareRequestDataType dataType, String uuid) throws SormasToSormasException;
 

@@ -30,7 +30,6 @@ import org.mockito.Mockito;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.symeda.sormas.api.SormasToSormasConfig;
@@ -51,10 +50,12 @@ import de.symeda.sormas.api.sample.SampleDto;
 import de.symeda.sormas.api.sample.SampleMaterial;
 import de.symeda.sormas.api.sample.SamplePurpose;
 import de.symeda.sormas.api.sample.SampleSource;
+import de.symeda.sormas.api.sormastosormas.ServerAccessDataReferenceDto;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasEncryptedDataDto;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasException;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasOriginInfoDto;
 import de.symeda.sormas.api.sormastosormas.SormasToSormasSampleDto;
+import de.symeda.sormas.api.sormastosormas.shareinfo.SormasToSormasShareInfoDto;
 import de.symeda.sormas.api.user.UserDto;
 import de.symeda.sormas.api.user.UserReferenceDto;
 import de.symeda.sormas.api.utils.DataHelper;
@@ -157,7 +158,17 @@ public class SormasToSormasFacadeTest extends AbstractBeanTest {
 		return shareInfo;
 	}
 
-	protected SormasToSormasEncryptedDataDto encryptShareDataAsArray(Object shareData) throws JsonProcessingException, SormasToSormasException {
+	protected SormasToSormasShareInfoDto createShareInfoDto(UserReferenceDto sender, String serverId, boolean ownershipHandedOver) {
+		SormasToSormasShareInfoDto shareInfo = new SormasToSormasShareInfoDto();
+
+		shareInfo.setOwnershipHandedOver(ownershipHandedOver);
+		shareInfo.setTarget(new ServerAccessDataReferenceDto(serverId));
+		shareInfo.setSender(sender);
+
+		return shareInfo;
+	}
+
+	protected SormasToSormasEncryptedDataDto encryptShareDataAsArray(Object shareData) throws SormasToSormasException {
 		return encryptShareData(Collections.singletonList(shareData));
 	}
 

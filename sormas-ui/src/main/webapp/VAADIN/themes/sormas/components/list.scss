@@ -4,7 +4,12 @@
   .s-list {
     .s-list-entry {
       border-top: 1px solid $v-focus-color;
-      padding: 9px 0px;
+      padding: 9px 0;
+    }
+
+    .s-list-entry-no-border {
+      border-top: none;
+      padding-top: 0;
     }
   }
 }
