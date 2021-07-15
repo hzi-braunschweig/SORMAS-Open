@@ -1,13 +1,14 @@
 package de.symeda.sormas.app.component.validation;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 
 import android.view.View;
 
-import java.util.Date;
-
 import de.symeda.sormas.api.i18n.I18nProperties;
 import de.symeda.sormas.api.i18n.Validations;
+import de.symeda.sormas.api.utils.DateHelper;
 import de.symeda.sormas.app.component.controls.ControlDateField;
 import de.symeda.sormas.app.component.controls.ControlTextEditField;
 import de.symeda.sormas.app.util.ResultCallback;
@@ -18,7 +19,10 @@ public class ValidationHelper {
 		initDateIntervalValidator(dateFromControl, dateUntilControl, true);
 	}
 
-	public static void initDateIntervalValidator(ControlDateField dateFromControl, ControlDateField dateUntilControl, boolean doNotSetForHiddenFields) {
+	public static void initDateIntervalValidator(
+		ControlDateField dateFromControl,
+		ControlDateField dateUntilControl,
+		boolean doNotSetForHiddenFields) {
 		if (doNotSetForHiddenFields && (dateFromControl.getVisibility() == View.GONE || dateUntilControl.getVisibility() == View.GONE)) {
 			return;
 		}
@@ -27,11 +31,11 @@ public class ValidationHelper {
 			Date dateFromValue = dateFromControl.getValue();
 			Date dateUntilValue = dateUntilControl.getValue();
 			if (dateFromValue != null && dateUntilValue != null) {
-				if (dateFromValue.after(dateUntilValue)) {
+				if (DateHelper.getStartOfDay(dateFromValue).after(DateHelper.getStartOfDay(dateUntilValue))) {
 					dateFromControl.enableErrorState(
-							I18nProperties.getValidationError(Validations.beforeDate, dateFromControl.getCaption(), dateUntilControl.getCaption()));
+						I18nProperties.getValidationError(Validations.beforeDate, dateFromControl.getCaption(), dateUntilControl.getCaption()));
 					dateUntilControl.enableErrorState(
-							I18nProperties.getValidationError(Validations.afterDate, dateUntilControl.getCaption(), dateFromControl.getCaption()));
+						I18nProperties.getValidationError(Validations.afterDate, dateUntilControl.getCaption(), dateFromControl.getCaption()));
 					return true;
 				} else {
 					dateFromControl.disableErrorState();
