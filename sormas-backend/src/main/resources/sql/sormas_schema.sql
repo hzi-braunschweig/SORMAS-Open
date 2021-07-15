@@ -7607,4 +7607,12 @@ ALTER TABLE events_history ADD COLUMN diseasevariant text;
 
 INSERT INTO schema_version (version_number, comment) VALUES (383, 'Add disease variant to event #5525');
 
+-- 2021-07-15 Immunization data type correction #4756
+ALTER TABLE immunization ALTER COLUMN additionaldetails set DATA TYPE text;
+ALTER TABLE immunization ALTER COLUMN meansOfImmunizationDetails set DATA TYPE text;
+ALTER TABLE immunization_history ALTER COLUMN additionaldetails set DATA TYPE text;
+ALTER TABLE immunization_history ALTER COLUMN meansOfImmunizationDetails set DATA TYPE text;
+
+INSERT INTO schema_version (version_number, comment) VALUES (384, 'Immunization data type correction #4756');
+
 -- *** Insert new sql commands BEFORE this line ***

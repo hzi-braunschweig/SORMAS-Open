@@ -241,7 +241,7 @@ public class Immunization extends CoreAdo {
 		this.lastInfectionDate = lastInfectionDate;
 	}
 
-	@Column(length = COLUMN_LENGTH_DEFAULT)
+	@Column(columnDefinition = "text")
 	public String getAdditionalDetails() {
 		return additionalDetails;
 	}
@@ -295,7 +295,7 @@ public class Immunization extends CoreAdo {
 		this.immunizationManagementStatus = immunizationManagementStatus;
 	}
 
-	@Column(length = COLUMN_LENGTH_DEFAULT)
+	@Column(columnDefinition = "text")
 	public String getMeansOfImmunizationDetails() {
 		return meansOfImmunizationDetails;
 	}
