@@ -90,6 +90,6 @@
 			<artifactId>jsoup</artifactId>
 		</dependency>
 
-	</dependencies>
+    </dependencies>
 
 </project>
