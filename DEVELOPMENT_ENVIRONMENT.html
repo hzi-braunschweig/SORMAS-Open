@@ -1,0 +1,933 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.10">
+    
+    
+      
+        <title>Development Environment - SORMAS Project</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.1fe995fd.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.f1a3b89f.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL(".",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#development-environment-setup" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="SORMAS Project" class="md-header__button md-logo" aria-label="SORMAS Project" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SORMAS Project
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Development Environment
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/hzi-braunschweig/SORMAS-Project/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hzi-braunschweig/SORMAS-Project
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="SORMAS Project" class="md-nav__button md-logo" aria-label="SORMAS Project" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    SORMAS Project
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/hzi-braunschweig/SORMAS-Project/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hzi-braunschweig/SORMAS-Project
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://sormas.org" class="md-nav__link">
+        Official Website
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="CONTRIBUTING.html" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="DEMO_APP.html" class="md-nav__link">
+        Demo App
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sormas-rest/index.html" class="md-nav__link">
+        REST
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Development Environment
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="DEVELOPMENT_ENVIRONMENT.html" class="md-nav__link md-nav__link--active">
+        Development Environment
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-install-a-local-sormas-server" class="md-nav__link">
+    Step 1: Install a Local SORMAS Server
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-check-out-the-sormas-repository" class="md-nav__link">
+    Step 2: Check Out the SORMAS Repository
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-install-java" class="md-nav__link">
+    Step 3: Install Java
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-install-and-configure-your-ide" class="md-nav__link">
+    Step 4: Install and Configure Your IDE
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4: Install and Configure Your IDE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#intellij" class="md-nav__link">
+    IntelliJ
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eclipse" class="md-nav__link">
+    Eclipse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#android-studio" class="md-nav__link">
+    Android Studio
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-configure-code-formatting-and-import-settings" class="md-nav__link">
+    Step 5: Configure Code Formatting and Import Settings
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5: Configure Code Formatting and Import Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#intellij-and-android-studio-settings" class="md-nav__link">
+    IntelliJ and Android Studio Settings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eclipse-settings" class="md-nav__link">
+    Eclipse Settings
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#issues-which-can-appear-during-installation-process-of-the-project" class="md-nav__link">
+    Issues which can appear during installation process of the project
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sormas-cargoserver/index.html" class="md-nav__link">
+        Cargo Server
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sormas-base/doc/keycloak.html" class="md-nav__link">
+        Keycloak
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sormas-keycloak-service-provider/index.html" class="md-nav__link">
+        Keycloak Service Provider
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="I18N.html" class="md-nav__link">
+        I18n
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="SECURITY.html" class="md-nav__link">
+        Security
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="SERVER_CUSTOMIZATION.html" class="md-nav__link">
+        Customization
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="SERVER_DEV_SETUP.html" class="md-nav__link">
+        Development Setup
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="SERVER_SETUP.html" class="md-nav__link">
+        Setup
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="SERVER_UPDATE.html" class="md-nav__link">
+        Update
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="SOP_DISEASES.html" class="md-nav__link">
+        Diseases
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ADDING_LICENSE.html" class="md-nav__link">
+        Licensing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3RD_PARTY_ACK.html" class="md-nav__link">
+        Acknowledgements
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-install-a-local-sormas-server" class="md-nav__link">
+    Step 1: Install a Local SORMAS Server
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-check-out-the-sormas-repository" class="md-nav__link">
+    Step 2: Check Out the SORMAS Repository
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-install-java" class="md-nav__link">
+    Step 3: Install Java
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-install-and-configure-your-ide" class="md-nav__link">
+    Step 4: Install and Configure Your IDE
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4: Install and Configure Your IDE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#intellij" class="md-nav__link">
+    IntelliJ
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eclipse" class="md-nav__link">
+    Eclipse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#android-studio" class="md-nav__link">
+    Android Studio
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-configure-code-formatting-and-import-settings" class="md-nav__link">
+    Step 5: Configure Code Formatting and Import Settings
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5: Configure Code Formatting and Import Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#intellij-and-android-studio-settings" class="md-nav__link">
+    IntelliJ and Android Studio Settings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eclipse-settings" class="md-nav__link">
+    Eclipse Settings
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#issues-which-can-appear-during-installation-process-of-the-project" class="md-nav__link">
+    Issues which can appear during installation process of the project
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/hzi-braunschweig/SORMAS-Project/edit/master/docs/DEVELOPMENT_ENVIRONMENT.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="development-environment-setup">Development Environment Setup</h1>
+<p>This step-by-step guide explains how to set up your development environment, using either Eclipse or IntelliJ for the backend and web UI and Android Studio for the mobile app. Please follow it strictly to make sure that development will run as smoothly as possible and your code adheres to our guidelines.</p>
+<p><strong>Please note that these instructions are optimized for Windows and Linux systems.</strong> If you're developing on a Mac and, we would be glad to get your feedback about how this guide can be extended with OS-specific instructions in our developer chat on <a href="https://gitter.im/SORMAS-Project">Gitter</a>.</p>
+<h2 id="step-1-install-a-local-sormas-server">Step 1: Install a Local SORMAS Server</h2>
+<p>Please follow the <a href="SERVER_SETUP.html">Server Setup Instructions</a> to set up a local SORMAS instance that you will use to test your code. Alternatively, you can also use <a href="../sormas-cargoserver/README.md">Maven Cargo</a>, or a <a href="SERVER_DEV_SETUP.html">Docker installation</a> (not recommended at this time).</p>
+<h2 id="step-2-check-out-the-sormas-repository">Step 2: Check Out the SORMAS Repository</h2>
+<ul>
+<li><a href="https://git-scm.com/downloads">Download and install the latest Git version</a> for your operating system</li>
+<li><em>Optional:</em> Install a Git client such as <a href="https://tortoisegit.org/">TortoiseGit</a> or <a href="https://desktop.github.com/">GitHub Desktop</a> if you don't want to handle version control from the command line or within your IDE</li>
+<li><em>Optional:</em> Clone the SORMAS-Project repository with <code>git clone https://github.com/hzi-braunschweig/SORMAS-Project.git</code>; if you want to use Git from within your IDE, you can also clone the repository in Step 4</li>
+<li>Open Git Bash and execute the following command to ensure that rebase is used when pulling the development branch rather than merge: <code>git config --global branch.development.rebase true</code></li>
+</ul>
+<h2 id="step-3-install-java">Step 3: Install Java</h2>
+<p>Download and install the <strong>Java 11 JDK</strong> (not JRE) for your operating system.
+We suggest using <a href="https://www.azul.com/downloads/?version=java-11-lts&amp;package=jdk">Zulu OpenJDK</a>. If you're running Linux, please refer to the <a href="https://docs.azul.com/zulu/zuludocs/ZuluUserGuide/PrepareZuluPlatform/AttachAPTRepositoryUbuntuOrDebianSys.htm">official documentation</a> on how to install Zulu OpenJDK on your system.
+If you plan to work on the Android App as well, you will also need the <strong>Java 8 JDK</strong> to use with Android Studio.</p>
+<h2 id="step-4-install-and-configure-your-ide">Step 4: Install and Configure Your IDE</h2>
+<h3 id="intellij">IntelliJ</h3>
+<ul>
+<li>Download and install the latest <a href="https://www.jetbrains.com/lp/intellij-frameworks/">IntelliJ IDEA Ultimate</a>; (newer than version of 2020-04-15 to enable debugging, see <a href="https://youtrack.jetbrains.com/issue/IDEA-216528">https://youtrack.jetbrains.com/issue/IDEA-216528</a>)</li>
+<li>Set the project SDK to the installed JDK</li>
+<li><em>Optional:</em> Clone the SORMAS-Project repository if you haven't done so already</li>
+<li>Open the project in IntelliJ; make sure that under <code>File -&gt; Project Structure -&gt; Modules</code> all modules EXCEPT sormas-app are recognized; if not, add the missing modules with the <code>+</code> button</li>
+<li>Navigate to <code>File -&gt; Settings -&gt; Plugins</code> and make sure that Glassfish &amp; Ant integrations are enabled</li>
+<li>Install the <a href="https://plugins.jetbrains.com/plugin/13199-vaadin-6-8">Vaadin 6-8 plugin</a>; the commercial Vaadin Designer is not needed</li>
+<li>Make a copy of <code>sormas-base/build.properties.example</code>, rename it to <code>build.properties</code> and set <code>glassfish.domain.root</code> to the location of the SORMAS domain inside your Payara installation</li>
+<li>Run <code>mvn install</code> on the <code>sormas-base</code> project (e.g. by opening the Maven view and executing <code>sormas-base -&gt; Lifecycle -&gt; install</code>)</li>
+<li>Add a Payara server to IntelliJ:</li>
+<li>Open <code>Run -&gt; Edit Configurations</code>, add a new configuration and choose the Glassfish server template</li>
+<li>Click on <code>Configure</code> next to <code>Application server</code> and create a new server configuration by selecting your Payara installation directory</li>
+<li>Check the <code>After launch</code> checkbox and specify the browser that you want SORMAS to open in once the server has been deployed</li>
+<li>Enter <code>http://localhost:6080/sormas-ui</code> into the <code>URL</code> field</li>
+<li>Make sure that the correct JRE is specified (your Java 11 JDK)</li>
+<li>Enter the path to the SORMAS domain and the credentials that you've specified when setting up the server</li>
+<li>Open the <code>Deployment</code> tab and add the artifacts <code>sormas-ear</code>, <code>sormas-rest</code> and <code>sormas-ui</code></li>
+<li>Open the <code>Logs</code> tab and add a new log file pointing to the <code>logs/server.log</code> file in your SORMAS domain</li>
+<li>Open the <code>Startup/Connection</code> tab and make sure that <code>Pass environment variables</code> is NOT checked; ignore warnings about the debug configuration not being correct</li>
+<li>Open the <code>config/domain.xml</code> file in your domain directory and make sure that the <code>java-config</code> node contains the following code: <code>&lt;java-config classpath-suffix="" debug-enabled="true" debug-options="-agentlib:jdwp=transport=dt_socket,address=6009,server=n,suspend=y" ...</code></li>
+<li>Open the Ant window, click on the <code>+</code> icon and select the <code>sormas-base/build.xml</code> file</li>
+<li>Execute the <code>install</code> and <code>deploy-serverlibs</code> Ant scripts</li>
+<li>Set the default working directory for run configurations by navigating to <code>Run -&gt; Edit Configurations -&gt; Templates -&gt; Application</code> and setting <code>Working directory</code> to <code>$MODULE_WORKING_DIR$</code></li>
+</ul>
+<h3 id="eclipse">Eclipse</h3>
+<ul>
+<li>Download and install the latest <a href="https://www.eclipse.org/downloads/packages">Eclipse IDE for Enterprise Java and Web Developers</a></li>
+<li>Set the default JRE of Eclipse to the installed JDK: <a href="https://help.eclipse.org/kepler/index.jsp?topic=%2Forg.eclipse.jdt.doc.user%2Ftasks%2Ftask-assign_default_jre.htm">Assigning the default JRE for the workbench</a></li>
+<li><em>Optional:</em> Clone the SORMAS-Project repository if you haven't done so already via <code>File -&gt; Import -&gt; Git -&gt; Projects from Git</code> and cancel the process when you're asked to create a new project from the cloned repository</li>
+<li>Import the projects from the SORMAS-Project repository into your workspace via <code>File -&gt; Import -&gt; Maven -&gt; Existing Maven Projects</code></li>
+<li>Install the <a href="https://marketplace.eclipse.org/content/payara-tools">Payara Tools plugin</a></li>
+<li>Install the <a href="https://marketplace.eclipse.org/content/vaadin-plugin-eclipse">Vaadin Plugin for Eclipse</a>; the commercial UI designer is not needed</li>
+<li>Add a Payara server to Eclipse and enter the credentials you specified when setting up the local SORMAS server</li>
+<li>Make a copy of <code>sormas-base/build.properties.example</code>, rename it to <code>build.properties</code> and set <code>glassfish.domain.root</code> to the location of the SORMAS domain inside your Payara installation</li>
+<li>Drag the <code>sormas-base/build.xml</code> file into the Ant view in Eclipse</li>
+<li>Either run <code>mvn install</code> on the <code>sormas-base</code> project or execute the <code>install [default]</code> Ant script (this needs a Maven installation on your system with the M2_HOME variable set)</li>
+<li>Execute the <code>deploy-serverlibs</code> Ant script</li>
+<li>Highlight all Eclipse projects and choose <code>Maven -&gt; Update Project</code> from the right-click menu; perform the update for all projects</li>
+<li>Start the Glassfish server and deploy <code>sormas-ear</code>, <code>sormas-rest</code> and <code>sormas-ui</code> by dragging the respective projects onto it, or use the <code>Add and Remove...</code> function by right-clicking on the server</li>
+<li>Open your browser and type in <code>http://localhost:6080/sormas-ui</code> to test whether the server and IDE have been set up correctly</li>
+</ul>
+<h3 id="android-studio">Android Studio</h3>
+<p><strong>Please note: You only need to install Android Studio if you're developing code for the Android app. This is likely the case when you're adding new fields or entities to the system, or if you specifically want to work on the mobile app.</strong></p>
+<ul>
+<li>Download and install the latest <a href="https://developer.android.com/studio">Android Studio version</a></li>
+<li>Please make sure to run the installer with admin rights if you're using Windows</li>
+<li>Ensure that the Android SDK installation path does not contain whitespaces; you can also change this later via <code>Tools -&gt; SDK Manager -&gt; Android SDK Location</code></li>
+<li>Open Android Studio and import the <code>sormas-app</code> module from the SORMAS-Project repository</li>
+<li>Make a copy of <code>keystore.properties.example</code> and rename it to <code>keystore.properties</code></li>
+<li>Make sure to use the JDK version 8 (<code>File -&gt; Project Structure -&gt; SDK Location -&gt; JDK Location</code>)</li>
+<li>Build the Android Studio project by executing the Gradle build (this may be done automatically)</li>
+<li>Add an emulator and set the SDK version to the <code>minSdkVersion</code> or <code>targetSdkVersion</code> from <code>build.gradle</code>; we suggest to test your code on both, but <code>minSdkVersion</code> should be preferred to ensure compatibility to the minimum supported SDK</li>
+<li>Click on <code>Run 'app'</code> to install and run the app on your emulator; enter <code>http://10.0.2.2:6080/sormas-rest</code> as the server URL when you start the newly installed app for the first time</li>
+</ul>
+<p><strong>Important:</strong> Whenever you do or pull changes in the <code>sormas-api</code> project that you want to use in the mobile app or that are referenced there already, you need to execute the <code>install</code> Ant script to notify the <code>sormas-app</code> project of the changes.</p>
+<h2 id="step-5-configure-code-formatting-and-import-settings">Step 5: Configure Code Formatting and Import Settings</h2>
+<p>In order to ensure a consistent code style and prevent so-called edit wars, we have set up custom configuration files for automatic code formatting and import ordering. Please make sure to adhere to the following steps for your IDE(s) before you start developing.</p>
+<h3 id="intellij-and-android-studio-settings">IntelliJ and Android Studio Settings</h3>
+<ul>
+<li>Install the <a href="https://plugins.jetbrains.com/plugin/6546-eclipse-code-formatter">Eclipse Code Formatter for IntelliJ/Android Studio plugin</a></li>
+<li>Open the plugin settings via <code>File -&gt; Settings -&gt; Other Settings -&gt; Eclipse Code Formatter</code> and select <code>Use the Eclipse Code Formatter</code></li>
+<li>Under <code>Eclipse formatter config</code>, choose <code>Eclipse workspace/project folder or config file</code> and select <code>sormas-base/java-formatter-profile.xml</code></li>
+<li>Check <code>Optimize Imports</code></li>
+<li>Under <code>Import order</code>, choose <code>From file</code> and select <code>sormas-base/java-importorder-profile.importorder</code></li>
+<li>Make sure that <code>Do not format other file types by IntelliJ formatter</code> is selected</li>
+<li>Go to <code>Editor -&gt; Code Style -&gt; Java -&gt; Imports</code> and set <code>Class count to use import with '*'</code> and <code>Names count to use static import with '*'</code> to 99</li>
+<li>Navigate to <code>Editor -&gt; General -&gt; Auto Import</code> and disable <code>Optimize imports on the fly</code></li>
+</ul>
+<p>Optional, but strongly recommended:
+- Install the <a href="https://plugins.jetbrains.com/plugin/7642-save-actions">Save Actions plugin</a> that automatically applies code formatting and import reordering whenever you save a file - otherwise you will manually have to do so (by default with Ctrl+Alt+L)
+- Open the plugin settings via <code>File -&gt; Settings -&gt; Other Settings -&gt; Save Actions</code> and make sure that the <em>first three checkboxes</em> under <code>General</code> and the <em>first two checkboxes</em> under <code>Formatting Actions</code> are selected</p>
+<h3 id="eclipse-settings">Eclipse Settings</h3>
+<ul>
+<li>Open <code>Window -&gt; Preferences</code></li>
+<li>Navigate to <code>Java -&gt; Code Style -&gt; Formatter</code>, import <code>sormas-base/java-formatter-profile.xml</code> and apply the changes</li>
+<li>Navigate to <code>Java -&gt; Code Style -&gt; Organize Imports</code> and import <code>sormas-base/java-importorder-profile.importorder</code></li>
+<li>On the same screen, set <code>Number of imports needed for .*</code> and <code>Number of static imports needed for .*</code> to 99</li>
+<li>On the same screen, make sure that <code>Do not create import for types starting with a lowercase letter</code> is checked and apply the changes</li>
+<li>Navigate to <code>Java -&gt; Editor -&gt; Save Actions</code> and make sure that the following options are selected: <code>Perform the selected actions on save</code>, <code>Format source code</code>, <code>Format all lines</code> and <code>Organize imports</code></li>
+</ul>
+<h2 id="issues-which-can-appear-during-installation-process-of-the-project">Issues which can appear during installation process of the project</h2>
+<ol>
+<li>
+<p>If debug mode does not work: To replace opt\payara5\glassfish\modules\launcher.jar with sormas-base/setup/launcher.jar</p>
+</li>
+<li>
+<p>For Windows: Please check your java_version. In case if you have the multiple java_versions installed on the system, it will always show to you the first version installed.
+   I had the java 8 instead of 11.
+   In order to fix it, go to environment variables, and move the 11 version up. And rerun the script. Seems that the console is reading those variables at the starting point, and the values of it can be updated only after console/script restart.</p>
+</li>
+<li>
+<p>For Windows: Pay attention to the postgres SQL files rights permissions after unziping the downloaded ZIP archive. Files physically were present but next script error has been generated:
+   psql:setup.sql:7: ERROR:  could not open extension control file "C:/Program Files/PostgreSQL/10/share/extension/temporal_tables.control": No such file or directory
+   -I checked the file rights, and under windows they has AV attribute, however, all others has only A attribute. When I was trying to open them with Notepad++ it was saying that such file does not exist. Do you want to create it? If <code>yes</code> will be pressed - another message saying that the file exists, appeared. Very strange scenario...</p>
+</li>
+<li>
+<p>All the postgres commands (of added users, etc.) which were added at first startup of the application - will raise errors in case if such entity exists. Just ignore those errors at repeated installation of .\server-setup.sh</p>
+</li>
+<li>
+<p>Check always the port number 6048 which can be occupied by an old instance of payara.
+   -&gt; For every installation, kill all Java/javaw processes and check the availability of 6048 port number.
+   -&gt; Delete files with generated domain folders and payara. In order to have a clean installation of each next ./server-setup.sh run.</p>
+</li>
+<li>
+<p>M2_HOME need to be set. By default, for newer version, it is set to MAVEN_HOME. But Ant script is looking for M2_HOME</p>
+</li>
+<li>
+<p>For eclipse formatted plugin, there is an issue for Idea: <a href="https://plugins.jetbrains.com/plugin/6546-eclipse-code-formatter">https://plugins.jetbrains.com/plugin/6546-eclipse-code-formatter</a> - <code>cannot save settings Path to custom eclipse folder is not valid</code> - it works only when settings were saved from down to up. And not vice versa.</p>
+</li>
+</ol>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="sormas-rest/index.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: REST" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              REST
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="sormas-cargoserver/index.html" class="md-footer__link md-footer__link--next" aria-label="Next: Cargo Server" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Cargo Server
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/hzi-braunschweig/SORMAS-Project" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": ".", "features": ["tabs"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "assets/javascripts/workers/search.477d984a.min.js", "version": 0.1}</script>
+    
+    
+      <script src="assets/javascripts/bundle.ddd52ceb.min.js"></script>
+      
+    
+  </body>
+</html>

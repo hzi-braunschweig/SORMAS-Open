@@ -1,0 +1,1429 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.10">
+    
+    
+      
+        <title>Setup - SORMAS Project</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.1fe995fd.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.f1a3b89f.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL(".",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#installing-a-sormas-server" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="SORMAS Project" class="md-header__button md-logo" aria-label="SORMAS Project" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SORMAS Project
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Setup
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/hzi-braunschweig/SORMAS-Project/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hzi-braunschweig/SORMAS-Project
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="SORMAS Project" class="md-nav__button md-logo" aria-label="SORMAS Project" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    SORMAS Project
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/hzi-braunschweig/SORMAS-Project/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hzi-braunschweig/SORMAS-Project
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://sormas.org" class="md-nav__link">
+        Official Website
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="CONTRIBUTING.html" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="DEMO_APP.html" class="md-nav__link">
+        Demo App
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sormas-rest/index.html" class="md-nav__link">
+        REST
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="DEVELOPMENT_ENVIRONMENT.html" class="md-nav__link">
+        Development Environment
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sormas-cargoserver/index.html" class="md-nav__link">
+        Cargo Server
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sormas-base/doc/keycloak.html" class="md-nav__link">
+        Keycloak
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sormas-keycloak-service-provider/index.html" class="md-nav__link">
+        Keycloak Service Provider
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="I18N.html" class="md-nav__link">
+        I18n
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="SECURITY.html" class="md-nav__link">
+        Security
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="SERVER_CUSTOMIZATION.html" class="md-nav__link">
+        Customization
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="SERVER_DEV_SETUP.html" class="md-nav__link">
+        Development Setup
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Setup
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="SERVER_SETUP.html" class="md-nav__link md-nav__link--active">
+        Setup
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#content" class="md-nav__link">
+    Content
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    Related
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    Prerequisites
+  </a>
+  
+    <nav class="md-nav" aria-label="Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#java-11" class="md-nav__link">
+    Java 11
+  </a>
+  
+    <nav class="md-nav" aria-label="Java 11">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#linux" class="md-nav__link">
+    Linux
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    Windows
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#postgres-database" class="md-nav__link">
+    Postgres Database
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sormas-server" class="md-nav__link">
+    SORMAS Server
+  </a>
+  
+    <nav class="md-nav" aria-label="SORMAS Server">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-on-linux" class="md-nav__link">
+    Install on Linux
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-on-windows" class="md-nav__link">
+    Install on Windows
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-installation-configuration" class="md-nav__link">
+    Post-Installation Configuration
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keycloak-server" class="md-nav__link">
+    Keycloak Server
+  </a>
+  
+    <nav class="md-nav" aria-label="Keycloak Server">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keycloak-as-a-docker-container" class="md-nav__link">
+    Keycloak as a Docker container
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keycloak-as-a-standalone-installation" class="md-nav__link">
+    Keycloak as a standalone installation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connect-keycloak-to-an-already-running-instance-of-sormas" class="md-nav__link">
+    Connect Keycloak to an already running instance of SORMAS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keycloak-configuration" class="md-nav__link">
+    Keycloak configuration
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web-server-setup" class="md-nav__link">
+    Web Server Setup
+  </a>
+  
+    <nav class="md-nav" aria-label="Web Server Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apache-web-server" class="md-nav__link">
+    Apache Web Server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#firewall" class="md-nav__link">
+    Firewall
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#postfix-mail-server" class="md-nav__link">
+    Postfix Mail Server
+  </a>
+  
+    <nav class="md-nav" aria-label="Postfix Mail Server">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-postfix-and-mailutils" class="md-nav__link">
+    Install postfix and mailutils
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configure-your-system" class="md-nav__link">
+    Configure your system
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing-the-server-setup" class="md-nav__link">
+    Testing the Server Setup
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#r-software-environment" class="md-nav__link">
+    R Software Environment
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sormas-to-sormas-certificate-setup" class="md-nav__link">
+    SORMAS to SORMAS Certificate Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    Troubleshooting
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problem-login-fails" class="md-nav__link">
+    Problem: Login fails
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problem-server-is-out-of-memory" class="md-nav__link">
+    Problem: Server is out of memory
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="SERVER_UPDATE.html" class="md-nav__link">
+        Update
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="SOP_DISEASES.html" class="md-nav__link">
+        Diseases
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ADDING_LICENSE.html" class="md-nav__link">
+        Licensing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3RD_PARTY_ACK.html" class="md-nav__link">
+        Acknowledgements
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#content" class="md-nav__link">
+    Content
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    Related
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    Prerequisites
+  </a>
+  
+    <nav class="md-nav" aria-label="Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#java-11" class="md-nav__link">
+    Java 11
+  </a>
+  
+    <nav class="md-nav" aria-label="Java 11">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#linux" class="md-nav__link">
+    Linux
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    Windows
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#postgres-database" class="md-nav__link">
+    Postgres Database
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sormas-server" class="md-nav__link">
+    SORMAS Server
+  </a>
+  
+    <nav class="md-nav" aria-label="SORMAS Server">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-on-linux" class="md-nav__link">
+    Install on Linux
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-on-windows" class="md-nav__link">
+    Install on Windows
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-installation-configuration" class="md-nav__link">
+    Post-Installation Configuration
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keycloak-server" class="md-nav__link">
+    Keycloak Server
+  </a>
+  
+    <nav class="md-nav" aria-label="Keycloak Server">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keycloak-as-a-docker-container" class="md-nav__link">
+    Keycloak as a Docker container
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keycloak-as-a-standalone-installation" class="md-nav__link">
+    Keycloak as a standalone installation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connect-keycloak-to-an-already-running-instance-of-sormas" class="md-nav__link">
+    Connect Keycloak to an already running instance of SORMAS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keycloak-configuration" class="md-nav__link">
+    Keycloak configuration
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web-server-setup" class="md-nav__link">
+    Web Server Setup
+  </a>
+  
+    <nav class="md-nav" aria-label="Web Server Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apache-web-server" class="md-nav__link">
+    Apache Web Server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#firewall" class="md-nav__link">
+    Firewall
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#postfix-mail-server" class="md-nav__link">
+    Postfix Mail Server
+  </a>
+  
+    <nav class="md-nav" aria-label="Postfix Mail Server">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-postfix-and-mailutils" class="md-nav__link">
+    Install postfix and mailutils
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configure-your-system" class="md-nav__link">
+    Configure your system
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing-the-server-setup" class="md-nav__link">
+    Testing the Server Setup
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#r-software-environment" class="md-nav__link">
+    R Software Environment
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sormas-to-sormas-certificate-setup" class="md-nav__link">
+    SORMAS to SORMAS Certificate Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    Troubleshooting
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problem-login-fails" class="md-nav__link">
+    Problem: Login fails
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problem-server-is-out-of-memory" class="md-nav__link">
+    Problem: Server is out of memory
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/hzi-braunschweig/SORMAS-Project/edit/master/docs/SERVER_SETUP.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="installing-a-sormas-server">Installing a SORMAS Server</h1>
+<p><strong>Note: This guide explains how to set up a SORMAS server on Linux and Windows systems, the latter only being intended for usage on development systems. Please also note that certain parts of the setup script will not be executed on Windows.</strong></p>
+<h2 id="content">Content</h2>
+<ul>
+<li><a href="#installing-a-sormas-server">Installing a SORMAS Server</a></li>
+<li><a href="#content">Content</a></li>
+<li><a href="#related">Related</a></li>
+<li><a href="#prerequisites">Prerequisites</a><ul>
+<li><a href="#java-11">Java 11</a></li>
+<li><a href="#linux">Linux</a></li>
+<li><a href="#windows">Windows</a></li>
+<li><a href="#postgres-database">Postgres Database</a></li>
+</ul>
+</li>
+<li><a href="#sormas-server">SORMAS Server</a><ul>
+<li><a href="#install-on-linux">Install on Linux</a></li>
+<li><a href="#install-on-windows">Install on Windows</a></li>
+<li><a href="#post-installation-configuration">Post-Installation Configuration</a></li>
+</ul>
+</li>
+<li><a href="#keycloak-server">Keycloak Server</a><ul>
+<li><a href="#keycloak-as-a-docker-container">Keycloak as a Docker container</a></li>
+<li><a href="#keycloak-as-a-standalone-installation">Keycloak as a standalone installation</a></li>
+<li><a href="#connect-keycloak-to-an-already-running-instance-of-sormas">Connect Keycloak to an already running instance of SORMAS</a></li>
+<li><a href="#keycloak-configuration">Keycloak configuration</a></li>
+</ul>
+</li>
+<li><a href="#web-server-setup">Web Server Setup</a><ul>
+<li><a href="#apache-web-server">Apache Web Server</a></li>
+<li><a href="#firewall">Firewall</a></li>
+<li><a href="#postfix-mail-server">Postfix Mail Server</a></li>
+<li><a href="#install-postfix-and-mailutils">Install postfix and mailutils</a></li>
+<li><a href="#configure-your-system">Configure your system</a></li>
+<li><a href="#testing-the-server-setup">Testing the Server Setup</a></li>
+</ul>
+</li>
+<li><a href="#r-software-environment">R Software Environment</a></li>
+<li><a href="#sormas-to-sormas-certificate-setup">SORMAS to SORMAS Certificate Setup</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a><ul>
+<li><a href="#problem-login-fails">Problem: Login fails</a></li>
+<li><a href="#problem-server-is-out-of-memory">Problem: Server is out of memory</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="DEMO_APP.html">Creating an App for a Demo Server</a></li>
+<li><a href="https://github.com/hzi-braunschweig/SORMAS-Docker">SORMAS Docker Repository</a></li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<h3 id="java-11">Java 11</h3>
+<p>Download and install the Java 11 <strong>JDK</strong> (not JRE) for your operating system. We suggest using the <a href="https://www.azul.com/downloads/zulu/">Zulu OpenJDK</a>.</p>
+<h4 id="linux"><a href="https://docs.azul.com/zulu/zuludocs/#ZuluUserGuide/PrepareZuluPlatform/AttachAPTRepositoryUbuntuOrDebianSys.htm">Linux</a></h4>
+<pre><code class="language-bash">sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9
+sudo apt-add-repository 'deb https://repos.azul.com/zulu/deb/ stable main'
+sudo apt-get update
+sudo apt-get install zulu11
+</code></pre>
+<h4 id="windows">Windows</h4>
+<p>For testing and development environments we suggest to download and run the installer of the Java 11 <strong>JDK</strong> for 32 or 64 bit client systems (depending on your system).
+You can check your Java version from the shell/command line using: <code>java -version</code>.</p>
+<h3 id="postgres-database">Postgres Database</h3>
+<ul>
+<li>Install PostgreSQL (currently 9.5, 9.6 or 10) on your system (manuals for all OS can be found here: <a href="https://www.postgresql.org/download">https://www.postgresql.org/download</a>)</li>
+<li>Set <strong>max_connections = 288</strong> and <strong>max_prepared_transactions = 256</strong> (at least, sum of all connection pools) in <code>postgresql.conf</code> (e.g. <code>/etc/postgresql/10.0/main/postgresql.conf</code>; <code>C:/Program Files/PostgreSQL/10.0/data</code>) - make sure the property is uncommented and restart the service to apply the changes.</li>
+<li>Install the "temporal tables" extension for Postgres (<a href="https://github.com/arkhipov/temporal_tables">https://github.com/arkhipov/temporal_tables</a>)</li>
+<li><strong>Windows</strong>: Download the latest version for your Postgres version: <a href="https://github.com/arkhipov/temporal_tables/releases/latest">https://github.com/arkhipov/temporal_tables/releases/latest</a>, then copy the DLL from the project into the PostgreSQL's lib directory and the .sql and .control files into the directory share\extension.</li>
+<li><strong>Linux</strong> (see <a href="https://github.com/arkhipov/temporal_tables#installation)">https://github.com/arkhipov/temporal_tables#installation)</a></li>
+</ul>
+<pre><code class="language-bash">sudo apt-get install libpq-dev
+sudo apt-get install postgresql-server-dev-all
+sudo apt install pgxnclient
+#Check for GCC:
+gcc --version # and install if missing
+sudo pgxn install temporal_tables
+# The packages can be removed afterward
+</code></pre>
+<h2 id="sormas-server">SORMAS Server</h2>
+<p>Get the latest SORMAS build by downloading the ZIP archive from the latest release on GitHub: <a href="https://github.com/hzi-braunschweig/SORMAS-Project/releases/latest">https://github.com/hzi-braunschweig/SORMAS-Project/releases/latest</a></p>
+<h3 id="install-on-linux">Install on Linux</h3>
+<p>Unzip the archive, copy/upload its contents to <strong>/root/deploy/sormas/$(date +%F)</strong> and make the setup script executable (as root user).</p>
+<pre><code class="language-bash">sudo su
+mkdir /root/deploy/sormas
+cd /root/deploy/sormas
+SORMAS_VERSION=1.y.z
+wget https://github.com/hzi-braunschweig/SORMAS-Project/releases/download/v${SORMAS_VERSION}/sormas_${SORMAS_VERSION}.zip
+unzip sormas_${SORMAS_VERSION}.zip
+mv deploy/ $(date +%F)
+rm sormas_${SORMAS_VERSION}.zip
+chmod +x $(date +%F)/server-setup.sh
+</code></pre>
+<h3 id="install-on-windows">Install on Windows</h3>
+<ul>
+<li>Download &amp; install Git for Windows. This will provide a bash emulation that you can use to run the setup script: <a href="https://gitforwindows.org/">https://gitforwindows.org/</a></li>
+<li>Unzip the ZIP archive (e.g. into you download directory)</li>
+<li>Open Git Bash and navigate to the setup sub-directory</li>
+</ul>
+<h3 id="post-installation-configuration">Post-Installation Configuration</h3>
+<ul>
+<li>Optional: Open <code>server-setup.sh</code> in a text editor to customize the install paths, database access and ports for the server. The default ports are 6080 (HTTP), 6081 (HTTPS) and 6048 (admin). <strong>Important:</strong> Do not change the name of the database user. The pre-defined name is used in the statements executed in the database.</li>
+<li>Set up the database and a Payara domain for SORMAS by executing the setup script: <code>sudo -s ./server-setup.sh</code> Press enter whenever asked for it</li>
+<li><strong>IMPORTANT</strong>: Make sure the script executed successfully. If anything goes wrong you need to fix the problem (or ask for help), then delete the created domain directory and re-execute the script.</li>
+<li><strong>IMPORTANT</strong>: Adjust the SORMAS configuration for your country in /opt/domains/sormas/sormas.properties</li>
+<li>Adjust the logging configuration in <code>/opt/domains/sormas/config/logback.xml</code> based on your needs (e.g. configure and activate email appender)</li>
+<li>Linux: <a href="SERVER_UPDATE.html">Update the SORMAS domain</a></li>
+</ul>
+<h2 id="keycloak-server">Keycloak Server</h2>
+<p>Keycloak can be set up in two ways:
+* as a Docker container (for just using Keycloak approach)
+* as a Standalone installation (for doing development in Keycloak like themes, SPIs)</p>
+<h3 id="keycloak-as-a-docker-container">Keycloak as a Docker container</h3>
+<p><em>To be done only in the situation when SORMAS is already installed on the machine as a standalone installation.</em></p>
+<p><em>For complete Docker setup see the <a href="https://github.com/hzi-braunschweig/SORMAS-Docker/tree/keycloak-integration">SORMAS-Docker</a> repository.</em></p>
+<p><strong>Prerequisites</strong>
+* SORMAS Server is installed
+* PostgreSQL is installed
+* Docker is installed
+* Open and edit <code>sormas-base/setup/keycloak/keycloak-setup.sh</code> with your system's actual values <em>(on Windows use Git Bash)</em>.</p>
+<p><strong>Setup</strong>
+* Run <code>sormas-base/setup/keycloak/keycloak-setup.sh</code>
+* Update <code>sormas.properties</code> file in the SORMAS domain with the property <code>authentication.provider=KEYCLOAK</code></p>
+<h3 id="keycloak-as-a-standalone-installation">Keycloak as a standalone installation</h3>
+<p><strong>Prerequisites</strong>
+* SORMAS Server is installed
+* PostgreSQL is installed</p>
+<p><strong>Setup</strong></p>
+<p>Setting Keycloak up as a standalone installation <a href="https://www.keycloak.org/docs/11.0/server_installation/#installation">Server Installation and Configuration Guide</a>
+* Make sure to configure Keycloak with PostgreSQL Database <a href="https://www.keycloak.org/docs/11.0/server_installation/#_database">Relational Database Setup</a>
+* Set up an Admin User
+* Copy the <code>themes</code> folder content to <code>${KEYCLOAK_HOME}/themes</code> <a href="https://www.keycloak.org/docs/11.0/server_development/#deploying-themes">Deploying Themes</a>
+* Deploy the <code>sormas-keycloak-service-provider</code> <a href="https://www.keycloak.org/docs/11.0/server_development/#using-the-keycloak-deployer">Using Keycloak Deployer</a>
+* Update the <code>sormas-base/setup/keycloak/SORMAS.json</code> file by replacing the following placeholders: <code>${SORMAS_SERVER_URL}</code>, <code>${KEYCLOAK_SORMAS_UI_SECRET}</code>, <code>${KEYCLOAK_SORMAS_BACKEND_SECRET}</code>, <code>${KEYCLOAK_SORMAS_REST_SECRET}</code>
+* Create the SORMAS Realm by importing <code>sormas-base/setup/keycloak/SORMAS.json</code> see <a href="https://www.keycloak.org/docs/11.0/server_admin/#_create-realm">Create a New Realm</a>
+* Update the <code>sormas-*</code> clients by generating new secrets for them
+* Update the realm's email settings to allow sending emails to users</p>
+<p>To update the SORMAS Server run the following commands:</p>
+<pre><code class="language-bash">${ASADMIN} set-config-property --propertyName=payara.security.openid.clientSecret --propertyValue=${KEYCLOAK_SORMAS_UI_SECRET} --source=domain
+${ASADMIN} set-config-property --propertyName=payara.security.openid.clientId --propertyValue=sormas-ui --source=domain
+${ASADMIN} set-config-property --propertyName=payara.security.openid.scope --propertyValue=openid --source=domain
+${ASADMIN} set-config-property --propertyName=payara.security.openid.providerURI --propertyValue=http://localhost:${KEYCLOAK_PORT}/keycloak/auth/realms/SORMAS --source=domain
+${ASADMIN} set-config-property --propertyName=sormas.rest.security.oidc.json \
+        --propertyValue=&quot;{\&quot;realm\&quot;:\&quot;SORMAS\&quot;,\&quot;auth-server-url\&quot;:\&quot;http://localhost:${KEYCLOAK_PORT}/auth\&quot;,\&quot;ssl-required\&quot;:\&quot;external\&quot;,\&quot;resource\&quot;:\&quot;sormas-rest\&quot;,\&quot;credentials\&quot;:{\&quot;secret\&quot;:\&quot;${KEYCLOAK_SORMAS_REST_SECRET}\&quot;},\&quot;confidential-port\&quot;:0,\&quot;principal-attribute\&quot;:\&quot;preferred_username\&quot;,\&quot;enable-basic-auth\&quot;:true}&quot; \
+        --source=domain
+${ASADMIN} set-config-property --propertyName=sormas.backend.security.oidc.json --propertyValue=&quot;{\&quot;realm\&quot;:\&quot;SORMAS\&quot;,\&quot;auth-server-url\&quot;:\&quot;http://localhost:${KEYCLOAK_PORT}/auth/\&quot;,\&quot;ssl-required\&quot;:\&quot;external\&quot;,\&quot;resource\&quot;:\&quot;sormas-backend\&quot;,\&quot;credentials\&quot;:{\&quot;secret\&quot;:\&quot;${KEYCLOAK_SORMAS_BACKEND_SECRET}\&quot;},\&quot;confidential-port\&quot;:0}&quot; --source=domain
+</code></pre>
+<p>where:
+* <code>${ASADMIN}</code> - represents the location to <code>${PAYARA_HOME}\bin\asadmin</code>
+* <code>${KEYCLOAK_PORT}</code> - the port on which keycloak will run
+* <code>${KEYCLOAK_SORMAS_UI_SECRET}</code> - is the secret generated in Keycloak for the <code>sormas-ui</code> client
+* <code>${KEYCLOAK_SORMAS_REST_SECRET}</code> - is the secret generated in Keycloak for the <code>sormas-rest</code> client
+* <code>${KEYCLOAK_SORMAS_BACKEND_SECRET}</code> - is the secret generated in Keycloak for the <code>sormas-backend</code> client</p>
+<p>Then update <code>sormas.properties</code> file in the SORMAS domain with the property <code>authentication.provider=KEYCLOAK</code></p>
+<h3 id="connect-keycloak-to-an-already-running-instance-of-sormas">Connect Keycloak to an already running instance of SORMAS</h3>
+<p><em>after setting up Keycloak as one of the described options above</em></p>
+<p>In case Keycloak is set up alongside an already running instance of SORMAS, these are the steps to follow to make sure already existing users can access the system:
+1. Manually create an admin user in Keycloak for the SORMAS realm <a href="https://www.keycloak.org/docs/11.0/getting_started/index.html#creating-a-user">Creating a user</a> <em>(username has to be the same as admin's username in SORMAS)</em>
+2. Login to SORMAS and trigger the <strong>Sync Users</strong> button from the <strong>Users</strong> page
+3. This will sync users to Keycloak keeping their original password - see <a href="sormas-keycloak-service-provider/index.html">SORMAS Keycloak Service Provider</a> for more information about this</p>
+<h3 id="keycloak-configuration">Keycloak configuration</h3>
+<p>More about the default configuration and how to customize can be found here <a href="sormas-base/doc/keycloak.html">Keycloak</a></p>
+<h2 id="web-server-setup">Web Server Setup</h2>
+<h3 id="apache-web-server">Apache Web Server</h3>
+<p><strong>Note: This is not necessary for development systems.</strong> When you are using SORMAS in a production environment you should use a http server like Apache 2 instead of putting the Payara server in the first line.
+Here are some things that you should do to configure the Apache server as a proxy:</p>
+<p>Activate all needed modules:</p>
+<pre><code class="language-bash">a2enmod ssl
+a2enmod rewrite
+a2enmod proxy
+a2enmod proxy_http
+a2enmod headers
+</code></pre>
+<p>Create a new site <code>/etc/apache2/sites-available/your.sormas.server.url.conf</code> (e.g. sormas.org.conf).</p>
+<p>Force SSL secured connections: redirect from http to https:</p>
+<pre><code class="language-xml">&lt;VirtualHost *:80&gt;
+        ServerName your.sormas.server.url
+        RewriteEngine On
+        RewriteCond %{HTTPS} !=on
+        RewriteRule ^/(.*) https://your.sormas.server.url/$1 [R,L]
+&lt;/VirtualHost&gt;
+&lt;IfModule mod_ssl.c&gt;
+&lt;VirtualHost *:443&gt;
+        ServerName your.sormas.server.url
+        ...
+&lt;/VirtualHost&gt;
+&lt;/IfModule&gt;
+</code></pre>
+<p>Configure logging:</p>
+<pre><code class="language-text">ErrorLog /var/log/apache2/error.log
+LogLevel warn
+LogFormat &quot;%h %l %u %t \&quot;%r\&quot; %&gt;s %b _%D_ \&quot;%{User}i\&quot;  \&quot;%{Connection}i\&quot;  \&quot;%{Referer}i\&quot; \&quot;%{User-agent}i\&quot;&quot; combined_ext
+CustomLog /var/log/apache2/access.log combined_ext
+</code></pre>
+<p>SSL key config:</p>
+<pre><code class="language-text">SSLEngine on
+SSLCertificateFile    /etc/ssl/certs/your.sormas.server.url.crt
+SSLCertificateKeyFile /etc/ssl/private/your.sormas.server.url.key
+SSLCertificateChainFile /etc/ssl/certs/your.sormas.server.url.ca-bundle
+
+# disable weak ciphers and old TLS/SSL
+SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+SSLCipherSuite ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE$
+SSLHonorCipherOrder off
+</code></pre>
+<p>Add a proxy pass to the local port:</p>
+<pre><code class="language-text">ProxyRequests Off
+ProxyPass /sormas-ui http://localhost:6080/sormas-ui
+ProxyPassReverse /sormas-ui http://localhost:6080/sormas-ui
+ProxyPass /sormas-rest http://localhost:6080/sormas-rest
+ProxyPassReverse /sormas-rest http://localhost:6080/sormas-rest
+</code></pre>
+<p>Configure security settings:</p>
+<pre><code class="language-text">Header always set X-Content-Type-Options &quot;nosniff&quot;
+Header always set X-Xss-Protection &quot;1; mode=block&quot;
+# Disable Caching
+Header always set Cache-Control &quot;no-cache, no-store, must-revalidate, private&quot;
+Header always set Pragma &quot;no-cache&quot;
+
+Header always set Content-Security-Policy \
+        &quot;default-src 'none'; \
+        object-src 'self'; \
+        script-src 'self' 'unsafe-inline' 'unsafe-eval'; \
+        connect-src https://fonts.googleapis.com https://fonts.gstatic.com 'self'; \
+        img-src *; \
+        style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; \
+        font-src https://fonts.gstatic.com 'self'; \
+        frame-src 'self'; \
+        worker-src 'self'; \
+        manifest-src 'self'; \
+        frame-ancestors 'self'
+
+# The Content-Type header was either missing or empty.
+# Ensure each page is setting the specific and appropriate content-type value for the content being delivered.
+AddType application/vnd.ms-fontobject    .eot
+AddType application/x-font-opentype      .otf
+AddType image/svg+xml                    .svg
+AddType application/x-font-ttf           .ttf
+AddType application/font-woff            .woff
+</code></pre>
+<p>Activate output compression (very important!):</p>
+<pre><code class="language-xml">&lt;IfModule mod_deflate.c&gt;
+        AddOutputFilterByType DEFLATE text/plain text/html text/xml
+        AddOutputFilterByType DEFLATE text/css text/javascript
+        AddOutputFilterByType DEFLATE application/json
+        AddOutputFilterByType DEFLATE application/xml application/xhtml+xml
+        AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+        DeflateCompressionLevel 1
+&lt;/IfModule&gt;
+</code></pre>
+<p>Provide the android apk:</p>
+<pre><code class="language-java">Options -Indexes
+AliasMatch &quot;/downloads/sormas-(.*)&quot; &quot;/var/www/sormas/downloads/sormas-$1&quot;
+</code></pre>
+<p>For the Apache 2 security configuration we suggest the following settings (<code>/etc/apache2/conf-available/security.conf</code>):</p>
+<pre><code class="language-conf">ServerTokens Prod
+ServerSignature Off
+TraceEnable Off
+
+Header always set Strict-Transport-Security &quot;max-age=15768000; includeSubDomains; preload&quot;
+Header unset X-Frame-Options
+Header always set X-Frame-Options SAMEORIGIN
+Header unset Referrer-Policy
+Header always set Referrer-Policy &quot;same-origin&quot;
+Header edit Set-Cookie &quot;(?i)^((?:(?!;\s?HttpOnly).)+)$&quot; &quot;$1;HttpOnly&quot;
+Header edit Set-Cookie &quot;(?i)^((?:(?!;\s?Secure).)+)$&quot; &quot;$1;Secure&quot;
+
+Header unset X-Powered-By
+Header unset Server
+</code></pre>
+<ul>
+<li>In case you need to update the site config while the server is running, use the following command to publish the changes without the need for a reload:</li>
+</ul>
+<pre><code class="language-bash">apache2ctl graceful
+</code></pre>
+<h3 id="firewall">Firewall</h3>
+<ul>
+<li>The server should only publish the ports that are needed. For SORMAS this is port 80 (HTTP) and 443 (HTTPS). In addition you will need the SSH port to access the server for admin purposes.</li>
+<li>We suggest to use UFW (Uncomplicated Firewall) which provides a simple interface to iptables:</li>
+</ul>
+<pre><code class="language-bash">sudo apt-get install ufw
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow ssh
+sudo ufw allow http
+sudo ufw allow https
+sudo ufw enable
+</code></pre>
+<h3 id="postfix-mail-server">Postfix Mail Server</h3>
+<h4 id="install-postfix-and-mailutils">Install postfix and mailutils</h4>
+<pre><code class="language-bash">apt install aptitude
+aptitude install postfix
+-&gt; choose &quot;satelite system&quot;
+apt install mailutils
+</code></pre>
+<h4 id="configure-your-system">Configure your system</h4>
+<pre><code class="language-bash">nano /etc/aliases
+-&gt; add &quot;root: enter-your@support-email-here.com&quot;
+nano /opt/domains/sormas/config/logback.xml
+-&gt; make sure &quot;EMAIL_ERROR&quot; appender is active and sends out to your email address
+</code></pre>
+<h3 id="testing-the-server-setup">Testing the Server Setup</h3>
+<p>Use SSL Labs to test your server security config: <a href="https://www.ssllabs.com/ssltest">https://www.ssllabs.com/ssltest</a></p>
+<h2 id="r-software-environment">R Software Environment</h2>
+<p>In order to enable disease network diagrams in the contact dashboard, R and several extension packages are required.
+Then the Rscript executable has to be configured in the <code>sormas.properties</code> file.
+This can be conveniently accomplished by executing the R setup script from the SORMAS ZIP archive (see <a href="#sormas-server">SORMAS Server</a>):</p>
+<ul>
+<li>If the SORMAS installation has been customized, <code>r-setup.sh</code> the install paths may have to be adjusted accordingly with a text editor.</li>
+<li>Execute R setup script and follow its instructions.</li>
+</ul>
+<pre><code class="language-bash">chmod +x r-setup.sh
+./r-setup.sh
+</code></pre>
+<h2 id="sormas-to-sormas-certificate-setup">SORMAS to SORMAS Certificate Setup</h2>
+<p>To be able to communicate with other SORMAS instances, there are some additional steps which need to be taken, in order to set
+up the certificate and the truststore. Please see the <a href="https://github.com/hzi-braunschweig/SORMAS-Project/wiki/Creating-a-SORMAS2SORMAS-Certificate">related guide</a> for detailed instructions regarding SORMAS to SORMAS setup.
+<br/></p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="problem-login-fails">Problem: Login fails</h3>
+<p>Check that the users table does have a corresponding entry. If not, the database initialization that is done when deploying sormas-ear.ear probably had an error.</p>
+<h3 id="problem-server-is-out-of-memory">Problem: Server is out of memory</h3>
+<p>Old servers were set up with a memory size of less than 2048MB. You can change this using the following commands:</p>
+<pre><code class="language-bash">/opt/payara-172/glassfish/bin/asadmin --port 6048 delete-jvm-options -Xmx512m
+/opt/payara-172/glassfish/bin/asadmin --port 6048 delete-jvm-options -Xmx1024m
+/opt/payara-172/glassfish/bin/asadmin --port 6048 create-jvm-options -Xmx2048m
+</code></pre>
+<p>Alternative: You can edit the settings directly in the domain.xml in the config directory of the SORMAS domain. Just search for <code>Xmx</code> - there should be two entries that need to be changed.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="SERVER_DEV_SETUP.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Development Setup" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Development Setup
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="SERVER_UPDATE.html" class="md-footer__link md-footer__link--next" aria-label="Next: Update" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Update
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/hzi-braunschweig/SORMAS-Project" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": ".", "features": ["tabs"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "assets/javascripts/workers/search.477d984a.min.js", "version": 0.1}</script>
+    
+    
+      <script src="assets/javascripts/bundle.ddd52ceb.min.js"></script>
+      
+    
+  </body>
+</html>
