@@ -44,4 +44,10 @@ public interface SormasToSormasFacade {
 	boolean isFeatureEnabledForUser();
 
 	boolean isFeatureConfigured();
+
+    boolean isSharingCasesContactsAndSamplesEnabledForUser();
+
+	boolean isSharingEventsEnabledForUser();
+
+	boolean isSharingLabMessagesEnabledForUser();
 }
