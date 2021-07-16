@@ -312,8 +312,13 @@ public final class I18nProperties {
 
 	public static String getCountryName(String isoCode, String defaultValue) {
 
-		String result = getCountryName(userLanguage.get(), isoCode);
-		return StringUtils.isEmpty(result) ? defaultValue : result;
+		// first, check if the defaultValue actually equals the defaultValue in english language. If not, it has been customized
+		String trueDefaultName = getCountryName(Language.EN, isoCode);
+		if (!StringUtils.isEmpty(trueDefaultName) && !trueDefaultName.equalsIgnoreCase(defaultValue)) {
+			return defaultValue;
+		}
+		String translatedName = getCountryName(userLanguage.get(), isoCode);
+		return StringUtils.isEmpty(translatedName) ? defaultValue : translatedName;
 	}
 
 	public static String getCountryName(Language language, String isoCode) {

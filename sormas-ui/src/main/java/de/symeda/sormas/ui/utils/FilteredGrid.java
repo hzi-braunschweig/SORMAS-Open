@@ -46,8 +46,12 @@ public class FilteredGrid<T, C extends BaseCriteria> extends Grid<T> {
 	}
 
 	public void setCriteria(C criteria) {
+		setCriteria(criteria, false);
+	}
+
+	public void setCriteria(C criteria, boolean ignoreDataProvider) {
 		this.criteria = criteria;
-		if (!inEagerMode) {
+		if (!ignoreDataProvider && !inEagerMode) {
 			getFilteredDataProvider().setFilter(criteria);
 		}
 	}

@@ -60,6 +60,7 @@ public class CountriesView extends AbstractConfigurationView {
 	private HorizontalLayout filterLayout;
 	private VerticalLayout gridLayout;
 	private CountriesGrid grid;
+	private RowCount rowCount;
 	protected Button createButton;
 	protected Button importButton;
 	protected Button importDefaultCountriesButton;
@@ -76,7 +77,8 @@ public class CountriesView extends AbstractConfigurationView {
 		grid = new CountriesGrid(criteria);
 		gridLayout = new VerticalLayout();
 		gridLayout.addComponent(createFilterBar());
-		gridLayout.addComponent(new RowCount(Strings.labelNumberOfCountries, grid.getItemCount()));
+		rowCount = new RowCount(Strings.labelNumberOfCountries, 0);
+		gridLayout.addComponent(rowCount);
 		gridLayout.addComponent(grid);
 		gridLayout.setMargin(true);
 		gridLayout.setSpacing(false);
@@ -140,7 +142,7 @@ public class CountriesView extends AbstractConfigurationView {
 				btnEnterBulkEditMode.setVisible(false);
 				btnLeaveBulkEditMode.setVisible(true);
 				searchField.setEnabled(false);
-				grid.setEagerDataProvider();
+				grid.setInEagerMode(true);
 				grid.reload();
 			});
 			btnLeaveBulkEditMode.addClickListener(e -> {
@@ -252,6 +254,7 @@ public class CountriesView extends AbstractConfigurationView {
 		}
 		updateFilterComponents();
 		grid.reload();
+		rowCount.update(grid.getItemCount());
 	}
 
 	public void updateFilterComponents() {

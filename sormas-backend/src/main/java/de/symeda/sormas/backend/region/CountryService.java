@@ -109,7 +109,8 @@ public class CountryService extends AbstractInfrastructureAdoService<Country> {
 
 				Predicate likeFilters = cb.or(
 					CriteriaBuilderHelper.ilike(cb, from.get(Country.ISO_CODE), textFilter),
-					CriteriaBuilderHelper.ilike(cb, from.get(Country.UNO_CODE), textFilter));
+					CriteriaBuilderHelper.ilike(cb, from.get(Country.UNO_CODE), textFilter),
+					CriteriaBuilderHelper.ilike(cb, from.get(Country.DEFAULT_NAME), textFilter));
 				filter = CriteriaBuilderHelper.and(cb, filter, likeFilters);
 			}
 		}
