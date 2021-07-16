@@ -15,21 +15,6 @@
 
 package de.symeda.sormas.app.backend.common;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
-import android.util.Log;
-
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.GenericRawResults;
-import com.j256.ormlite.field.DataType;
-import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.TableUtils;
-
-import org.apache.commons.lang3.StringUtils;
-
 import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.sql.SQLException;
@@ -41,6 +26,21 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.GenericRawResults;
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
+import android.util.Log;
 
 import de.symeda.sormas.api.caze.Vaccination;
 import de.symeda.sormas.api.epidata.AnimalCondition;
@@ -156,6 +156,8 @@ import de.symeda.sormas.app.backend.user.User;
 import de.symeda.sormas.app.backend.user.UserDao;
 import de.symeda.sormas.app.backend.user.UserRoleConfig;
 import de.symeda.sormas.app.backend.user.UserRoleConfigDao;
+import de.symeda.sormas.app.backend.vaccination.VaccinationEntity;
+import de.symeda.sormas.app.backend.vaccination.VaccinationEntityDao;
 import de.symeda.sormas.app.backend.visit.Visit;
 import de.symeda.sormas.app.backend.visit.VisitDao;
 
@@ -172,7 +174,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	public static final String DATABASE_NAME = "sormas.db";
 	// any time you make changes to your database objects, you may have to increase the database version
 
-	public static final int DATABASE_VERSION = 309;
+	public static final int DATABASE_VERSION = 310;
 
 	private static DatabaseHelper instance = null;
 
@@ -211,6 +213,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			ConnectionSource connectionSource = getCaseDao().getConnectionSource();
 			TableUtils.clearTable(connectionSource, Case.class);
 			TableUtils.clearTable(connectionSource, Immunization.class);
+			TableUtils.clearTable(connectionSource, VaccinationEntity.class);
 			TableUtils.clearTable(connectionSource, Treatment.class);
 			TableUtils.clearTable(connectionSource, Prescription.class);
 			TableUtils.clearTable(connectionSource, Therapy.class);
@@ -306,6 +309,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, PersonContactDetail.class);
 			TableUtils.createTable(connectionSource, Case.class);
 			TableUtils.createTable(connectionSource, Immunization.class);
+			TableUtils.createTable(connectionSource, VaccinationEntity.class);
 			TableUtils.createTable(connectionSource, Symptoms.class);
 			TableUtils.createTable(connectionSource, Therapy.class);
 			TableUtils.createTable(connectionSource, Prescription.class);
@@ -1461,44 +1465,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 				getDao(Event.class).executeRaw("ALTER TABLE events RENAME TO tmp_events;");
 
 				getDao(Event.class).executeRaw(
-					"CREATE TABLE events ("
-					+ "		disease VARCHAR,"
-					+ "		diseaseDetails VARCHAR,"
-					+ "		endDate BIGINT,"
-					+ "		eventDesc VARCHAR,"
-					+ "		eventLocation_id BIGINT,"
-					+ "		eventStatus VARCHAR,"
-					+ "		eventType VARCHAR,"
-					+ "		externalId VARCHAR,"
-					+ "		nosocomial VARCHAR,"
-					+ "		reportDateTime BIGINT,"
-					+ "		reportLat DOUBLE PRECISION,"
-					+ "		reportLatLonAccuracy FLOAT,"
-					+ "		reportLon DOUBLE PRECISION,"
-					+ "		reportingUser_id BIGINT,"
-					+ "		srcEmail VARCHAR,"
-					+ "		srcFirstName VARCHAR,"
-					+ "		srcLastName VARCHAR,"
-					+ "		srcMediaDetails VARCHAR,"
-					+ "		srcMediaName VARCHAR,"
-					+ "		srcMediaWebsite VARCHAR,"
-					+ "		srcTelNo VARCHAR,"
-					+ "		srcType VARCHAR,"
-					+ "		startDate BIGINT,"
-					+ "		surveillanceOfficer_id BIGINT,"
-					+ "		typeOfPlace VARCHAR,"
-					+ "		typeOfPlaceText VARCHAR,"
-					+ "		changeDate BIGINT NOT NULL,"
-					+ "		creationDate BIGINT NOT NULL,"
-					+ "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "		lastOpenedDate BIGINT,"
-					+ "		localChangeDate BIGINT NOT NULL,"
-					+ "		modified SMALLINT,"
-					+ "		snapshot SMALLINT,"
-					+ "		uuid VARCHAR NOT NULL,"
-					+ "		UNIQUE (snapshot ASC, uuid ASC)"
-					+ ");"
-				);
+					"CREATE TABLE events (" + "		disease VARCHAR," + "		diseaseDetails VARCHAR," + "		endDate BIGINT,"
+						+ "		eventDesc VARCHAR," + "		eventLocation_id BIGINT," + "		eventStatus VARCHAR," + "		eventType VARCHAR,"
+						+ "		externalId VARCHAR," + "		nosocomial VARCHAR," + "		reportDateTime BIGINT,"
+						+ "		reportLat DOUBLE PRECISION," + "		reportLatLonAccuracy FLOAT," + "		reportLon DOUBLE PRECISION,"
+						+ "		reportingUser_id BIGINT," + "		srcEmail VARCHAR," + "		srcFirstName VARCHAR," + "		srcLastName VARCHAR,"
+						+ "		srcMediaDetails VARCHAR," + "		srcMediaName VARCHAR," + "		srcMediaWebsite VARCHAR,"
+						+ "		srcTelNo VARCHAR," + "		srcType VARCHAR," + "		startDate BIGINT," + "		surveillanceOfficer_id BIGINT,"
+						+ "		typeOfPlace VARCHAR," + "		typeOfPlaceText VARCHAR," + "		changeDate BIGINT NOT NULL,"
+						+ "		creationDate BIGINT NOT NULL," + "		id INTEGER PRIMARY KEY AUTOINCREMENT," + "		lastOpenedDate BIGINT,"
+						+ "		localChangeDate BIGINT NOT NULL," + "		modified SMALLINT," + "		snapshot SMALLINT,"
+						+ "		uuid VARCHAR NOT NULL," + "		UNIQUE (snapshot ASC, uuid ASC)" + ");");
 
 				db.execSQL("INSERT INTO events (" + queryColumns.replace("eventDate", "startDate") + ") SELECT " + queryColumns + " FROM tmp_events");
 				db.execSQL("DROP TABLE tmp_events;");
@@ -1578,29 +1555,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 				db.execSQL("ALTER TABLE visits RENAME TO visits_old;");
 
 				getDao(Visit.class).executeRaw(
-					"CREATE TABLE visits ("
-					+ "		disease VARCHAR,"
-					+ "		person_id BIGINT NOT NULL,"
-					+ "		reportLat DOUBLE PRECISION,"
-					+ "		reportLatLonAccuracy FLOAT,"
-					+ "		reportLon DOUBLE PRECISION,"
-					+ "		symptoms_id BIGINT,"
-					+ "		visitDateTime BIGINT NOT NULL,"
-					+ "		visitRemarks VARCHAR,"
-					+ "		visitStatus VARCHAR,"
-					+ "		visitUser_id BIGINT,"
-					+ "		pseudonymized SMALLINT,"
-					+ "		changeDate BIGINT NOT NULL,"
-					+ "		creationDate BIGINT NOT NULL,"
-					+ "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "		lastOpenedDate BIGINT,"
-					+ "		localChangeDate BIGINT NOT NULL,"
-					+ "		modified SMALLINT,"
-					+ "		snapshot SMALLINT,"
-					+ "		uuid VARCHAR NOT NULL,"
-					+ "		UNIQUE (snapshot ASC, uuid ASC)"
-					+ ");"
-				);
+					"CREATE TABLE visits (" + "		disease VARCHAR," + "		person_id BIGINT NOT NULL," + "		reportLat DOUBLE PRECISION,"
+						+ "		reportLatLonAccuracy FLOAT," + "		reportLon DOUBLE PRECISION," + "		symptoms_id BIGINT,"
+						+ "		visitDateTime BIGINT NOT NULL," + "		visitRemarks VARCHAR," + "		visitStatus VARCHAR,"
+						+ "		visitUser_id BIGINT," + "		pseudonymized SMALLINT," + "		changeDate BIGINT NOT NULL,"
+						+ "		creationDate BIGINT NOT NULL," + "		id INTEGER PRIMARY KEY AUTOINCREMENT," + "		lastOpenedDate BIGINT,"
+						+ "		localChangeDate BIGINT NOT NULL," + "		modified SMALLINT," + "		snapshot SMALLINT,"
+						+ "		uuid VARCHAR NOT NULL," + "		UNIQUE (snapshot ASC, uuid ASC)" + ");");
 
 				db.execSQL("INSERT INTO visits (" + visitQueryColumns + ") SELECT " + visitQueryColumns + " FROM visits_old;");
 				db.execSQL("DROP TABLE visits_old;");
@@ -1772,62 +1733,25 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 				db.execSQL("ALTER TABLE person RENAME TO person_old;");
 
 				getDao(Person.class).executeRaw(
-					"CREATE TABLE person ("
-					+ "		address_id BIGINT,"
-					+ "		approximateAge INTEGER,"
-					+ "		approximateAgeReferenceDate BIGINT,"
-					+ "		approximateAgeType VARCHAR,"
-					+ "		birthWeight INTEGER,"
-					+ "		birthdateDD INTEGER,"
-					+ "		birthdateMM INTEGER,"
-					+ "		birthdateYYYY INTEGER,"
-					+ "		burialConductor VARCHAR,"
-					+ "		burialDate BIGINT,"
-					+ "		burialPlaceDescription VARCHAR,"
-					+ "		causeOfDeath VARCHAR,"
-					+ "		causeOfDeathDetails VARCHAR,"
-					+ "		causeOfDeathDisease VARCHAR,"
-					+ "		deathDate BIGINT,"
-					+ "		deathPlaceDescription VARCHAR,"
-					+ "		deathPlaceType VARCHAR,"
-					+ "		educationDetails VARCHAR,"
-					+ "		educationType VARCHAR,"
-					+ "		emailAddress VARCHAR,"
-					+ "		externalId VARCHAR,"
-					+ "		fathersName VARCHAR,"
-					+ "		firstName VARCHAR NOT NULL,"
-					+ "		generalPractitionerDetails VARCHAR,"
-					+ "		gestationAgeAtBirth INTEGER,"
-					+ "		lastName VARCHAR NOT NULL,"
-					+ "		mothersMaidenName VARCHAR,"
-					+ "		mothersName VARCHAR,"
-					+ "		nationalHealthId VARCHAR,"
-					+ "		nickname VARCHAR,"
-					+ "		occupationDetails VARCHAR,"
-					+ "		occupationType VARCHAR,"
-					+ "		passportNumber VARCHAR,"
-					+ "		phone VARCHAR,"
-					+ "		phoneOwner VARCHAR,"
-					+ "		placeOfBirthCommunity_id BIGINT,"
-					+ "		placeOfBirthDistrict_id BIGINT,"
-					+ "		placeOfBirthFacility_id BIGINT,"
-					+ "		placeOfBirthFacilityDetails VARCHAR,"
-					+ "		placeOfBirthFacilityType VARCHAR,"
-					+ "		placeOfBirthRegion_id BIGINT,"
-					+ "		presentCondition VARCHAR,"
-					+ "		sex VARCHAR,"
-					+ "		pseudonymized SMALLINT,"
-					+ "		changeDate BIGINT NOT NULL,"
-					+ "		creationDate BIGINT NOT NULL,"
-					+ "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "		lastOpenedDate BIGINT,"
-					+ "		localChangeDate BIGINT NOT NULL,"
-					+ "		modified SMALLINT,"
-					+ "		snapshot SMALLINT,"
-					+ "		uuid VARCHAR NOT NULL,"
-					+ "		UNIQUE (snapshot ASC, uuid ASC)"
-					+ ");"
-				);
+					"CREATE TABLE person (" + "		address_id BIGINT," + "		approximateAge INTEGER,"
+						+ "		approximateAgeReferenceDate BIGINT," + "		approximateAgeType VARCHAR," + "		birthWeight INTEGER,"
+						+ "		birthdateDD INTEGER," + "		birthdateMM INTEGER," + "		birthdateYYYY INTEGER,"
+						+ "		burialConductor VARCHAR," + "		burialDate BIGINT," + "		burialPlaceDescription VARCHAR,"
+						+ "		causeOfDeath VARCHAR," + "		causeOfDeathDetails VARCHAR," + "		causeOfDeathDisease VARCHAR,"
+						+ "		deathDate BIGINT," + "		deathPlaceDescription VARCHAR," + "		deathPlaceType VARCHAR,"
+						+ "		educationDetails VARCHAR," + "		educationType VARCHAR," + "		emailAddress VARCHAR,"
+						+ "		externalId VARCHAR," + "		fathersName VARCHAR," + "		firstName VARCHAR NOT NULL,"
+						+ "		generalPractitionerDetails VARCHAR," + "		gestationAgeAtBirth INTEGER," + "		lastName VARCHAR NOT NULL,"
+						+ "		mothersMaidenName VARCHAR," + "		mothersName VARCHAR," + "		nationalHealthId VARCHAR,"
+						+ "		nickname VARCHAR," + "		occupationDetails VARCHAR," + "		occupationType VARCHAR,"
+						+ "		passportNumber VARCHAR," + "		phone VARCHAR," + "		phoneOwner VARCHAR,"
+						+ "		placeOfBirthCommunity_id BIGINT," + "		placeOfBirthDistrict_id BIGINT,"
+						+ "		placeOfBirthFacility_id BIGINT," + "		placeOfBirthFacilityDetails VARCHAR,"
+						+ "		placeOfBirthFacilityType VARCHAR," + "		placeOfBirthRegion_id BIGINT," + "		presentCondition VARCHAR,"
+						+ "		sex VARCHAR," + "		pseudonymized SMALLINT," + "		changeDate BIGINT NOT NULL,"
+						+ "		creationDate BIGINT NOT NULL," + "		id INTEGER PRIMARY KEY AUTOINCREMENT," + "		lastOpenedDate BIGINT,"
+						+ "		localChangeDate BIGINT NOT NULL," + "		modified SMALLINT," + "		snapshot SMALLINT,"
+						+ "		uuid VARCHAR NOT NULL," + "		UNIQUE (snapshot ASC, uuid ASC)" + ");");
 
 				db.execSQL("INSERT INTO person (" + personQueryColumns + ") SELECT " + personQueryColumns + " FROM person_old;");
 				db.execSQL("DROP TABLE person_old;");
@@ -1845,24 +1769,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 				currentVersion = 234;
 
 				getDao(SormasToSormasOriginInfo.class).executeRaw(
-					"CREATE TABLE sormasToSormasOriginInfo ("
-					+ "		comment VARCHAR,"
-					+ "		organizationId VARCHAR,"
-					+ "		ownershipHandedOver SMALLINT,"
-					+ "		senderEmail VARCHAR,"
-					+ "		senderName VARCHAR,"
-					+ "		senderPhoneNumber VARCHAR,"
-					+ "		changeDate BIGINT NOT NULL,"
-					+ "		creationDate BIGINT NOT NULL,"
-					+ "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "		lastOpenedDate BIGINT,"
-					+ "		localChangeDate BIGINT NOT NULL,"
-					+ "		modified SMALLINT,"
-					+ "		snapshot SMALLINT,"
-					+ "		uuid VARCHAR NOT NULL,"
-					+ "		UNIQUE (snapshot ASC, uuid ASC)"
-					+ ");"
-				);
+					"CREATE TABLE sormasToSormasOriginInfo (" + "		comment VARCHAR," + "		organizationId VARCHAR,"
+						+ "		ownershipHandedOver SMALLINT," + "		senderEmail VARCHAR," + "		senderName VARCHAR,"
+						+ "		senderPhoneNumber VARCHAR," + "		changeDate BIGINT NOT NULL," + "		creationDate BIGINT NOT NULL,"
+						+ "		id INTEGER PRIMARY KEY AUTOINCREMENT," + "		lastOpenedDate BIGINT," + "		localChangeDate BIGINT NOT NULL,"
+						+ "		modified SMALLINT," + "		snapshot SMALLINT," + "		uuid VARCHAR NOT NULL,"
+						+ "		UNIQUE (snapshot ASC, uuid ASC)" + ");");
 
 				getDao(Case.class)
 					.executeRaw("ALTER TABLE cases ADD COLUMN sormasToSormasOriginInfo_id bigint REFERENCES sormasToSormasOriginInfo(id);");
@@ -1884,69 +1796,27 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 				currentVersion = 237;
 
 				getDao(Campaign.class).executeRaw(
-					"CREATE TABLE campaigns ("
-					+ "		archived SMALLINT,"
-					+ "		creatingUser_id BIGINT,"
-					+ "		description VARCHAR,"
-					+ "		endDate BIGINT,"
-					+ "		name VARCHAR,"
-					+ "		startDate BIGINT,"
-					+ "		pseudonymized SMALLINT,"
-					+ "		changeDate BIGINT NOT NULL,"
-					+ "		creationDate BIGINT NOT NULL,"
-					+ "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "		lastOpenedDate BIGINT,"
-					+ "		localChangeDate BIGINT NOT NULL,"
-					+ "		modified SMALLINT,"
-					+ "		snapshot SMALLINT,"
-					+ "		uuid VARCHAR NOT NULL,"
-					+ "		UNIQUE (snapshot ASC, uuid ASC)"
-					+ ");"
-				);
+					"CREATE TABLE campaigns (" + "		archived SMALLINT," + "		creatingUser_id BIGINT," + "		description VARCHAR,"
+						+ "		endDate BIGINT," + "		name VARCHAR," + "		startDate BIGINT," + "		pseudonymized SMALLINT,"
+						+ "		changeDate BIGINT NOT NULL," + "		creationDate BIGINT NOT NULL," + "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
+						+ "		lastOpenedDate BIGINT," + "		localChangeDate BIGINT NOT NULL," + "		modified SMALLINT,"
+						+ "		snapshot SMALLINT," + "		uuid VARCHAR NOT NULL," + "		UNIQUE (snapshot ASC, uuid ASC)" + ");");
 
 				getDao(CampaignFormMeta.class).executeRaw(
-					"CREATE TABLE campaignformmeta ("
-					+ "		campaignFormElements VARCHAR,"
-					+ "		campaignFormTranslations VARCHAR,"
-					+ "		formId VARCHAR,"
-					+ "		formName VARCHAR,"
-					+ "		languageCode VARCHAR,"
-					+ "		pseudonymized SMALLINT,"
-					+ "		changeDate BIGINT NOT NULL,"
-					+ "		creationDate BIGINT NOT NULL,"
-					+ "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "		lastOpenedDate BIGINT,"
-					+ "		localChangeDate BIGINT NOT NULL,"
-					+ "		modified SMALLINT,"
-					+ "		snapshot SMALLINT,"
-					+ "		uuid VARCHAR NOT NULL,"
-					+ "		UNIQUE (snapshot ASC, uuid ASC)"
-					+ ");"
-				);
+					"CREATE TABLE campaignformmeta (" + "		campaignFormElements VARCHAR," + "		campaignFormTranslations VARCHAR,"
+						+ "		formId VARCHAR," + "		formName VARCHAR," + "		languageCode VARCHAR," + "		pseudonymized SMALLINT,"
+						+ "		changeDate BIGINT NOT NULL," + "		creationDate BIGINT NOT NULL," + "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
+						+ "		lastOpenedDate BIGINT," + "		localChangeDate BIGINT NOT NULL," + "		modified SMALLINT,"
+						+ "		snapshot SMALLINT," + "		uuid VARCHAR NOT NULL," + "		UNIQUE (snapshot ASC, uuid ASC)" + ");");
 
 				getDao(CampaignFormData.class).executeRaw(
-					"CREATE TABLE campaignFormData ("
-					+ "		archived SMALLINT,"
-					+ "		campaign_id BIGINT,"
-					+ "		campaignFormMeta_id BIGINT,"
-					+ "		community_id BIGINT,"
-					+ "		creatingUser_id BIGINT,"
-					+ "		district_id BIGINT,"
-					+ "		formDate BIGINT,"
-					+ "		formValues VARCHAR,"
-					+ "		region_id BIGINT,"
-					+ "		pseudonymized SMALLINT,"
-					+ "		changeDate BIGINT NOT NULL,"
-					+ "		creationDate BIGINT NOT NULL,"
-					+ "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "		lastOpenedDate BIGINT,"
-					+ "		localChangeDate BIGINT NOT NULL,"
-					+ "		modified SMALLINT,"
-					+ "		snapshot SMALLINT,"
-					+ "		uuid VARCHAR NOT NULL,"
-					+ "		UNIQUE (snapshot ASC, uuid ASC)"
-					+ ");"
-				);
+					"CREATE TABLE campaignFormData (" + "		archived SMALLINT," + "		campaign_id BIGINT,"
+						+ "		campaignFormMeta_id BIGINT," + "		community_id BIGINT," + "		creatingUser_id BIGINT,"
+						+ "		district_id BIGINT," + "		formDate BIGINT," + "		formValues VARCHAR," + "		region_id BIGINT,"
+						+ "		pseudonymized SMALLINT," + "		changeDate BIGINT NOT NULL," + "		creationDate BIGINT NOT NULL,"
+						+ "		id INTEGER PRIMARY KEY AUTOINCREMENT," + "		lastOpenedDate BIGINT," + "		localChangeDate BIGINT NOT NULL,"
+						+ "		modified SMALLINT," + "		snapshot SMALLINT," + "		uuid VARCHAR NOT NULL,"
+						+ "		UNIQUE (snapshot ASC, uuid ASC)" + ");");
 
 			case 238:
 				currentVersion = 238;
@@ -1977,89 +1847,35 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 				currentVersion = 242;
 
 				getDao(Country.class).executeRaw(
-					"CREATE TABLE IF NOT EXISTS country ("
-					+ "		isoCode VARCHAR,"
-					+ "		name VARCHAR,"
-					+ "		archived SMALLINT,"
-					+ "		changeDate BIGINT NOT NULL,"
-					+ "		creationDate BIGINT NOT NULL,"
-					+ "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "		lastOpenedDate BIGINT,"
-					+ "		localChangeDate BIGINT NOT NULL,"
-					+ "		modified SMALLINT,"
-					+ "		snapshot SMALLINT,"
-					+ "		uuid VARCHAR NOT NULL,"
-					+ "		UNIQUE (snapshot ASC, uuid ASC)"
-					+ ");"
-				);
+					"CREATE TABLE IF NOT EXISTS country (" + "		isoCode VARCHAR," + "		name VARCHAR," + "		archived SMALLINT,"
+						+ "		changeDate BIGINT NOT NULL," + "		creationDate BIGINT NOT NULL," + "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
+						+ "		lastOpenedDate BIGINT," + "		localChangeDate BIGINT NOT NULL," + "		modified SMALLINT,"
+						+ "		snapshot SMALLINT," + "		uuid VARCHAR NOT NULL," + "		UNIQUE (snapshot ASC, uuid ASC)" + ");");
 
 			case 243:
 				currentVersion = 243;
 
 				getDao(Exposure.class).executeRaw(
-					"CREATE TABLE exposures ("
-					+ "		animalCondition VARCHAR,"
-					+ "		animalContactType VARCHAR,"
-					+ "		animalContactTypeDetails text,"
-					+ "		animalMarket VARCHAR,"
-					+ "		animalVaccinated VARCHAR,"
-					+ "		bodyOfWater VARCHAR,"
-					+ "		connectionNumber VARCHAR,"
-					+ "		contactToBodyFluids VARCHAR,"
-					+ "		contactToCase_id BIGINT,"
-					+ "		deceasedPersonIll VARCHAR,"
-					+ "		deceasedPersonName VARCHAR,"
-					+ "		deceasedPersonRelation VARCHAR,"
-					+ "		description text,"
-					+ "		eatingRawAnimalProducts VARCHAR,"
-					+ "		endDate BIGINT,"
-					+ "		epiData_id BIGINT,"
-					+ "		exposureType VARCHAR,"
-					+ "		exposureTypeDetails text,"
-					+ "		gatheringDetails text,"
-					+ "		gatheringType VARCHAR,"
-					+ "		habitationDetails text,"
-					+ "		habitationType VARCHAR,"
-					+ "		handlingAnimals VARCHAR,"
-					+ "		handlingSamples VARCHAR,"
-					+ "		indoors VARCHAR,"
-					+ "		location_id BIGINT,"
-					+ "		longFaceToFaceContact VARCHAR,"
-					+ "		meansOfTransport VARCHAR,"
-					+ "		meansOfTransportDetails text,"
-					+ "		otherProtectiveMeasures VARCHAR,"
-					+ "		outdoors VARCHAR,"
-					+ "		percutaneous VARCHAR,"
-					+ "		physicalContactDuringPreparation VARCHAR,"
-					+ "		physicalContactWithBody VARCHAR,"
-					+ "		prophylaxis VARCHAR,"
-					+ "		prophylaxisDate BIGINT,"
-					+ "		protectiveMeasuresDetails text,"
-					+ "		reportingUser_id BIGINT,"
-					+ "		riskArea VARCHAR,"
-					+ "		seatNumber VARCHAR,"
-					+ "		shortDistance VARCHAR,"
-					+ "		startDate BIGINT,"
-					+ "		typeOfAnimal VARCHAR,"
-					+ "		typeOfAnimalDetails text,"
-					+ "		typeOfPlace VARCHAR,"
-					+ "		typeOfPlaceDetails text,"
-					+ "		waterSource VARCHAR,"
-					+ "		waterSourceDetails text,"
-					+ "		wearingMask VARCHAR,"
-					+ "		wearingPpe VARCHAR,"
-					+ "		pseudonymized SMALLINT,"
-					+ "		changeDate BIGINT NOT NULL,"
-					+ "		creationDate BIGINT NOT NULL,"
-					+ "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "		lastOpenedDate BIGINT,"
-					+ "		localChangeDate BIGINT NOT NULL,"
-					+ "		modified SMALLINT,"
-					+ "		snapshot SMALLINT,"
-					+ "		uuid VARCHAR NOT NULL,"
-					+ "		UNIQUE (snapshot ASC, uuid ASC)"
-					+ ");"
-				);
+					"CREATE TABLE exposures (" + "		animalCondition VARCHAR," + "		animalContactType VARCHAR,"
+						+ "		animalContactTypeDetails text," + "		animalMarket VARCHAR," + "		animalVaccinated VARCHAR,"
+						+ "		bodyOfWater VARCHAR," + "		connectionNumber VARCHAR," + "		contactToBodyFluids VARCHAR,"
+						+ "		contactToCase_id BIGINT," + "		deceasedPersonIll VARCHAR," + "		deceasedPersonName VARCHAR,"
+						+ "		deceasedPersonRelation VARCHAR," + "		description text," + "		eatingRawAnimalProducts VARCHAR,"
+						+ "		endDate BIGINT," + "		epiData_id BIGINT," + "		exposureType VARCHAR," + "		exposureTypeDetails text,"
+						+ "		gatheringDetails text," + "		gatheringType VARCHAR," + "		habitationDetails text,"
+						+ "		habitationType VARCHAR," + "		handlingAnimals VARCHAR," + "		handlingSamples VARCHAR,"
+						+ "		indoors VARCHAR," + "		location_id BIGINT," + "		longFaceToFaceContact VARCHAR,"
+						+ "		meansOfTransport VARCHAR," + "		meansOfTransportDetails text," + "		otherProtectiveMeasures VARCHAR,"
+						+ "		outdoors VARCHAR," + "		percutaneous VARCHAR," + "		physicalContactDuringPreparation VARCHAR,"
+						+ "		physicalContactWithBody VARCHAR," + "		prophylaxis VARCHAR," + "		prophylaxisDate BIGINT,"
+						+ "		protectiveMeasuresDetails text," + "		reportingUser_id BIGINT," + "		riskArea VARCHAR,"
+						+ "		seatNumber VARCHAR," + "		shortDistance VARCHAR," + "		startDate BIGINT," + "		typeOfAnimal VARCHAR,"
+						+ "		typeOfAnimalDetails text," + "		typeOfPlace VARCHAR," + "		typeOfPlaceDetails text,"
+						+ "		waterSource VARCHAR," + "		waterSourceDetails text," + "		wearingMask VARCHAR,"
+						+ "		wearingPpe VARCHAR," + "		pseudonymized SMALLINT," + "		changeDate BIGINT NOT NULL,"
+						+ "		creationDate BIGINT NOT NULL," + "		id INTEGER PRIMARY KEY AUTOINCREMENT," + "		lastOpenedDate BIGINT,"
+						+ "		localChangeDate BIGINT NOT NULL," + "		modified SMALLINT," + "		snapshot SMALLINT,"
+						+ "		uuid VARCHAR NOT NULL," + "		UNIQUE (snapshot ASC, uuid ASC)" + ");");
 
 				getDao(EpiData.class).executeRaw("ALTER TABLE epidata ADD COLUMN exposureDetailsKnown varchar(255);");
 				getDao(EpiData.class).executeRaw(
@@ -2093,24 +1909,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 				getDao(EpiData.class).executeRaw("ALTER TABLE epidata RENAME TO tmp_epidata;");
 
 				getDao(EpiData.class).executeRaw(
-					"CREATE TABLE epidata ("
-					+ "		areaInfectedAnimals VARCHAR,"
-					+ "		contactWithSourceCaseKnown VARCHAR,"
-					+ "		exposureDetailsKnown VARCHAR,"
-					+ "		highTransmissionRiskArea VARCHAR,"
-					+ "		largeOutbreaksArea VARCHAR,"
-					+ "		pseudonymized SMALLINT,"
-					+ "		changeDate BIGINT NOT NULL,"
-					+ "		creationDate BIGINT NOT NULL,"
-					+ "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "		lastOpenedDate BIGINT,"
-					+ "		localChangeDate BIGINT NOT NULL,"
-					+ "		modified SMALLINT,"
-					+ "		snapshot SMALLINT,"
-					+ "		uuid VARCHAR NOT NULL,"
-					+ "		UNIQUE (snapshot ASC, uuid ASC)"
-					+ ");"
-				);
+					"CREATE TABLE epidata (" + "		areaInfectedAnimals VARCHAR," + "		contactWithSourceCaseKnown VARCHAR,"
+						+ "		exposureDetailsKnown VARCHAR," + "		highTransmissionRiskArea VARCHAR," + "		largeOutbreaksArea VARCHAR,"
+						+ "		pseudonymized SMALLINT," + "		changeDate BIGINT NOT NULL," + "		creationDate BIGINT NOT NULL,"
+						+ "		id INTEGER PRIMARY KEY AUTOINCREMENT," + "		lastOpenedDate BIGINT," + "		localChangeDate BIGINT NOT NULL,"
+						+ "		modified SMALLINT," + "		snapshot SMALLINT," + "		uuid VARCHAR NOT NULL,"
+						+ "		UNIQUE (snapshot ASC, uuid ASC)" + ");");
 
 				getDao(EpiData.class).executeRaw(
 					"INSERT INTO epidata(exposureDetailsKnown, contactWithSourceCaseKnown, areaInfectedAnimals, changeDate, creationDate, "
@@ -2328,39 +2132,16 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 				currentVersion = 278;
 
 				getDao(ActivityAsCase.class).executeRaw(
-					"CREATE TABLE activityascase ("
-					+ "		activityAsCaseType VARCHAR,"
-					+ "		activityAsCaseTypeDetails text,"
-					+ "		connectionNumber VARCHAR,"
-					+ "		description text,"
-					+ "		endDate BIGINT,"
-					+ "		epiData_id BIGINT,"
-					+ "		gatheringDetails text,"
-					+ "		gatheringType VARCHAR,"
-					+ "		habitationDetails text,"
-					+ "		habitationType VARCHAR,"
-					+ "		location_id BIGINT,"
-					+ "		meansOfTransport VARCHAR,"
-					+ "		meansOfTransportDetails text,"
-					+ "		reportingUser_id BIGINT,"
-					+ "		role VARCHAR,"
-					+ "		seatNumber VARCHAR,"
-					+ "		startDate BIGINT,"
-					+ "		typeOfPlace VARCHAR,"
-					+ "		typeOfPlaceDetails text,"
-					+ "		workEnvironment VARCHAR,"
-					+ "		pseudonymized SMALLINT,"
-					+ "		changeDate BIGINT NOT NULL,"
-					+ "		creationDate BIGINT NOT NULL,"
-					+ "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "		lastOpenedDate BIGINT,"
-					+ "		localChangeDate BIGINT NOT NULL,"
-					+ "		modified SMALLINT,"
-					+ "		snapshot SMALLINT,"
-					+ "		uuid VARCHAR NOT NULL,"
-					+ "		UNIQUE (snapshot ASC, uuid ASC)"
-					+ ");"
-				);
+					"CREATE TABLE activityascase (" + "		activityAsCaseType VARCHAR," + "		activityAsCaseTypeDetails text,"
+						+ "		connectionNumber VARCHAR," + "		description text," + "		endDate BIGINT," + "		epiData_id BIGINT,"
+						+ "		gatheringDetails text," + "		gatheringType VARCHAR," + "		habitationDetails text,"
+						+ "		habitationType VARCHAR," + "		location_id BIGINT," + "		meansOfTransport VARCHAR,"
+						+ "		meansOfTransportDetails text," + "		reportingUser_id BIGINT," + "		role VARCHAR,"
+						+ "		seatNumber VARCHAR," + "		startDate BIGINT," + "		typeOfPlace VARCHAR," + "		typeOfPlaceDetails text,"
+						+ "		workEnvironment VARCHAR," + "		pseudonymized SMALLINT," + "		changeDate BIGINT NOT NULL,"
+						+ "		creationDate BIGINT NOT NULL," + "		id INTEGER PRIMARY KEY AUTOINCREMENT," + "		lastOpenedDate BIGINT,"
+						+ "		localChangeDate BIGINT NOT NULL," + "		modified SMALLINT," + "		snapshot SMALLINT,"
+						+ "		uuid VARCHAR NOT NULL," + "		UNIQUE (snapshot ASC, uuid ASC)" + ");");
 
 				getDao(EpiData.class).executeRaw("ALTER TABLE epidata ADD COLUMN activityAsCaseDetailsKnown varchar(255);");
 
@@ -2442,29 +2223,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 				currentVersion = 288;
 
 				getDao(PersonContactDetail.class).executeRaw(
-					"CREATE TABLE personContactDetail ("
-					+ "		additionalInformation text,"
-					+ "		contactInformation text,"
-					+ "		details text,"
-					+ "		person_id BIGINT,"
-					+ "		personContactDetailType VARCHAR,"
-					+ "		phoneNumberType VARCHAR,"
-					+ "		primaryContact SMALLINT,"
-					+ "		thirdParty SMALLINT,"
-					+ "		thirdPartyName text,"
-					+ "		thirdPartyRole text,"
-					+ "		pseudonymized SMALLINT,"
-					+ "		changeDate BIGINT NOT NULL,"
-					+ "		creationDate BIGINT NOT NULL,"
-					+ "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "		lastOpenedDate BIGINT,"
-					+ "		localChangeDate BIGINT NOT NULL,"
-					+ "		modified SMALLINT,"
-					+ "		snapshot SMALLINT,"
-					+ "		uuid VARCHAR NOT NULL,"
-					+ "		UNIQUE (snapshot ASC, uuid ASC)"
-					+ ");"
-				);
+					"CREATE TABLE personContactDetail (" + "		additionalInformation text," + "		contactInformation text,"
+						+ "		details text," + "		person_id BIGINT," + "		personContactDetailType VARCHAR,"
+						+ "		phoneNumberType VARCHAR," + "		primaryContact SMALLINT," + "		thirdParty SMALLINT,"
+						+ "		thirdPartyName text," + "		thirdPartyRole text," + "		pseudonymized SMALLINT,"
+						+ "		changeDate BIGINT NOT NULL," + "		creationDate BIGINT NOT NULL," + "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
+						+ "		lastOpenedDate BIGINT," + "		localChangeDate BIGINT NOT NULL," + "		modified SMALLINT,"
+						+ "		snapshot SMALLINT," + "		uuid VARCHAR NOT NULL," + "		UNIQUE (snapshot ASC, uuid ASC)" + ");");
 
 				migratePersonContactDetails();
 
@@ -2478,37 +2243,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 				currentVersion = 290;
 
 				getDao(Continent.class).executeRaw(
-					"CREATE TABLE IF NOT EXISTS continent ("
-					+ "		defaultName text,"
-					+ "		archived SMALLINT,"
-					+ "		changeDate BIGINT NOT NULL,"
-					+ "		creationDate BIGINT NOT NULL,"
-					+ "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "		lastOpenedDate BIGINT,"
-					+ "		localChangeDate BIGINT NOT NULL,"
-					+ "		modified SMALLINT,"
-					+ "		snapshot SMALLINT,"
-					+ "		uuid VARCHAR NOT NULL,"
-					+ "		UNIQUE (snapshot ASC, uuid ASC)"
-					+ ");"
-				);
+					"CREATE TABLE IF NOT EXISTS continent (" + "		defaultName text," + "		archived SMALLINT,"
+						+ "		changeDate BIGINT NOT NULL," + "		creationDate BIGINT NOT NULL," + "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
+						+ "		lastOpenedDate BIGINT," + "		localChangeDate BIGINT NOT NULL," + "		modified SMALLINT,"
+						+ "		snapshot SMALLINT," + "		uuid VARCHAR NOT NULL," + "		UNIQUE (snapshot ASC, uuid ASC)" + ");");
 
 				getDao(Subcontinent.class).executeRaw(
-					"CREATE TABLE IF NOT EXISTS subcontinent ("
-					+ "		continent_id BIGINT NOT NULL,"
-					+ "		defaultName text,"
-					+ "		archived SMALLINT,"
-					+ "		changeDate BIGINT NOT NULL,"
-					+ "		creationDate BIGINT NOT NULL,"
-					+ "		id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "		lastOpenedDate BIGINT,"
-					+ "		localChangeDate BIGINT NOT NULL,"
-					+ "		modified SMALLINT,"
-					+ "		snapshot SMALLINT,"
-					+ "		uuid VARCHAR NOT NULL,"
-					+ "		UNIQUE (snapshot ASC, uuid ASC)"
-					+ ");"
-				);
+					"CREATE TABLE IF NOT EXISTS subcontinent (" + "		continent_id BIGINT NOT NULL," + "		defaultName text,"
+						+ "		archived SMALLINT," + "		changeDate BIGINT NOT NULL," + "		creationDate BIGINT NOT NULL,"
+						+ "		id INTEGER PRIMARY KEY AUTOINCREMENT," + "		lastOpenedDate BIGINT," + "		localChangeDate BIGINT NOT NULL,"
+						+ "		modified SMALLINT," + "		snapshot SMALLINT," + "		uuid VARCHAR NOT NULL,"
+						+ "		UNIQUE (snapshot ASC, uuid ASC)" + ");");
 
 				getDao(Country.class).executeRaw("ALTER TABLE country ADD COLUMN subcontinent_id BIGINT REFERENCES subcontinent(id);");
 
@@ -2593,81 +2338,70 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 				getDao(PathogenTest.class).executeRaw("UPDATE pathogenTest SET testedDiseaseVariant_id = NULL;");
 				getDao(Case.class).executeRaw("DROP TABLE diseaseVariant;");
 
-				case 302:
-					currentVersion = 302;
-					getDao(Case.class).executeRaw("ALTER TABLE cases ADD COLUMN internalToken text;");
-					getDao(Contact.class).executeRaw("ALTER TABLE contacts ADD COLUMN internalToken text;");
-					getDao(Person.class).executeRaw("ALTER TABLE person ADD COLUMN internalToken text;");
+			case 302:
+				currentVersion = 302;
+				getDao(Case.class).executeRaw("ALTER TABLE cases ADD COLUMN internalToken text;");
+				getDao(Contact.class).executeRaw("ALTER TABLE contacts ADD COLUMN internalToken text;");
+				getDao(Person.class).executeRaw("ALTER TABLE person ADD COLUMN internalToken text;");
 
-				case 303:
-					currentVersion = 303;
-					getDao(Case.class).executeRaw("UPDATE cases" +
-							" SET responsibleRegion_id = region_id," +
-							" responsibleDistrict_id = district_id," +
-							" responsibleCommunity_id = community_id," +
-							" region_id = null," +
-							" district_id = null," +
-							" community_id = null," +
-							" reportingDistrict_id = null"+
-							" WHERE responsibleRegion_id IS NULL AND (reportingDistrict_id IS NULL OR reportingDistrict_id = district_id)");
+			case 303:
+				currentVersion = 303;
+				getDao(Case.class).executeRaw(
+					"UPDATE cases" + " SET responsibleRegion_id = region_id," + " responsibleDistrict_id = district_id,"
+						+ " responsibleCommunity_id = community_id," + " region_id = null," + " district_id = null," + " community_id = null,"
+						+ " reportingDistrict_id = null"
+						+ " WHERE responsibleRegion_id IS NULL AND (reportingDistrict_id IS NULL OR reportingDistrict_id = district_id)");
 
-					getDao(Case.class).executeRaw("UPDATE cases" +
-							" SET responsibleRegion_id = (SELECT region_id from district where id = cases.reportingDistrict_id)," +
-							" responsibleDistrict_id = reportingDistrict_id," +
-							" reportingDistrict_id = null"+
-							" WHERE responsibleRegion_id IS NULL AND reportingDistrict_id IS NOT NULL");
+				getDao(Case.class).executeRaw(
+					"UPDATE cases" + " SET responsibleRegion_id = (SELECT region_id from district where id = cases.reportingDistrict_id),"
+						+ " responsibleDistrict_id = reportingDistrict_id," + " reportingDistrict_id = null"
+						+ " WHERE responsibleRegion_id IS NULL AND reportingDistrict_id IS NOT NULL");
 
-				case 304:
-					currentVersion = 304;
-					getDao(SormasToSormasOriginInfo.class).executeRaw("ALTER TABLE sormasToSormasOriginInfo ADD COLUMN withAssociatedContacts boolean;");
-					getDao(SormasToSormasOriginInfo.class).executeRaw("ALTER TABLE sormasToSormasOriginInfo ADD COLUMN withSamples boolean;");
-					getDao(SormasToSormasOriginInfo.class).executeRaw("ALTER TABLE sormasToSormasOriginInfo ADD COLUMN withEventParticipants boolean;");
+			case 304:
+				currentVersion = 304;
+				getDao(SormasToSormasOriginInfo.class).executeRaw("ALTER TABLE sormasToSormasOriginInfo ADD COLUMN withAssociatedContacts boolean;");
+				getDao(SormasToSormasOriginInfo.class).executeRaw("ALTER TABLE sormasToSormasOriginInfo ADD COLUMN withSamples boolean;");
+				getDao(SormasToSormasOriginInfo.class).executeRaw("ALTER TABLE sormasToSormasOriginInfo ADD COLUMN withEventParticipants boolean;");
 
-				case 305:
-					currentVersion = 305;
-					getDao(Immunization.class).executeRaw("CREATE TABLE immunization (" +
-							" id integer primary key autoincrement, uuid varchar(36) not null unique," +
-							" changeDate timestamp not null, creationDate timestamp not null, lastOpenedDate timestamp, localChangeDate timestamp not null," +
-							" modified SMALLINT DEFAULT 0, snapshot SMALLINT DEFAULT 0,"  +
-							" disease varchar(255) not null," +
-							" person_id bigint not null," +
-							" reportdate timestamp not null," +
-							" reportinguser_id bigint not null," +
-							" archived boolean DEFAULT false," +
-							" immunizationstatus varchar(255) not null," +
-							" meansofimmunization varchar(255) not null," +
-							" meansOfImmunizationDetails varchar(512)," +
-							" immunizationmanagementstatus varchar(255) not null," +
-							" externalid varchar(255) not null," +
-							" responsibleregion_id bigint," +
-							" responsibledistrict_id bigint," +
-							" responsiblecommunity_id bigint," +
-							" country_id bigint," +
-							" startdate timestamp," +
-							" enddate timestamp," +
-							" numberofdoses int," +
-							" previousinfection varchar(255)," +
-							" lastinfectiondate timestamp," +
-							" additionaldetails varchar(512)," +
-							" positivetestresultdate timestamp not null," +
-							" recoverydate timestamp not null," +
-							" relatedcase_id bigint)");
+			case 305:
+				currentVersion = 305;
+				getDao(Immunization.class).executeRaw(
+					"CREATE TABLE immunization (" + " id integer primary key autoincrement, uuid varchar(36) not null unique,"
+						+ " changeDate timestamp not null, creationDate timestamp not null, lastOpenedDate timestamp, localChangeDate timestamp not null,"
+						+ " modified SMALLINT DEFAULT 0, snapshot SMALLINT DEFAULT 0," + " disease varchar(255) not null,"
+						+ " person_id bigint not null," + " reportdate timestamp not null," + " reportinguser_id bigint not null,"
+						+ " archived boolean DEFAULT false," + " immunizationstatus varchar(255) not null,"
+						+ " meansofimmunization varchar(255) not null," + " meansOfImmunizationDetails varchar(512),"
+						+ " immunizationmanagementstatus varchar(255) not null," + " externalid varchar(255) not null,"
+						+ " responsibleregion_id bigint," + " responsibledistrict_id bigint," + " responsiblecommunity_id bigint,"
+						+ " country_id bigint," + " startdate timestamp," + " enddate timestamp," + " numberofdoses int,"
+						+ " previousinfection varchar(255)," + " lastinfectiondate timestamp," + " additionaldetails varchar(512),"
+						+ " positivetestresultdate timestamp not null," + " recoverydate timestamp not null," + " relatedcase_id bigint)");
 
-				case 306:
-					currentVersion = 306;
-					getDao(Immunization.class).executeRaw("ALTER TABLE immunization ADD COLUMN pseudonymized boolean;");
+			case 306:
+				currentVersion = 306;
+				getDao(Immunization.class).executeRaw("ALTER TABLE immunization ADD COLUMN pseudonymized boolean;");
 
-				case 307:
-					currentVersion = 307;
-					getDao(LbdsSync.class).executeRaw(
-							"CREATE TABLE lbdsSync(" +
-							"sentUuid varchar(36) primary key," +
-							"lastSendDate timestamp," +
-							"lastReceivedDate timestamp);");
+			case 307:
+				currentVersion = 307;
+				getDao(LbdsSync.class).executeRaw(
+					"CREATE TABLE lbdsSync(" + "sentUuid varchar(36) primary key," + "lastSendDate timestamp," + "lastReceivedDate timestamp);");
 
 			case 308:
 				currentVersion = 308;
 				getDao(Event.class).executeRaw("ALTER TABLE events ADD COLUMN diseaseVariant text;");
+
+			case 309:
+				currentVersion = 309;
+				getDao(VaccinationEntity.class).executeRaw(
+					"CREATE TABLE vaccination (\n" + "id integer primary key autoincrement,\n" + " uuid varchar(36) not null unique,\n"
+						+ " changedate timestamp not null,\n" + " creationdate timestamp not null,\n" + " immunization_id bigint not null,\n"
+						+ " healthconditions_id bigint not null,\n" + " reportdate timestamp not null,\n" + " reportinguser_id bigint,\n"
+						+ " vaccinationDate timestamp,\n" + " vaccinename varchar(255),\n" + " othervaccinename text,\n"
+						+ " vaccinenamedetails text,\n" + " vaccinemanufacturer varchar(255),\n" + " othervaccinemanufacturer text,\n"
+						+ " vaccinemanufacturerdetails text,\n" + " vaccineinn text,\n" + " vaccinebatchnumber text,\n" + " vaccineuniicode text,\n"
+						+ " vaccineatccode text,\n" + " vaccinationinfosource varchar(255),\n" + " pregnant varchar(255),\n"
+						+ " trimester varchar(255), pseudonymized boolean);");
 
 				// ATTENTION: break should only be done after last version
 				break;
@@ -3015,6 +2749,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			Log.i(DatabaseHelper.class.getName(), "onUpgrade");
 			TableUtils.dropTable(connectionSource, Case.class, true);
 			TableUtils.dropTable(connectionSource, Immunization.class, true);
+			TableUtils.dropTable(connectionSource, VaccinationEntity.class, true);
 			TableUtils.dropTable(connectionSource, Prescription.class, true);
 			TableUtils.dropTable(connectionSource, Treatment.class, true);
 			TableUtils.dropTable(connectionSource, Therapy.class, true);
@@ -3092,6 +2827,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 					dao = (AbstractAdoDao<ADO>) new CaseDao((Dao<Case, Long>) innerDao);
 				} else if (type.equals(Immunization.class)) {
 					dao = (AbstractAdoDao<ADO>) new ImmunizationDao((Dao<Immunization, Long>) innerDao);
+				} else if (type.equals(VaccinationEntity.class)) {
+					dao = (AbstractAdoDao<ADO>) new VaccinationEntityDao((Dao<VaccinationEntity, Long>) innerDao);
 				} else if (type.equals(Therapy.class)) {
 					dao = (AbstractAdoDao<ADO>) new TherapyDao((Dao<Therapy, Long>) innerDao);
 				} else if (type.equals(Prescription.class)) {
@@ -3272,6 +3009,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	public static ImmunizationDao getImmunizationDao() {
 		return (ImmunizationDao) getAdoDao(Immunization.class);
+	}
+
+	public static VaccinationEntityDao getVaccinationEntityDao() {
+		return (VaccinationEntityDao) getAdoDao(VaccinationEntity.class);
 	}
 
 	public static TherapyDao getTherapyDao() {

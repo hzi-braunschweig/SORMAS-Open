@@ -80,6 +80,7 @@
 		<class>de.symeda.sormas.backend.customizableenum.CustomizableEnumValue</class>
 		<class>de.symeda.sormas.backend.immunization.Immunization</class>
 		<class>de.symeda.sormas.backend.travelentry.TravelEntry</class>
+		<class>de.symeda.sormas.backend.vaccination.VaccinationEntity</class>
 
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 

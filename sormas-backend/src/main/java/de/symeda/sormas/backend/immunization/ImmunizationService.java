@@ -15,6 +15,7 @@
 
 package de.symeda.sormas.backend.immunization;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -24,15 +25,19 @@ import javax.ejb.Stateless;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.From;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import de.symeda.sormas.api.immunization.ImmunizationCriteria;
 import de.symeda.sormas.api.utils.DateHelper;
 import de.symeda.sormas.backend.common.AbstractCoreAdoService;
+import de.symeda.sormas.backend.common.ChangeDateFilterBuilder;
 import de.symeda.sormas.backend.user.User;
 import de.symeda.sormas.backend.user.UserService;
 import de.symeda.sormas.backend.util.JurisdictionHelper;
+import de.symeda.sormas.backend.vaccination.VaccinationEntity;
 
 @Stateless
 @LocalBean
@@ -71,6 +76,13 @@ public class ImmunizationService extends AbstractCoreAdoService<Immunization> {
 
 	public Predicate buildCriteriaFilter(ImmunizationCriteria criteria, CriteriaBuilder cb, Root<Immunization> from) {
 		return cb.conjunction();
+	}
+
+	@Override
+	public Predicate createChangeDateFilter(CriteriaBuilder cb, From<?, Immunization> immunization, Timestamp date) {
+		Join<Immunization, VaccinationEntity> vaccinations = immunization.join(Immunization.VACCINATIONS, JoinType.LEFT);
+
+		return new ChangeDateFilterBuilder(cb, date).add(immunization).add(vaccinations).build();
 	}
 
 	public List<Immunization> getAllActiveAfter(Date date) {

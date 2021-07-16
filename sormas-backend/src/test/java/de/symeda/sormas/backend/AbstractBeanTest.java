@@ -23,8 +23,6 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import de.symeda.sormas.api.travelentry.TravelEntryFacade;
-import de.symeda.sormas.backend.travelentry.TravelEntryFacadeEjb;
 import org.junit.Before;
 
 import de.symeda.sormas.api.ConfigFacade;
@@ -87,11 +85,13 @@ import de.symeda.sormas.api.task.TaskFacade;
 import de.symeda.sormas.api.therapy.PrescriptionFacade;
 import de.symeda.sormas.api.therapy.TherapyFacade;
 import de.symeda.sormas.api.therapy.TreatmentFacade;
+import de.symeda.sormas.api.travelentry.TravelEntryFacade;
 import de.symeda.sormas.api.user.UserDto;
 import de.symeda.sormas.api.user.UserFacade;
 import de.symeda.sormas.api.user.UserRightsFacade;
 import de.symeda.sormas.api.user.UserRole;
 import de.symeda.sormas.api.user.UserRoleConfigFacade;
+import de.symeda.sormas.api.vaccination.VaccinationEntityFacade;
 import de.symeda.sormas.api.visit.VisitFacade;
 import de.symeda.sormas.backend.action.ActionFacadeEjb;
 import de.symeda.sormas.backend.bagexport.BAGExportFacadeEjb;
@@ -181,12 +181,15 @@ import de.symeda.sormas.backend.therapy.PrescriptionService;
 import de.symeda.sormas.backend.therapy.TherapyFacadeEjb.TherapyFacadeEjbLocal;
 import de.symeda.sormas.backend.therapy.TreatmentFacadeEjb.TreatmentFacadeEjbLocal;
 import de.symeda.sormas.backend.therapy.TreatmentService;
+import de.symeda.sormas.backend.travelentry.TravelEntryFacadeEjb;
 import de.symeda.sormas.backend.user.CurrentUser;
 import de.symeda.sormas.backend.user.CurrentUserService;
 import de.symeda.sormas.backend.user.UserFacadeEjb.UserFacadeEjbLocal;
 import de.symeda.sormas.backend.user.UserRightsFacadeEjb.UserRightsFacadeEjbLocal;
 import de.symeda.sormas.backend.user.UserRoleConfigFacadeEjb.UserRoleConfigFacadeEjbLocal;
 import de.symeda.sormas.backend.user.UserService;
+import de.symeda.sormas.backend.vaccination.VaccinationEntityFacadeEjb;
+import de.symeda.sormas.backend.vaccination.VaccinationEntityService;
 import de.symeda.sormas.backend.visit.VisitFacadeEjb.VisitFacadeEjbLocal;
 import de.symeda.sormas.backend.visit.VisitService;
 import info.novatec.beantest.api.BaseBeanTest;
@@ -262,6 +265,14 @@ public class AbstractBeanTest extends BaseBeanTest {
 
 	public ImmunizationFacade getImmunizationFacade() {
 		return getBean(ImmunizationFacadeEjbLocal.class);
+	}
+
+	public VaccinationEntityFacade getVaccinationEntityFacade() {
+		return getBean(VaccinationEntityFacadeEjb.VaccinationEntityFacadeEjbLocal.class);
+	}
+
+	public VaccinationEntityService getVaccinationEntityService() {
+		return getBean(VaccinationEntityService.class);
 	}
 
 	public TravelEntryFacade getTravelEntryFacade() {

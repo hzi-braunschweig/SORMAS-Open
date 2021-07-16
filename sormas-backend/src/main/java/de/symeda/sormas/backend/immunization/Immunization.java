@@ -1,24 +1,25 @@
 /*
- *  SORMAS® - Surveillance Outbreak Response Management & Analysis System
- *  Copyright © 2016-2021 Helmholtz-Zentrum für Infektionsforschung GmbH (HZI)
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *  You should have received a copy of the GNU General Public License
- *  along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
+ * SORMAS® - Surveillance Outbreak Response Management & Analysis System
+ * Copyright © 2016-2021 Helmholtz-Zentrum für Infektionsforschung GmbH (HZI)
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 package de.symeda.sormas.backend.immunization;
 
 import static de.symeda.sormas.api.EntityDto.COLUMN_LENGTH_DEFAULT;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,6 +29,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -46,6 +48,7 @@ import de.symeda.sormas.backend.region.Country;
 import de.symeda.sormas.backend.region.District;
 import de.symeda.sormas.backend.region.Region;
 import de.symeda.sormas.backend.user.User;
+import de.symeda.sormas.backend.vaccination.VaccinationEntity;
 
 @Entity(name = "immunization")
 @Audited
@@ -72,7 +75,8 @@ public class Immunization extends CoreAdo {
 	public static final String POSITIVE_TEST_RESULT_DATE = "positiveTestResultDate";
 	public static final String RECOVERY_DATE = "recoveryDate";
 	public static final String RELATED_CASE = "relatedCase";
-	
+	public static final String VACCINATIONS = "vaccinations";
+
 	private Disease disease;
 	private Person person;
 	private Date reportDate;
@@ -102,6 +106,8 @@ public class Immunization extends CoreAdo {
 	private Case relatedCase;
 
 	private Country country;
+
+	private List<VaccinationEntity> vaccinations = new ArrayList<>();
 
 	@Enumerated(EnumType.STRING)
 	public Disease getDisease() {
@@ -311,5 +317,14 @@ public class Immunization extends CoreAdo {
 
 	public void setCountry(Country country) {
 		this.country = country;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = VaccinationEntity.IMMUNIZATION, fetch = FetchType.EAGER)
+	public List<VaccinationEntity> getVaccinations() {
+		return vaccinations;
+	}
+
+	public void setVaccinations(List<VaccinationEntity> vaccinations) {
+		this.vaccinations = vaccinations;
 	}
 }

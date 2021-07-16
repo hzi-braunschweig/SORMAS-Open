@@ -95,6 +95,7 @@ import de.symeda.sormas.api.travelentry.travelentryimport.TravelEntryImportFacad
 import de.symeda.sormas.api.user.UserFacade;
 import de.symeda.sormas.api.user.UserRightsFacade;
 import de.symeda.sormas.api.user.UserRoleConfigFacade;
+import de.symeda.sormas.api.vaccination.VaccinationEntityFacade;
 import de.symeda.sormas.api.visit.VisitFacade;
 import de.symeda.sormas.api.visualization.VisualizationFacade;
 
@@ -128,6 +129,10 @@ public class FacadeProvider {
 
 	public static ImmunizationFacade getImmunizationFacade() {
 		return get().lookupEjbRemote(ImmunizationFacade.class);
+	}
+
+	public static VaccinationEntityFacade getVaccinationEntityFacade() {
+		return get().lookupEjbRemote(VaccinationEntityFacade.class);
 	}
 
 	public static TravelEntryFacade getTravelEntryFacade() {
