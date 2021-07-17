@@ -23,8 +23,8 @@
     <string name="due_timeago_format">termín %1$s</string>
     <string name="lbds_response_cases">LBDS Sync Response. Cases transferred: %1$d , ignored: %2$d</string>
     <string name="lbds_response_persons">LBDS Sync Response. Persons transferred: %1$d , ignored: %2$d</string>
-    <string name="lbds_cases_transferred">LBDS Sync. Sending cases: %1$d</string>
-    <string name="lbds_persons_transferred">LBDS Sync. Sending persons: %1$d</string>
+    <string name="lbds_cases_transferred">Synchronizace LBDS. Odesílání případů: %1$d</string>
+    <string name="lbds_persons_transferred">Synchronizace LBDS. Odesílání osob: %1$d</string>
     <string name="message_unsynchronized_changes_confirmation">Na vašem zařízení jsou nesynchronizované změny.\nPokud budete pokračovat, budou ztraceny a nebudete je moci obnovit. Pro pokračování zadejte slovo %1$s do textového pole níže.</string>
     <string name="number_of_cases_format">%1$s</string>
     <string name="number_of_visits_long_format">%1$d návštěv (%2$d zmeškáno)</string>
